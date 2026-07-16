@@ -60,7 +60,7 @@
   .score-final{font-family:'VT323',monospace;font-size:16px;color:var(--dim)}
   .score-final b{display:block;font-family:'Press Start 2P';font-size:24px;color:var(--ink);margin-top:8px}
   .ach-line{font-family:'VT323',monospace;font-size:17px;color:var(--gold);min-height:20px}
-  #toast{position:absolute;top:16%;left:50%;transform:translateX(-50%);font-size:11px;color:var(--red);text-shadow:0 0 10px rgba(255,93,93,.6);opacity:0;transition:opacity .2s;pointer-events:none;z-index:4;white-space:nowrap;text-align:center}
+  #toast{position:absolute;top:14%;left:50%;transform:translateX(-50%);font-size:10px;line-height:1.6;color:var(--red);text-shadow:0 0 10px rgba(255,93,93,.6);opacity:0;transition:opacity .2s;pointer-events:none;z-index:4;white-space:normal;text-align:center;width:88%;max-width:440px}
   #toast.show{opacity:1}
   #toast.good{color:var(--neon);text-shadow:0 0 10px rgba(127,220,164,.6)}
   #achPop{position:absolute;top:24px;left:50%;transform:translateX(-50%) translateY(-60px);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:10px 16px;z-index:6;opacity:0;transition:all .35s;pointer-events:none;text-align:center}
@@ -377,6 +377,23 @@ const burger=sprite([
 "  oooooo  ",
 ],{o:'#1a0e06',B:'#d69a4a',s:'#f0c070',S:'#ffe0a0',G:'#5aa84a',m:'#c0392b',M:'#e05a4a',C:'#8a5a2b',N:'#c98a4a'});
 
+/* ---------- PES (na vodítku, běží po chodníku) ---------- */
+const DGc={o:'#080a0e',b:'#6b4a2a',B:'#8a6238',h:'#4a3220',a:'#c98a5a',n:'#1a1a1a',t:'#5a3f24',sh:'#12141a'};
+function dogSprite(run){
+  return sprite([
+"           ",
+"  oo    ooo",
+" obBo  obBBo",
+" obBboobBaBo",
+"obBBBBBBBBno",
+"obBBBBBBBBBo",
+" obBBBBBBBo ",
+run?" oto..oto.t":" oto..oto..",
+run?"osho..osho.":"osho.osho..",
+], DGc);
+}
+const dogA=dogSprite(0),dogB=dogSprite(1);
+
 /* VCHOD */
 const door=sprite([
 "wwwwwwwwwwww",
@@ -417,22 +434,23 @@ const cop=sprite([
 
 /* ===================== HLÁŠKY ===================== */
 const DEATH={
-  man:['Sundal jsi chlapa v saku. To bude výslech.','Chlap k zemi. Ráno tě pozná.','Do chlapa jsi vrazil jak tramvaj.'],
-  fem:['Ženská i kabelka na zemi. Ostuda.','Vrazil jsi do ní jak slon. Modřina jistá.','Dáma k zemi. Tohle ti nezapomene.'],
-  kid:['Dítě?! Ve tři ráno?! To bude průšvih.','Fakt jsi skolil harmonikáře v plínkách?','Malý cik-cak tě dostal. A ty jeho.'],
-  babka:['Babka i vozík k zemi. Peklo na Vinohradech.','Sundals důchodkyni. Gratuluju, hrdino.','Vozík se rozsypal, babka řve. Konec.'],
-  homeless:['Zakopl jsi o bezdomovce. Probudil se, ty spíš.','Spáč pod dekou tě složil. Trapné.','Přeletěl jsi přes bezdomovce jak přes obrubník.'],
-  gal:['Do kurvy se nevráží, ta se platí.','Kunda se objednává, ne přejíždí, vole.','Za pětikilo si ji rozložíš v posteli, ne na chodníku.','Chtěls šoustat, ne ji poslat do špitálu, kokote.'],
-  gals:['Obě naráz? To zvládne jen ožrala.','Dvě rány, dvě modřiny, žádný číslo.','Dvě kurvy k mání a tys je složil jak kuželky, debile.','Za dvě se platí dvakrát, ne že je oba rozmázneš.'],
-  side:['Chodec z boku, tys ho neviděl. Konec.','Vlítls do něj z ničeho nic. Prásk.','Přišel zleva, tys běžel rovnou do něj.'],
-  tram:['Tramvaj nebrzdí kvůli ožralovi. Konec.','Vlítls pod tramvaj. Jízdenku sis mohl odpustit.','Noční linka tě semlela.'],
-  cop:['Vlítls do policajta. Teď tě veze on.','Do chlupatýho ne, kokote. Konec šichty.','Policie tě sebrala. Doslova.'],
+  man:['Sejmuls chlapa v saku, ty vole. Ráno tě pozná.','Do chlapa jsi vrazil jak debil. Konec.','Chlap na zemi, ty kokote. Šlus.'],
+  fem:['Vrazils do ženský jak prase. Modřina jistá, magore.','Složils dámu, ty hovado. Ostuda.','Ženská i kabelka na zemi. Chudák, ty vole.'],
+  kid:['Dítě?! Ve tři ráno?! Kurva, to bude průšvih.','Sejmuls harmonikáře v plínkách, ty zvíře.','Skolils děcko, ty magore. Do prdele.'],
+  babka:['Sundals babku i s vozíkem, ty hajzle. Peklo.','Důchodkyně k zemi. Gratuluju, ty kreténe.','Vozík v hajzlu, babka řve. Ty vole, konec.'],
+  homeless:['Zakopl jsi o bezdomovce, ty slepej debile.','Přeletěls přes spáče jak přes obrubník, magore.','Sejmuls chudáka pod dekou. Trapný, ty vole.'],
+  gal:['Do kurvy se nevráží, ta se platí, ty debile.','Kunda se objednává, ne přejíždí, vole.','Za pětikilo si ji rozložíš v posteli, ne na chodníku, kokote.','Chtěls šoustat, ne ji poslat do špitálu, ty hovado.','Upadl jsi do ní. To bude doma průšvih, magore.'],
+  gals:['Obě naráz? To zvládne jen vožrala, ty vole.','Dvě rány, dvě modřiny, žádný číslo, kokote.','Dvě kurvy k mání a tys je složil jak kuželky, debile.','Za dvě se platí dvakrát, ne že je oba rozmážeš, magore.'],
+  side:['Vlítls do něj z boku jak slepej, ty vole.','Přišel zleva a tys do něj napálil, debile.','Chodce z boku jsi neviděl, kokote. Konec.'],
+  dog:['Narazil jsi do čubiny, ty demente.','Ty magore, sejmul jsi psa.','Vole, sundal jsi psa, je asi mrtvej, ty mamrde.'],
+  tram:['Vlítls pod tramvaj, ty vožralej idiote.','Tramvaj nebrzdí kvůli debilovi. Semlela tě.','Pod šalinu, ty kokote. Jízdenku sis mohl odpustit.'],
+  cop:['Vlítls do policajta, ty vole. Teď tě veze on.','Do chlupatýho ne, kokote. Konec šichty.','Napálil jsi do polišů, magore. Seberou tě.'],
 };
 // burger: 3 hlášky za sebou (náhodně vybraná sekvence)
 const BURGER=[
-  ['Kebab ve tři ráno? Blbej nápad.','Žaludek to vrací...','BLÉÉ! Utři si hubu a běž.'],
-  ['To maso bylo zkažený, vole.','Ohýbáš se... a je to venku.','Fuj. Aspoň žaludek máš prázdnej.'],
-  ['Ten hamburger byl chyba.','Cítíš to stoupat...','HRRR! Celej chodník je tvůj.'],
+  ['Kebab ve tři ráno? Blbej nápad, vole.','Žaludek to vrací, kurva...','BLÉÉ! Utři si hubu a běž, magore.'],
+  ['To maso bylo zkažený, do prdele.','Ohýbáš se... a je to venku, ty vole.','Fuj. Aspoň žaludek máš prázdnej, kokote.'],
+  ['Ten hamburger byl kurevská chyba.','Cítíš to stoupat, ty vožralo...','HRRR! Celej chodník je tvůj, magore.'],
 ];
 const rnd=a=>a[Math.random()*a.length|0];
 
@@ -476,9 +494,10 @@ addEventListener('pointerup',()=>{touch=null;});
 const $=id=>document.getElementById(id);
 const ovStart=$('ovStart'),ovDead=$('ovDead'),ovPause=$('ovPause'),ovWin=$('ovWin');
 function show(ov){[ovStart,ovDead,ovPause,ovWin].forEach(o=>o.classList.add('hidden'));if(ov)ov.classList.remove('hidden');}
-$('btnStart').onclick=()=>{reset();state='run';show(null);};
-$('btnRetry').onclick=()=>{reset();state='run';show(null);};
-$('btnAgain').onclick=()=>{reset();state='run';show(null);};
+function startRun(){reset();state='run';show(null);toast('Kde jsi, magore, už jsi měl být doma.','',4,4);}
+$('btnStart').onclick=startRun;
+$('btnRetry').onclick=startRun;
+$('btnAgain').onclick=startRun;
 $('btnResume').onclick=()=>{state='run';show(null);};
 function togglePause(){if(state==='run'){state='pause';show(ovPause);}else if(state==='pause'){state='run';show(null);}}
 let toastT=0,toastPrio=0,toastQueue=[];
@@ -497,7 +516,7 @@ function fmtScore(n){return String(Math.max(0,Math.round(n))).padStart(6,'0');}
 function fmtTime(s){const m=Math.floor(s/60),ss=Math.floor(s%60);return m+':'+String(ss).padStart(2,'0');}
 function zoneName(tt){if(tt<45)return '◆ NÁBŘEŽÍ';if(tt<75)return '◆ MOST';if(tt<160)return '◆ VINOHRADY';return '◆ TVOJE ULICE';}
 function buildLegend(){
-  const rows=[[beer,'PIVO','+120','pos'],[bag,'BÍLÝ SÁČEK','SPRINT 5s','pos'],[booze,'TVRDÝ','ZPOMALÍ 5s','neg'],[burger,'BURGER','BLIJEŠ 3s','neg'],[null,'TĚSNÝ ÚHYB','COMBO ×','pos']];
+  const rows=[[beer,'PIVO','+500','pos'],[bag,'BÍLÝ SÁČEK','+1000, 2× SPRINT','pos'],[booze,'TVRDÝ','ZPOMALÍ 5s','neg'],[burger,'BURGER','BLIJEŠ 3s','neg'],[null,'TĚSNÝ ÚHYB','COMBO ×','pos']];
   const wrap=$('startLegend');wrap.innerHTML='';
   rows.forEach(([img,name,val,cls])=>{const r=document.createElement('div');r.className='leg-row';const ic=img?`<img class="ico" src="${dURL(img)}">`:`<span class="ico" style="display:flex;align-items:center;justify-content:center;color:var(--neon);font-family:'Press Start 2P';font-size:12px">»</span>`;r.innerHTML=`${ic}<span><b>${name}</b><br><span class="${cls}">${val}</span></span>`;wrap.appendChild(r);});
 }
@@ -505,13 +524,17 @@ function buildLegend(){
 /* ===================== SPAWN ===================== */
 function spawn(){
   const roll=Math.random(),y=-90;
-  if(roll<0.13)obs.push({type:'man',lane:Math.random()*4|0,y,w:34,h:56,walk:40,anim:Math.random()*2});
-  else if(roll<0.32)obs.push({type:'fem',lane:Math.random()*4|0,laneF:0,y,w:32,h:52,walk:30,swapT:1+Math.random()*2,anim:Math.random()*2});
-  else if(roll<0.42)obs.push({type:'kid',lane:Math.random()*4|0,y,w:26,h:40,walk:90,ph:Math.random()*6,amp:0.9+Math.random()*0.8,anim:0});
-  else if(roll<0.50){const l=Math.random()*3|0;obs.push({type:'babka',lane:l,y,w:80,h:52,walk:-60});}
-  else if(roll<0.59){const l=Math.random()<0.5?0:3;obs.push({type:'homeless',lane:l,y,w:66,h:28,walk:0});scatterBeers(l===0?1:2,y);}
-  else if(roll<0.70){const l=Math.random()*3|0;obs.push({type:'gals',lane:l,y,w:78,h:54,walk:22,zdrz:false,anim:Math.random()*2,bl:Math.random()<.5});}
-  else if(roll<0.79)obs.push({type:'gal',lane:Math.random()*4|0,y,w:30,h:54,walk:26,zdrz:false,anim:Math.random()*2,bl:Math.random()<.5});
+  const prog=Math.min(1,t/GOAL_T); // 0..1, ke konci víc žen
+  const womenBoost=prog*0.18;      // ke konci až +18 % šance na ženu
+  // posuvné hranice: s progresem se rozšiřuje pásmo žen (gals/gal) na úkor mužů/dětí
+  if(roll<0.11-womenBoost*0.4)obs.push({type:'man',lane:Math.random()*4|0,y,w:34,h:56,walk:40,anim:Math.random()*2});
+  else if(roll<0.30-womenBoost*0.3)obs.push({type:'fem',lane:Math.random()*4|0,laneF:0,y,w:32,h:52,walk:30,swapT:1+Math.random()*2,anim:Math.random()*2});
+  else if(roll<0.38-womenBoost*0.3)obs.push({type:'kid',lane:Math.random()*4|0,y,w:26,h:40,walk:90,ph:Math.random()*6,amp:0.9+Math.random()*0.8,anim:0});
+  else if(roll<0.45)obs.push({type:'babka',lane:Math.random()*3|0,y,w:80,h:52,walk:-60});
+  else if(roll<0.51)obs.push({type:'dog',lane:Math.random()*4|0,y,w:34,h:26,walk:60,anim:Math.random()*2});
+  else if(roll<0.58){const l=Math.random()<0.5?0:3;obs.push({type:'homeless',lane:l,y,w:66,h:28,walk:0});scatterBeers(l===0?1:2,y);}
+  else if(roll<0.66+womenBoost*0.6){const l=Math.random()*3|0;obs.push({type:'gals',lane:l,y,w:78,h:54,walk:22,zdrz:false,anim:Math.random()*2,bl:Math.random()<.5});}
+  else if(roll<0.79+womenBoost){obs.push({type:'gal',lane:Math.random()*4|0,y,w:30,h:54,walk:26,zdrz:false,anim:Math.random()*2,bl:Math.random()<.5});}
   else if(roll<0.87)obs.push({type:'bag',lane:Math.random()*4|0,y,w:22,h:26,walk:0});
   else if(roll<0.94)obs.push({type:'burger',lane:Math.random()*4|0,y,w:24,h:22,walk:0});
   else obs.push({type:'booze',lane:Math.random()*4|0,y,w:22,h:30,walk:0});
@@ -539,12 +562,12 @@ function update(dt){
     updHud();
     // pokračuj zbytkem update i během zvracení (překážky se blíží), ale bez ovládání rychlosti
   } else {
-    const speedCap=boostT>0?V_MAX+120:V_MAX;
+    const speedCap=boostT>0?V_MAX+400:V_MAX;
     const cruise=drunkT>0?V_MIN+30:V_BASE;
     if(keys['arrowup']||keys['w'])player.v+=420*dt;
     else if(keys['arrowdown']||keys['s'])player.v-=520*dt;
     else if(!touch)player.v+=(cruise-player.v)*1.2*dt;
-    if(boostT>0)player.v+=500*dt;
+    if(boostT>0)player.v+=1100*dt;
     player.v=Math.max(V_MIN,Math.min(speedCap,player.v));
   }
   let wob=drunkT>0?Math.sin(t*11)*0.28:0;
@@ -557,7 +580,13 @@ function update(dt){
   if(player.v>320&&Math.random()<0.6)parts.push({x:player.x+(Math.random()-.5)*16,y:PLAYER_Y,vx:(Math.random()-.5)*20,vy:40+Math.random()*40,t:.5,c:boostT>0?'#6fd3ff':'#5a6675',r:2+Math.random()*2});
 
   lastSpawn-=dt;
-  if(t<GOAL_T-6&&lastSpawn<=0){spawn();const dif=Math.max(0.52,1.5-t*0.005-(player.v-V_BASE)*0.001);lastSpawn=dif*(0.7+Math.random()*0.6);}
+  if(t<GOAL_T-6&&lastSpawn<=0){
+    spawn();
+    const prog=t/GOAL_T;
+    const base=Math.max(0.30,0.85-prog*0.5-(player.v-V_BASE)*0.0008);
+    lastSpawn=base*(0.75+Math.random()*0.4);
+    if(Math.random()<0.35+prog*0.4)spawn();
+  }
   crossT-=dt;
   if(t<GOAL_T-14&&crossT<=0){spawnCross();crossT=9+Math.random()*8;}
   for(let i=roads.length-1;i>=0;i--){roads[i].y+=player.v*dt;if(roads[i].y>H+240)roads.splice(i,1);}
@@ -581,8 +610,8 @@ function update(dt){
     const hw=(o.w+pw)/2*(isItem?0.95:0.7),hh=(o.h+ph)/2*(isItem?1.1:0.7);
     const swept=isItem?player.v*dt:0; // rozšíření ve směru běhu mezi snímky
     if(Math.abs(ox-player.x)<hw&&Math.abs(o.y-PLAYER_Y)<hh+swept){
-      if(o.type==='beer'){beersCollected++;score+=120*mult;toast('LAHVÁČ +'+(120*mult),'good');floaters.push({x:ox,y:o.y,txt:'+'+(120*mult),c:'#7fdca4',t:1});if(beersCollected>=10)unlock('flush');obs.splice(i,1);continue;}
-      if(o.type==='bag'){boostT=5;score+=250*mult;toast('SÁČEK TĚ VYSTŘELIL!','good',3,2);floaters.push({x:ox,y:o.y,txt:'SPRINT!',c:'#6fd3ff',t:1.2});for(let k=0;k<12;k++)parts.push({x:ox,y:o.y,vx:(Math.random()-.5)*120,vy:(Math.random()-.5)*120,t:.6,c:'#6fd3ff',r:2});obs.splice(i,1);continue;}
+      if(o.type==='beer'){beersCollected++;score+=500*mult;toast('LAHVÁČ +'+(500*mult),'good');floaters.push({x:ox,y:o.y,txt:'+'+(500*mult),c:'#7fdca4',t:1});if(beersCollected>=10)unlock('flush');obs.splice(i,1);continue;}
+      if(o.type==='bag'){boostT=5;score+=1000*mult;toast('SÁČEK TĚ VYSTŘELIL!','good',3,2);floaters.push({x:ox,y:o.y,txt:'+'+(1000*mult)+' SPRINT!',c:'#6fd3ff',t:1.2});for(let k=0;k<12;k++)parts.push({x:ox,y:o.y,vx:(Math.random()-.5)*120,vy:(Math.random()-.5)*120,t:.6,c:'#6fd3ff',r:2});obs.splice(i,1);continue;}
       if(o.type==='booze'){drunkT=5;score=Math.max(0,score-150);fouls++;toast('TVRDÝ! MOTÁŠ SE 5s','',3,1);floaters.push({x:ox,y:o.y,txt:'−150 OŽRALÝ',c:'#ff5d5d',t:1.2});combo=0;mult=1;obs.splice(i,1);continue;}
       if(o.type==='burger'){pukeT=3;score=Math.max(0,score-200);fouls++;combo=0;mult=1;player.v=V_MIN;toastSeq(rnd(BURGER),'',1);floaters.push({x:ox,y:o.y,txt:'−200 BLIJEŠ',c:'#9ac33a',t:1.2});obs.splice(i,1);continue;}
       return die(o.type);
@@ -711,6 +740,7 @@ function draw(dt){
       case'fem':drawSprite(f?femA:femB,x,o.y+o.h/2);break;
       case'kid':drawSprite(f?kidA:kidB,x,o.y+o.h/2);break;
       case'babka':drawSprite(babka,x,o.y+o.h/2);break;
+      case'dog':drawSprite(f?dogA:dogB,x,o.y+o.h/2);break;
       case'homeless':drawSprite(homeless,x,o.y+o.h/2);break;
       case'gal':drawSprite(o.bl?(f?galBlA:galBlB):(f?galA:galB),x,o.y+o.h/2);break;
       case'gals':drawSprite(f?galA:galB,x-20,o.y+o.h/2);drawSprite(f?galBlB:galBlA,x+20,o.y+o.h/2,true);break;
