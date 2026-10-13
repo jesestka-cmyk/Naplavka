@@ -63,11 +63,11 @@ a{color:inherit}
 .hint i{display:block;width:1px;height:34px;margin:12px auto 0;background:linear-gradient(var(--muted),transparent);animation:drip 1.8s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-.note{top:50%;width:min(290px,24vw);opacity:0}
+.note{top:50%;width:min(290px,22vw);opacity:0}
 .note strong{display:block;font-weight:600;font-size:clamp(22px,2vw,29px);line-height:1.12;letter-spacing:-.025em;text-wrap:balance}
 .note span{display:block;margin-top:10px;font-size:16px;line-height:1.45;color:var(--muted)}
-.note.l{right:calc(50% + var(--gap,190px));text-align:right}
-.note.r{left:calc(50% + var(--gap,190px))}
+.note.l{right:calc(50% + var(--gapL,190px));text-align:right}
+.note.r{left:calc(50% + var(--gapR,300px))}
 
 .midnight{left:16px;right:16px;bottom:9svh;text-align:center;opacity:0}
 .midnight h2{margin:12px 0 0;font-weight:600;font-size:clamp(48px,7.6vw,100px);line-height:.95;letter-spacing:-.045em}
@@ -378,10 +378,12 @@ footer .wrap{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
   function layout(){
     W = innerWidth; H = innerHeight; mobile = W < 761;
     // stage 1: earbud (source 255×380 px, centre 602,350) at ~50 % of height on desktop
-    L.s1 = mobile ? Math.min(.34 * H / 380, .55 * W / 255) : Math.min(.5 * H / 380, .3 * W / 255);
+    L.s1 = mobile ? Math.min(.34 * H / 380, .55 * W / 255) : Math.max(.5, Math.min(.44 * H / 380, (W / 2 - 340) / 230));
     c1.style.width = SW * L.s1 + 'px'; c1.style.height = SH * L.s1 + 'px';
     c1.style.transformOrigin = `${602 * L.s1}px ${350 * L.s1}px`;
-    document.documentElement.style.setProperty('--gap', Math.round(130 * L.s1 + 48) + 'px');
+    // earbud reaches 121 px left / 222 px right of the focal point during the spin (source px)
+    document.documentElement.style.setProperty('--gapL', Math.round(135 * L.s1 + 56) + 'px');
+    document.documentElement.style.setProperty('--gapR', Math.round(232 * L.s1 + 56) + 'px');
     // stage 2: exploded parts span ~830×580 source px, centre 667,372
     L.s2 = mobile ? (W - 12) / 900 : Math.min(.84 * W / 830, .66 * H / 580);
     for (const el of [c2, labelsEl]){ el.style.width = SW * L.s2 + 'px'; el.style.height = SH * L.s2 + 'px'; }
