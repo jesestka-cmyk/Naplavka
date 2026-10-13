@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aura One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: two pinned film stages scrubbed by scroll (spin + WebGL colour wipe, then exploded view with callouts), dark spec sheet, light buy section. Single deliberate light look — the film's studio grey is the page. */
+:root{
+  color-scheme: light;
+  --studio:#cfcfcf;      /* average backdrop of the film */
+  --ink:#1d1d1f;
+  --muted:#4f4f53;
+  --line:rgba(29,29,31,.14);
+  --glass:rgba(255,255,255,.62);
+  --night:#0b0b0c;
+  --night-ink:#f5f5f7;
+  --night-muted:#8e8e93;
+  --night-line:rgba(245,245,247,.14);
+  --paper:#ffffff;
+  --paper-2:#f2f2f2;
+  --link:#0062d6;
+  --display:"Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono:"Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--studio);color:var(--ink);font-family:var(--display);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:6px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- local nav ---------- */
+.lnav{position:fixed;left:0;right:0;top:0;z-index:20;padding:env(safe-area-inset-top,0px) 16px 0;
+  background:rgba(214,214,214,.78);backdrop-filter:saturate(1.4) blur(18px);-webkit-backdrop-filter:saturate(1.4) blur(18px);
+  border-bottom:1px solid var(--line);opacity:0;transform:translateY(-100%);transition:opacity .4s, transform .4s}
+.lnav.on{opacity:1;transform:none}
+.lnav-in{max-width:1080px;margin:0 auto;height:52px;display:flex;align-items:center;gap:24px}
+.lnav b{font-weight:600;font-size:19px;letter-spacing:-.02em;margin-right:auto}
+.lnav a.t{font-size:13px;color:var(--muted);text-decoration:none}
+.lnav a.t:hover{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;font:500 13px/1 var(--display);padding:8px 14px;background:var(--ink);color:#fff;text-decoration:none;cursor:pointer}
+
+/* ---------- pinned stages ---------- */
+.scrolly{position:relative}
+#s1{height:620vh}
+#uvnitr{height:520vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--studio)}
+.film{position:absolute;left:0;top:0;width:1280px;height:720px;will-change:transform;
+  -webkit-mask-image:radial-gradient(34% 62% at 47% 48.6%,#000 50%,transparent 100%);
+          mask-image:radial-gradient(34% 62% at 47% 48.6%,#000 50%,transparent 100%)}
+#film2{-webkit-mask-image:radial-gradient(52% 54% at 52% 51.6%,#000 74%,transparent 100%);
+          mask-image:radial-gradient(52% 54% at 52% 51.6%,#000 74%,transparent 100%)}
+.layer{position:absolute;pointer-events:none}
+
+.hero{top:8svh;left:16px;right:16px;text-align:center}
+.hero h1{margin:14px 0 0;font-weight:600;font-size:clamp(50px,7.6vw,104px);line-height:.95;letter-spacing:-.045em}
+.hero p{margin:12px 0 0;font-size:clamp(19px,1.9vw,25px);color:var(--muted);letter-spacing:-.01em}
+.hint{bottom:5svh;left:0;right:0;text-align:center}
+.hint i{display:block;width:1px;height:34px;margin:12px auto 0;background:linear-gradient(var(--muted),transparent);animation:drip 1.8s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+.note{top:50%;width:min(290px,24vw);opacity:0}
+.note strong{display:block;font-weight:600;font-size:clamp(22px,2vw,29px);line-height:1.12;letter-spacing:-.025em;text-wrap:balance}
+.note span{display:block;margin-top:10px;font-size:16px;line-height:1.45;color:var(--muted)}
+.note.l{right:calc(50% + var(--gap,190px));text-align:right}
+.note.r{left:calc(50% + var(--gap,190px))}
+
+.midnight{left:16px;right:16px;bottom:9svh;text-align:center;opacity:0}
+.midnight h2{margin:12px 0 0;font-weight:600;font-size:clamp(48px,7.6vw,100px);line-height:.95;letter-spacing:-.045em}
+.midnight p{margin:12px 0 0;font-size:clamp(17px,1.6vw,21px);color:var(--muted)}
+
+.menu{left:16px;right:16px;bottom:7svh;opacity:0;display:flex;flex-direction:column;align-items:center;gap:16px}
+.menu.live{pointer-events:auto}
+.menu-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%}
+.opt{display:flex;align-items:center;gap:18px;min-width:0;width:min(380px,100%);padding:20px 22px;border-radius:22px;
+  background:var(--glass);border:1px solid rgba(255,255,255,.5);text-decoration:none;color:var(--ink);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:background .25s, transform .25s}
+.opt:hover{background:rgba(255,255,255,.9);transform:translateY(-2px)}
+.opt .n{font:500 13px/1 var(--mono);color:var(--muted)}
+.opt .tx{flex:1;min-width:0}
+.opt b{display:block;font-weight:600;font-size:22px;letter-spacing:-.02em;line-height:1.15}
+.opt small{display:block;font-size:14px;color:var(--muted);margin-top:4px}
+.opt .ar{font-size:22px;transition:transform .25s}
+.opt:hover .ar{transform:translateX(4px)}
+
+/* exploded stage */
+.inside-head{top:7svh;left:16px;right:16px;text-align:center}
+.inside-head h2{margin:12px 0 0;font-weight:600;font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:-.04em;text-wrap:balance}
+.labels{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;will-change:transform}
+.lab{position:absolute;width:0;height:0;opacity:0}
+.lab::before{content:"";position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 4px rgba(255,255,255,.55)}
+.lab span{position:absolute;white-space:nowrap;font-size:14px;font-weight:500;letter-spacing:-.005em;color:var(--ink)}
+.lab span small{display:block;font:500 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lab.up span{bottom:16px;left:50%;transform:translateX(-50%);text-align:center}
+.lab.down span{top:16px;left:50%;transform:translateX(-50%);text-align:center}
+.lab.left span{right:16px;top:50%;transform:translateY(-50%);text-align:right}
+.lab.right span{left:16px;top:50%;transform:translateY(-50%)}
+.chips{left:16px;right:16px;bottom:7svh;display:none;flex-wrap:wrap;justify-content:center;gap:8px;opacity:0}
+.chips span{font-size:13px;padding:7px 12px;border-radius:999px;background:var(--glass);border:1px solid rgba(255,255,255,.5)}
+.inside-foot{left:16px;right:16px;bottom:8svh;text-align:center;opacity:0}
+.inside-foot p{margin:0;font-size:clamp(19px,1.9vw,24px);font-weight:500;letter-spacing:-.015em}
+
+@media (max-width:760px){
+  .note{top:auto;bottom:8svh;left:16px;right:16px;width:auto}
+  .note.l{right:16px;text-align:left}
+  .note.r{left:16px;text-align:right}
+  .note strong{font-size:26px}
+  .lnav a.t{display:none}
+  .opt{padding:16px 18px}
+  .opt b{font-size:20px}
+  .labels{display:none}
+  .chips{display:flex}
+}
+
+/* ---------- tech (dark) ---------- */
+.tech{background:var(--night);color:var(--night-ink);padding-block:120px 110px;padding-inline:16px}
+.wrap{max-width:1080px;margin:0 auto}
+.tech .eyebrow{color:var(--night-muted)}
+.tech h2{margin:16px 0 0;font-weight:600;font-size:clamp(40px,6vw,80px);line-height:1;letter-spacing:-.04em;max-width:14ch;text-wrap:balance}
+.statement{margin:72px 0 0;font-weight:600;font-size:clamp(28px,3.6vw,48px);line-height:1.15;letter-spacing:-.03em;max-width:24ch;text-wrap:balance}
+.statement .w{opacity:.2;transition:opacity .25s}
+.statement .w.on{opacity:1}
+.specs{margin:96px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:40px;border-top:1px solid var(--night-line)}
+.spec{padding:28px 0 30px;border-bottom:1px solid var(--night-line);min-width:0}
+.spec dt{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--night-muted)}
+.spec dd{margin:14px 0 0}
+.spec .big{display:block;font-weight:600;font-size:34px;letter-spacing:-.03em;line-height:1.05;font-variant-numeric:tabular-nums}
+.spec .sm{display:block;margin-top:8px;font-size:15px;line-height:1.5;color:var(--night-muted)}
+@media (max-width:860px){.specs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.specs{grid-template-columns:minmax(0,1fr)}.tech{padding-block:88px 80px}}
+
+/* ---------- buy (light) ---------- */
+.buy{background:var(--paper);padding-block:120px 100px;padding-inline:16px}
+.buy .eyebrow{color:#6e6e73}
+.buy h2{margin:16px 0 0;font-weight:600;font-size:clamp(40px,6vw,80px);line-height:1;letter-spacing:-.04em}
+.buy-top{margin-top:56px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:center}
+.shot{aspect-ratio:1/1;max-width:100%;border-radius:28px;overflow:hidden;background:var(--studio)}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:47% 48.6%;transform:scale(1.45);display:block}
+.price{font-weight:600;font-size:clamp(30px,3.4vw,44px);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.price small{font-size:17px;font-weight:400;color:#6e6e73;letter-spacing:0;margin-left:6px}
+.lead{color:#6e6e73;margin:10px 0 0;max-width:40ch}
+.swatches{margin:32px 0 0;padding:0;border:0}
+.swatches legend{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#6e6e73;margin-bottom:14px}
+.sw-row{display:flex;gap:12px;flex-wrap:wrap}
+.sw{position:relative}
+.sw input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.sw label{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:999px;border:1px solid var(--line);cursor:pointer;font-size:15px}
+.sw .dot{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.sw input:checked + label{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.sw input:focus-visible + label{outline:2px solid var(--link);outline-offset:3px}
+.places{margin-top:72px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.place{background:var(--paper-2);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.place h3{margin:0;font-weight:600;font-size:22px;letter-spacing:-.02em}
+.place p{margin:0;color:#6e6e73;font-size:15px;flex:1}
+.place .pill{align-self:flex-start;margin-top:12px;font-size:14px;padding:11px 18px}
+.place .pill.ghost{background:transparent;color:var(--link);padding-inline:0}
+.toast{margin:20px 0 0;min-height:1.5em;font-size:14px;color:#6e6e73}
+@media (max-width:860px){.buy-top{grid-template-columns:minmax(0,1fr)}.places{grid-template-columns:minmax(0,1fr)}}
+
+footer{background:var(--paper);border-top:1px solid var(--line);padding-block:28px 40px;padding-inline:16px;font-size:13px;color:#6e6e73}
+footer .wrap{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hint i{animation:none}}
+</style>
+</head>
+<body>
+<nav class="lnav" id="lnav" aria-label="Aura One">
+  <div class="lnav-in">
+    <b>Aura One</b>
+    <a class="t" href="#s1">Přehled</a>
+    <a class="t" href="#uvnitr">Uvnitř</a>
+    <a class="t" href="#tech">Technický popis</a>
+    <a class="t" href="#koupit">Kde koupit</a>
+    <a class="pill" href="#koupit">Koupit</a>
+  </div>
+</nav>
+
+<!-- ================= 1) otočení + přechod do černé ================= -->
+<section class="scrolly" id="s1" aria-label="Aura One – přehled">
+  <div class="stage">
+    <canvas class="film" id="film1" width="1280" height="720" role="img" aria-label="Sluchátko Aura One se otočí a shora dolů se přebarví z bílé na půlnoční černou"></canvas>
+
+    <div class="layer hero" id="hero">
+      <div class="eyebrow">Nové</div>
+      <h1>Aura One</h1>
+      <p>Zvuk, který tě obejme.</p>
+    </div>
+    <div class="layer hint eyebrow" id="hint">Posouvej<i></i></div>
+
+    <div class="layer note l" data-in=".06" data-out=".17"><strong>Tvarované podle ucha.</strong><span>4,3 gramu. Po hodině zapomeneš, že je máš.</span></div>
+    <div class="layer note r" data-in=".16" data-out=".27"><strong>Ticho na požádání.</strong><span>Adaptivní potlačení hluku ztiší tramvaj i rušnou kancelář.</span></div>
+    <div class="layer note l" data-in=".26" data-out=".37"><strong>Zvuk kolem tebe.</strong><span>Prostorový zvuk rozprostře hudbu kolem tvé hlavy.</span></div>
+    <div class="layer note r" data-in=".36" data-out=".47"><strong>36 hodin.</strong><span>S nabíjecím pouzdrem vydrží celý pracovní týden.</span></div>
+
+    <div class="layer midnight" id="midnight">
+      <div class="eyebrow">Nová barva</div>
+      <h2>Půlnoční.</h2>
+      <p>Matná černá, na které neulpí otisky.</p>
+    </div>
+
+    <nav class="layer menu" id="menu" aria-label="Prozkoumej Aura One">
+      <div class="eyebrow">Prozkoumej Aura One</div>
+      <div class="menu-row">
+        <a class="opt" href="#uvnitr"><span class="n">01</span><span class="tx"><b>Technický popis</b><small>Co je uvnitř a jak to funguje</small></span><span class="ar" aria-hidden="true">→</span></a>
+        <a class="opt" href="#koupit"><span class="n">02</span><span class="tx"><b>Kde koupit</b><small>Online, v showroomu a u partnerů</small></span><span class="ar" aria-hidden="true">→</span></a>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<!-- ================= 2) rozklad na součástky ================= -->
+<section class="scrolly" id="uvnitr" aria-label="Aura One – uvnitř">
+  <div class="stage">
+    <canvas class="film" id="film2" width="1280" height="720" role="img" aria-label="Sluchátko se rozloží na deset součástek a znovu složí"></canvas>
+    <div class="labels" id="labels">
+      <div class="lab left"  style="left:20.3%;top:49.3%"><span><small>01</small>Silikonový špunt</span></div>
+      <div class="lab up"    style="left:37.5%;top:41.5%"><span><small>02</small>Měnič 11 mm</span></div>
+      <div class="lab down"  style="left:49.6%;top:59%"><span><small>03</small>Řídicí čip</span></div>
+      <div class="lab down"  style="left:60.3%;top:57.5%"><span><small>04</small>Baterie</span></div>
+      <div class="lab right" style="left:77%;top:65%"><span><small>05</small>Tlakový senzor</span></div>
+      <div class="lab right" style="left:84.6%;top:50%"><span><small>06</small>Akustická mřížka</span></div>
+    </div>
+
+    <div class="layer inside-head">
+      <div class="eyebrow">Technický popis</div>
+      <h2>Deset dílů. Jeden celek.</h2>
+    </div>
+    <div class="layer chips" id="chips" aria-hidden="true">
+      <span>Silikonový špunt</span><span>Měnič 11 mm</span><span>Řídicí čip</span><span>Baterie</span><span>Tlakový senzor</span><span>Akustická mřížka</span>
+    </div>
+    <div class="layer inside-foot" id="ifoot"><p>Složené zpět s přesností na desetinu milimetru.</p></div>
+  </div>
+</section>
+
+<section class="tech" id="tech">
+  <div class="wrap">
+    <div class="eyebrow">Parametry</div>
+    <h2>Malé. Promyšlené do posledního milimetru.</h2>
+    <p class="statement" id="statement">Jedenáct milimetrů vlastního měniče. Tři mikrofony v každém sluchátku. Jeden čip, který to celé řídí a ty o něm nevíš.</p>
+
+    <dl class="specs">
+      <div class="spec"><dt>Akustika</dt><dd><span class="big">11 mm</span><span class="sm">Dynamický měnič vlastní konstrukce, 20 Hz – 40 kHz</span></dd></div>
+      <div class="spec"><dt>Potlačení hluku</dt><dd><span class="big">Adaptivní</span><span class="sm">ANC a režim propustnosti, 3 mikrofony na stranu</span></dd></div>
+      <div class="spec"><dt>Výdrž</dt><dd><span class="big">8 h / 36 h</span><span class="sm">Sluchátka / s pouzdrem. 5 minut nabíjení dá hodinu poslechu</span></dd></div>
+      <div class="spec"><dt>Nabíjení</dt><dd><span class="big">USB‑C</span><span class="sm">Nebo bezdrátově přes Qi2</span></dd></div>
+      <div class="spec"><dt>Odolnost</dt><dd><span class="big">IP54</span><span class="sm">Prach, pot i déšť. Sluchátka i pouzdro</span></dd></div>
+      <div class="spec"><dt>Připojení</dt><dd><span class="big">BT 5.4</span><span class="sm">Multipoint pro dvě zařízení, LE Audio</span></dd></div>
+      <div class="spec"><dt>Ovládání</dt><dd><span class="big">Stisk</span><span class="sm">Tlakový senzor na stopce, hlasový asistent</span></dd></div>
+      <div class="spec"><dt>Hmotnost</dt><dd><span class="big">4,3 g</span><span class="sm">Jedno sluchátko. Pouzdro 41 g</span></dd></div>
+      <div class="spec"><dt>Rozměry</dt><dd><span class="big">30,9 mm</span><span class="sm">30,9 × 21,8 × 24,0 mm</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="buy" id="koupit">
+  <div class="wrap">
+    <div class="eyebrow">Kde koupit</div>
+    <h2>Vyber si barvu.</h2>
+    <div class="buy-top">
+      <div class="shot"><img id="shot" src="r/r_104.webp" alt="Aura One v bílé barvě"></div>
+      <div>
+        <div class="price">5 990 Kč <small>vč. DPH</small></div>
+        <p class="lead">V balení sluchátka, nabíjecí pouzdro, čtyři velikosti špuntů a kabel USB‑C.</p>
+        <fieldset class="swatches">
+          <legend>Barva: <span id="colname">Bílá</span></legend>
+          <div class="sw-row">
+            <div class="sw"><input type="radio" name="c" id="c-white" value="white" checked><label for="c-white"><span class="dot" style="background:#f4f4f4"></span>Bílá</label></div>
+            <div class="sw"><input type="radio" name="c" id="c-night" value="night"><label for="c-night"><span class="dot" style="background:#141414"></span>Půlnoční</label></div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    <div class="places">
+      <div class="place"><h3>Online</h3><p>Doručení zdarma do druhého dne. 30 dní na vrácení bez udání důvodu.</p><button class="pill" type="button" data-buy>Koupit online</button></div>
+      <div class="place"><h3>Showroom Praha</h3><p>Vyzkoušej si obě barvy naživo a nech si poradit s velikostí špuntů. Po–Pá 10–19.</p><button class="pill" type="button" data-buy>Rezervovat návštěvu</button></div>
+      <div class="place"><h3>Partnerské obchody</h3><p>Vybraní prodejci elektroniky po celé České republice.</p><button class="pill ghost" type="button" data-buy>Najít prodejce →</button></div>
+    </div>
+    <p class="toast" id="toast" aria-live="polite"></p>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>Aura One · designový koncept</span><span>© 2026</span></div></footer>
+
+<script>
+(() => {
+  const SW = 1280, SH = 720;
+  const R_N = 105, X_N = 159;
+  const pad = n => String(n).padStart(3, '0');
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
+  const ease = t => t * t * (3 - 2 * t);
+  const win = (p, a, b, f = .028) => Math.min(seg(p, a, a + f), 1 - seg(p, b - f, b));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = id => document.getElementById(id);
+
+  // ---------- frame loading ----------
+  function loadSeq(prefix, n, onEach){
+    const arr = new Array(n);
+    const order = [0, n - 1]; for (let i = 1; i < n - 1; i++) order.push(i);
+    order.forEach(i => { const im = new Image(); im.decoding = 'async';
+      im.onload = () => { arr[i] = im; onEach && onEach(i); }; im.src = `${prefix}${pad(i)}.webp`; });
+    return arr;
+  }
+  const nearest = (arr, i) => { if (arr[i]) return arr[i]; for (let k = 1; k < arr.length; k++){ if (arr[i - k]) return arr[i - k]; if (arr[i + k]) return arr[i + k]; } return null; };
+
+  let rot = loadSeq('r/r_', R_N, () => kick(true));
+  let black = null; { const im = new Image(); im.onload = () => { black = im; gl1 && gl1.setB(im); kick(true); }; im.src = 'b.webp'; }
+  let exp = [];
+  const startExp = () => { if (!exp.length) exp = loadSeq('x/x_', X_N, () => kick(true)); };
+  addEventListener('load', () => setTimeout(startExp, 300));
+  setTimeout(startExp, 2500);
+
+  // ---------- WebGL renderer for stage 1 (frame + top-down colour wipe) ----------
+  const c1 = $('film1');
+  function makeGL(canvas){
+    const gl = canvas.getContext('webgl', { premultipliedAlpha: false, antialias: false });
+    if (!gl) return null;
+    const vs = `attribute vec2 p;varying vec2 uv;void main(){uv=p*.5+.5;gl_Position=vec4(p,0.,1.);}`;
+    const fs = `precision mediump float;varying vec2 uv;uniform sampler2D A;uniform sampler2D B;uniform float w;
+      void main(){
+        vec2 st=vec2(uv.x,1.-uv.y);
+        vec3 a=texture2D(A,st).rgb; vec3 b=texture2D(B,st).rgb;
+        if(w<=0.){gl_FragColor=vec4(a,1.);return;}
+        if(w>=1.){gl_FragColor=vec4(b,1.);return;}
+        float line=mix(.16,.82,w)+.012*sin(st.x*13.+w*6.);
+        float k=smoothstep(line-.028,line+.028,st.y);
+        vec3 col=mix(b,a,k);
+        float obj=smoothstep(.10,.35,length(a-b));
+        float g=exp(-pow((st.y-line)/.016,2.))*obj;
+        col+=g*.38;
+        gl_FragColor=vec4(col,1.);
+      }`;
+    const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; };
+    const pr = gl.createProgram();
+    gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
+    gl.useProgram(pr);
+    const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const tex = unit => { const t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
+      [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE));
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([207,207,207,255])); return t; };
+    const tA = tex(0), tB = tex(1);
+    gl.uniform1i(gl.getUniformLocation(pr, 'A'), 0); gl.uniform1i(gl.getUniformLocation(pr, 'B'), 1);
+    const uW = gl.getUniformLocation(pr, 'w');
+    gl.viewport(0, 0, SW, SH);
+    let lastA = null, hasB = false;
+    return {
+      setB(img){ gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, tB); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); hasB = true; },
+      draw(img, w){
+        if (img && img !== lastA){ gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tA); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); lastA = img; }
+        gl.uniform1f(uW, hasB ? w : 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+    };
+  }
+  let gl1 = null; try { gl1 = makeGL(c1); } catch(e) { gl1 = null; }
+  const ctx1 = gl1 ? null : c1.getContext('2d');
+  function draw1(img, w){
+    if (gl1){ gl1.draw(img, w); return; }
+    if (!img) return;
+    ctx1.drawImage(img, 0, 0, SW, SH);
+    if (w > 0 && black){ ctx1.save(); ctx1.beginPath(); ctx1.rect(0, 0, SW, SH * (.16 + .66 * w)); ctx1.clip(); ctx1.drawImage(black, 0, 0, SW, SH); ctx1.restore(); }
+  }
+
+  const c2 = $('film2'), ctx2 = c2.getContext('2d');
+  const labelsEl = $('labels');
+
+  // ---------- layout ----------
+  let W = innerWidth, H = innerHeight, mobile = W < 761;
+  const L = { s1: 1, s2: 1 };
+  function layout(){
+    W = innerWidth; H = innerHeight; mobile = W < 761;
+    // stage 1: earbud (source 255×380 px, centre 602,350) at ~50 % of height on desktop
+    L.s1 = mobile ? Math.min(.34 * H / 380, .55 * W / 255) : Math.min(.5 * H / 380, .3 * W / 255);
+    c1.style.width = SW * L.s1 + 'px'; c1.style.height = SH * L.s1 + 'px';
+    c1.style.transformOrigin = `${602 * L.s1}px ${350 * L.s1}px`;
+    document.documentElement.style.setProperty('--gap', Math.round(130 * L.s1 + 48) + 'px');
+    // stage 2: exploded parts span ~830×580 source px, centre 667,372
+    L.s2 = mobile ? (W - 12) / 900 : Math.min(.84 * W / 830, .66 * H / 580);
+    for (const el of [c2, labelsEl]){ el.style.width = SW * L.s2 + 'px'; el.style.height = SH * L.s2 + 'px'; }
+    kick(true);
+  }
+
+  // ---------- progress ----------
+  const s1 = $('s1'), s2 = $('uvnitr');
+  const prog = el => { const r = el.getBoundingClientRect(); const t = r.height - innerHeight; return t > 0 ? clamp(-r.top / t, 0, 1) : 0; };
+
+  const hero = $('hero'), hint = $('hint'), notes = [...document.querySelectorAll('.note')];
+  const midnight = $('midnight'), menu = $('menu'), lnav = $('lnav');
+  const labs = [...document.querySelectorAll('.lab')], chips = $('chips'), ifoot = $('ifoot');
+
+  let last1 = '', last2 = '';
+  function render1(p){
+    const fi = p < .05 ? 0 : Math.round((R_N - 1) * ease(seg(p, .05, .48)));
+    const w = seg(p, .5, .72);
+    const m = ease(seg(p, .46, .64));
+    const cx = W / 2, cy = H * (mobile ? .44 : .55) - H * .1 * m, k = 1 - .05 * m;
+    c1.style.transform = `translate3d(${cx - 602 * L.s1}px,${cy - 350 * L.s1}px,0) scale(${k})`;
+    const key = fi + ':' + w.toFixed(4);
+    if (key !== last1){ const img = nearest(rot, fi); if (img){ draw1(img, w); last1 = key; } }
+
+    const h = 1 - seg(p, .015, .06);
+    hero.style.opacity = h; hero.style.transform = reduce ? '' : `translateY(${-24 * (1 - h)}px)`;
+    hint.style.opacity = 1 - seg(p, .004, .025);
+    for (const n of notes){
+      const o = win(p, +n.dataset.in, +n.dataset.out);
+      const x = reduce ? 0 : (n.classList.contains('l') ? -1 : 1) * 28 * (1 - o);
+      n.style.opacity = o;
+      n.style.transform = mobile ? `translateX(${x}px)` : `translate(${x}px,-50%)`;
+    }
+    const mo = win(p, .6, .8, .035);
+    midnight.style.opacity = mo;
+    midnight.style.transform = reduce ? '' : `translateY(${20 * (1 - seg(p, .6, .64))}px)`;
+    const me = seg(p, .81, .87);
+    menu.style.opacity = me; menu.style.transform = reduce ? '' : `translateY(${24 * (1 - ease(me))}px)`;
+    menu.classList.toggle('live', me > .5);
+  }
+  function render2(p){
+    let fi;
+    if (p < .06) fi = 0;
+    else if (p < .4) fi = 73 * ease(seg(p, .06, .4));
+    else if (p < .62) fi = 73 + 25 * seg(p, .4, .62);
+    else if (p < .94) fi = 98 + 60 * ease(seg(p, .62, .94));
+    else fi = X_N - 1;
+    fi = Math.round(fi);
+    const cx = W / 2, cy = H * (mobile ? .5 : .56);
+    const t = `translate3d(${cx - 667 * L.s2}px,${cy - 372 * L.s2}px,0)`;
+    c2.style.transform = t; labelsEl.style.transform = t;
+    if (fi + '' !== last2 && exp.length){ const img = nearest(exp, fi); if (img){ ctx2.drawImage(img, 0, 0, SW, SH); last2 = fi + ''; } }
+    else if (!exp.length && last2 === '' && rot[R_N - 1]){ /* placeholder until exploded frames arrive */ }
+    labs.forEach((el, i) => {
+      const o = Math.min(seg(p, .36 + i * .018, .4 + i * .018), 1 - seg(p, .6, .64));
+      el.style.opacity = o;
+    });
+    chips.style.opacity = win(p, .38, .64);
+    ifoot.style.opacity = win(p, .9, 1.2, .05);
+  }
+
+  // ---------- smoothed loop ----------
+  let t1 = 0, t2 = 0, c1p = 0, c2p = 0, raf = 0, near1 = true, near2 = false;
+  function tick(){
+    raf = 0;
+    const step = (cur, tar) => (reduce || Math.abs(tar - cur) < .0004) ? tar : cur + (tar - cur) * .16;
+    c1p = step(c1p, t1); c2p = step(c2p, t2);
+    if (near1) render1(c1p);
+    if (near2) render2(c2p);
+    if (c1p !== t1 || c2p !== t2) raf = requestAnimationFrame(tick);
+  }
+  function kick(force){
+    t1 = prog(s1); t2 = prog(s2);
+    const r1 = s1.getBoundingClientRect(), r2 = s2.getBoundingClientRect();
+    near1 = r1.bottom > -innerHeight && r1.top < innerHeight * 2;
+    near2 = r2.bottom > -innerHeight && r2.top < innerHeight * 2;
+    if (near2) startExp();
+    lnav.classList.toggle('on', t1 > .82 || r1.bottom < innerHeight);
+    if (force){ last1 = ''; last2 = ''; }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  addEventListener('scroll', () => kick(false), { passive: true });
+  addEventListener('resize', layout);
+  layout();
+  c1p = t1; c2p = t2; render1(c1p); render2(c2p);
+
+  // ---------- statement word reveal ----------
+  const st = $('statement');
+  st.innerHTML = st.textContent.split(' ').map(w => `<span class="w">${w}</span>`).join(' ');
+  const words = [...st.querySelectorAll('.w')];
+  function reveal(){
+    const r = st.getBoundingClientRect();
+    const t = clamp((innerHeight * .85 - r.top) / (r.height + innerHeight * .35), 0, 1);
+    const on = Math.round(t * words.length);
+    words.forEach((w, i) => w.classList.toggle('on', i < on));
+  }
+  addEventListener('scroll', reveal, { passive: true }); reveal();
+
+  // ---------- colour picker ----------
+  const shot = $('shot'), colname = $('colname');
+  document.querySelectorAll('input[name=c]').forEach(r => r.addEventListener('change', () => {
+    const night = r.value === 'night' && r.checked;
+    shot.src = night ? 'b.webp' : 'r/r_104.webp';
+    shot.alt = night ? 'Aura One v půlnoční černé' : 'Aura One v bílé barvě';
+    colname.textContent = night ? 'Půlnoční' : 'Bílá';
+  }));
+
+  // ---------- demo buttons ----------
+  const toast = $('toast');
+  document.querySelectorAll('[data-buy]').forEach(b => b.addEventListener('click', () => {
+    toast.textContent = 'Tohle je ukázkový web, objednávky zatím nejsou aktivní.';
+  }));
+})();
+</script>
+
+</body>
+</html>
