@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Skoreklam – světelná reklama, 3D tisk a LED. Navrhneme, vytiskneme, rozsvítíme.">
+</head>
+<body>
+<title>Skoreklam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Instrument+Sans:wght@400..600&family=Instrument+Serif:ital@0;1&family=Martian+Mono:wght@300..500&display=swap">
+<style>
+/* layout: dark press-room stage, content in a 1240px frame; glass panels float over a live field of light strands tinted by the brand blues, switching to process inks (C/M/Y) in the services section */
+:root{
+  --ink:#04070d; --ink-2:#0a0f18;
+  --line:rgba(160,190,230,.10); --line-2:rgba(160,190,230,.20);
+  --fg:#eef2f7; --mute:#8b96a8; --dim:#5b6677;
+  --acc:#84b2e3; --acc-2:#bcd6f4; --navy:#3358a2; --on-acc:#071530; --ok:#5fe3a1;
+  --pc:#00aeef; --pm:#ec008c; --py:#fff200; --pk:#231f20;
+  --paper:#f7f6f2;
+  --lg-sko:#ffffff; --lg-rek:#84b2e3; --lg-sub:#c3cedd; --lg-arc:#ffffff;
+  --f-display:"Bricolage Grotesque","Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-mono:"Martian Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{overflow-x:clip;background:var(--ink)}
+body{margin:0;background:var(--ink);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55;overflow-x:clip;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body.no-gl{background:radial-gradient(80% 60% at 55% 45%,rgba(132,178,227,.18),transparent 60%),radial-gradient(60% 50% at 80% 20%,rgba(51,88,162,.22),transparent 60%),var(--ink)}
+::selection{background:var(--acc);color:var(--on-acc)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc-2);outline-offset:3px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#field{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+main,footer{position:relative;z-index:2}
+.wrap{max-width:1240px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+#cc{position:fixed;left:0;top:0;width:200px;height:200px;pointer-events:none;z-index:95;opacity:0;will-change:transform,opacity}
+.cc,.cc *{cursor:none!important}
+
+/* logo */
+.logo{display:block;height:30px;width:calc(30px * 146 / 49);overflow:visible}
+.logo-paper{--lg-sko:#3358a2;--lg-rek:#84b2e3;--lg-sub:#231f20;--lg-arc:#231f20}
+.mark-svg{width:62%;height:62%;--lg-sko:var(--on-acc);--lg-arc:var(--on-acc)}
+
+/* type */
+h1,h2,h3{font-family:var(--f-display);font-weight:500;color:var(--fg);text-wrap:balance;margin:0}
+h1{font-size:clamp(46px,6.4vw,92px);line-height:.95;letter-spacing:-.045em;margin:22px 0 22px;font-variation-settings:"opsz" 96}
+h2{font-size:clamp(34px,4.6vw,62px);line-height:1;letter-spacing:-.04em;margin-top:16px;font-variation-settings:"opsz" 96}
+h3{font-size:19px;letter-spacing:-.02em;font-weight:500}
+h1 em,h2 em,.m-title em{font-family:var(--f-serif);font-style:italic;font-weight:400;letter-spacing:-.01em;color:var(--acc-2);padding-right:.05em}
+.mono-label{font:400 10.5px/1.4 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.dim{color:var(--dim)}
+.mono-note{font:400 10px/1.5 var(--f-mono);letter-spacing:.04em;color:var(--dim);margin:14px 0 0}
+.eyebrow{font:400 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc);display:inline-flex;gap:10px;align-items:center}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px var(--acc)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;padding:env(safe-area-inset-top,0px) clamp(12px,3vw,28px) 0}
+.nav-in{max-width:1240px;margin:12px auto 0;display:flex;align-items:center;gap:22px;padding:8px 8px 8px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(6,10,17,.58);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}
+.brand{display:inline-flex;align-items:center;text-decoration:none}
+.nav-links{display:flex;gap:22px;margin-left:10px}
+.nav-links a{color:var(--mute);font-size:14px;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--fg)}
+.status{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font:400 10px var(--f-mono);letter-spacing:.04em;color:var(--mute);padding:7px 11px;border:1px solid var(--line);border-radius:99px;font-variant-numeric:tabular-nums;text-decoration:none;transition:color .2s,border-color .2s}
+.status:hover{color:var(--fg);border-color:var(--line-2)}
+@media (max-width:900px){.nav-links{display:none}}
+@media (max-width:600px){.status{display:none}.nav-in .btn{margin-left:auto}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:0 22px;border-radius:12px;font:500 15px var(--f-body);text-decoration:none;border:1px solid transparent;cursor:pointer;transition:background .25s,box-shadow .25s,border-color .25s,color .25s;will-change:transform;white-space:nowrap}
+.btn-primary{background:var(--acc);color:var(--on-acc);box-shadow:inset 0 0 0 1px rgba(220,235,252,.6),0 12px 40px -12px rgba(132,178,227,.85)}
+.btn-primary:hover{background:var(--acc-2);box-shadow:inset 0 0 0 1px rgba(235,244,255,.8),0 14px 50px -10px rgba(132,178,227,.95)}
+.btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line-2);color:var(--fg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:rgba(188,214,244,.45);background:rgba(132,178,227,.07)}
+.btn-sm{height:36px;padding:0 14px;font-size:13.5px;border-radius:9px}
+.btn .arr{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:rgba(132,178,227,.16);color:var(--acc-2)}
+.btn .arr svg{width:10px;height:10px}
+
+/* glass */
+.glass{position:relative;background:linear-gradient(180deg,rgba(15,22,34,.76),rgba(7,11,18,.8));border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(18px) saturate(130%);-webkit-backdrop-filter:blur(18px) saturate(130%);box-shadow:0 40px 90px -40px rgba(0,0,0,.9);isolation:isolate}
+.glass::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:radial-gradient(280px circle at var(--mx,50%) var(--my,0%),rgba(170,205,245,.7),transparent 65%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .35s;pointer-events:none;z-index:3}
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(132,178,227,.08),transparent 60%);opacity:0;transition:opacity .35s;pointer-events:none;z-index:-1}
+.glass:hover::before,.glass:hover::after{opacity:1}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);font:400 10px var(--f-mono);letter-spacing:.05em;color:var(--mute)}
+.live{display:inline-flex;align-items:center;gap:7px;color:var(--ok)}
+.live .dot{width:6px;height:6px}
+
+/* hero */
+.hero{padding-top:clamp(120px,15vh,170px);padding-bottom:clamp(60px,9vw,110px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:clamp(32px,5vw,72px);align-items:center}
+.chip{display:inline-flex;gap:9px;align-items:center;font:400 10.5px var(--f-mono);letter-spacing:.04em;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:7px 13px;background:rgba(7,12,20,.55)}
+.chip .cmyk{display:inline-flex;gap:3px}
+.chip .cmyk i{width:6px;height:6px;border-radius:50%}
+.lede{font-size:clamp(16px,1.25vw,18px);color:#a9b3c3;max-width:46ch;margin:0}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.fine{font:400 10px var(--f-mono);color:#8a95a6;margin:18px 0 0;letter-spacing:.03em;text-shadow:0 1px 10px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9)}
+.fine a{text-decoration:none;color:var(--fg)}
+.hero-panel{perspective:1000px}
+.flow{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 18px;padding:24px 18px 20px}
+.flow-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
+.flow-svg .base{fill:none;stroke:rgba(160,190,230,.22);stroke-width:1.2;stroke-dasharray:3 4}
+.flow-svg .flowp{fill:none;stroke-width:2;stroke-linecap:round;filter:drop-shadow(0 0 4px currentColor)}
+.flow-svg .spark{filter:drop-shadow(0 0 6px #bcd6f4)}
+.node{position:relative;z-index:1;background:rgba(10,16,26,.94);border:1px solid var(--line-2);border-radius:12px;padding:10px 13px 11px;transition:border-color .35s,box-shadow .35s,transform .35s;min-width:0}
+.node .k{display:flex;align-items:center;gap:7px;font:400 9px var(--f-mono);color:var(--dim);text-transform:uppercase;letter-spacing:.09em}
+.node .v{display:block;font-size:14px;font-weight:500;margin-top:5px;letter-spacing:-.01em}
+.node .s{display:block;font:400 10px var(--f-mono);color:var(--mute);margin-top:3px;font-variant-numeric:tabular-nums}
+.node.hit{border-color:rgba(170,205,245,.9);box-shadow:0 0 0 4px rgba(132,178,227,.12),0 0 34px -6px rgba(132,178,227,.65);transform:translateY(-1px)}
+.n-t,.n-c{grid-column:1/-1;justify-self:center;width:min(270px,100%)}
+.n-o{grid-column:1/-1}
+.sw{width:8px;height:8px;border-radius:2px;background:var(--c);box-shadow:0 0 8px var(--c);flex:none}
+.strip{display:grid;grid-template-columns:repeat(32,minmax(0,1fr));gap:3px;margin-top:10px}
+.strip i{height:6px;border-radius:2px;background:#18202c;transition:background .35s,box-shadow .35s,opacity .35s}
+.log{border-top:1px solid var(--line);padding:12px 16px 14px;font:400 10px/1.5 var(--f-mono);color:var(--mute);height:118px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;-webkit-mask-image:linear-gradient(transparent,#000 45%);mask-image:linear-gradient(transparent,#000 45%);font-variant-numeric:tabular-nums}
+.log div{display:flex;gap:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:logIn .5s ease both}
+.log time{color:var(--dim)}
+.log b{font-weight:400;color:var(--acc-2)}
+@keyframes logIn{from{opacity:0;transform:translateY(8px)}}
+
+/* materials marquee */
+.protocols{padding-block:10px 20px}
+.proto-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.mq{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.mq-track{display:flex;gap:12px;width:max-content;animation:mq 46s linear infinite}
+.mq:hover .mq-track{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.tile{display:flex;align-items:center;gap:12px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:rgba(8,13,21,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:400 12px var(--f-mono);color:var(--fg);white-space:nowrap}
+.tile small{font-size:10px;color:var(--dim)}
+.tile .led{width:6px;height:6px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);animation:blink 2.8s infinite}
+
+/* sections */
+.sec{padding-block:clamp(90px,12vw,160px)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:32px;align-items:end;margin-bottom:clamp(32px,4vw,52px)}
+.sec-head p{color:#9aa4b4;max-width:44ch;margin:0;font-size:15.5px}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr;gap:18px}.hero-grid{grid-template-columns:1fr}}
+
+/* services */
+.editor{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr);overflow:hidden}
+.cues{border-right:1px solid var(--line);min-width:0}
+.cue{all:unset;box-sizing:border-box;display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:13px 16px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .25s}
+.cue:last-child{border-bottom:0}
+.cue:hover{background:rgba(255,255,255,.025)}
+.cue:focus-visible{outline:2px solid var(--acc-2);outline-offset:-2px}
+.cue[aria-pressed="true"]{background:linear-gradient(90deg,rgba(132,178,227,.12),rgba(132,178,227,0))}
+.cue .no{font:400 10px var(--f-mono);color:var(--dim);font-variant-numeric:tabular-nums}
+.cue b{display:block;font-weight:500;font-size:15px}
+.cue small{display:block;font:400 10px/1.4 var(--f-mono);color:var(--mute);margin-top:3px}
+.cue .ring{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px rgba(255,255,255,.04),0 0 10px var(--c);opacity:.55;transition:opacity .25s}
+.cue[aria-pressed="true"] .ring{opacity:1;box-shadow:0 0 0 3px rgba(255,255,255,.12),0 0 16px var(--c)}
+.preview{padding:18px;min-width:0;display:flex;flex-direction:column;gap:18px}
+.sheet-wrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#0b0f17;box-shadow:0 30px 60px -30px rgba(0,0,0,.9)}
+#scene{display:block;width:100%;aspect-ratio:16/10;max-width:100%;touch-action:pan-y}
+.sheet-wrap .ro{position:absolute;left:12px;top:10px;font:400 9.5px var(--f-mono);letter-spacing:.05em;color:rgba(238,242,247,.62);pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.svc-info{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px 28px;align-items:start}
+.svc-info h3{font-size:clamp(24px,2.6vw,32px);letter-spacing:-.035em;line-height:1.05}
+.svc-info p{margin:10px 0 0;color:#a3adbd;font-size:14.5px;max-width:44ch}
+.specs{display:grid;gap:0;margin:0}
+.specs div{display:grid;grid-template-columns:78px minmax(0,1fr);gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.specs div:first-child{padding-top:2px}
+.specs dt{font:400 9.5px/1.6 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.specs dd{margin:0;font-size:13.5px;color:var(--fg)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:18px;align-items:end;padding-top:16px;border-top:1px solid var(--line)}
+.ctl{display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--mute);min-width:0}
+.ctl>span{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ctl output{font:400 10.5px var(--f-mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.plates{display:flex;gap:8px;flex-wrap:wrap}
+.plate{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:9px;border:1px solid var(--line-2);font:400 11px var(--f-mono);color:var(--mute);cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.plate i{width:12px;height:12px;border-radius:3px;background:var(--c);opacity:.3;transition:opacity .2s,box-shadow .2s}
+.plate[aria-pressed="true"]{color:var(--fg);border-color:rgba(188,214,244,.4);background:rgba(255,255,255,.04)}
+.plate[aria-pressed="true"] i{opacity:1;box-shadow:0 0 10px var(--c)}
+.plate:focus-visible{outline:2px solid var(--acc-2);outline-offset:2px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--acc) var(--p,0%),#1a2331 var(--p,0%));outline:none;cursor:pointer;margin:6px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--fg);border:3px solid var(--ink);box-shadow:0 0 0 1px rgba(255,255,255,.4),0 0 16px rgba(132,178,227,.8)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--fg);border:3px solid var(--ink);box-shadow:0 0 0 1px rgba(255,255,255,.4),0 0 16px rgba(132,178,227,.8)}
+input[type=range]:focus-visible{outline:2px solid var(--acc-2);outline-offset:6px}
+@media (max-width:960px){.editor{grid-template-columns:1fr}.cues{border-right:0;border-bottom:1px solid var(--line)}}
+@media (max-width:600px){.svc-info{grid-template-columns:1fr}}
+
+/* proof / approvals */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,6vw,90px);align-items:center}
+.split-copy p{color:#9aa4b4;max-width:44ch;font-size:15.5px;margin:22px 0 0}
+.ticks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px}
+.ticks li{display:flex;gap:12px;align-items:center;font-size:14.5px;color:#c4ccd8}
+.ticks li::before{content:"";width:16px;height:16px;flex:none;border-radius:50%;border:1px solid rgba(132,178,227,.55);background:radial-gradient(circle,var(--acc) 0 3px,transparent 3.5px);box-shadow:0 0 12px rgba(132,178,227,.35)}
+.alert-stack{position:relative;padding-bottom:26px}
+.ghost-card{position:absolute;left:6%;right:6%;bottom:0;height:60%;border-radius:18px;border:1px solid var(--line);background:rgba(11,16,25,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.ghost-card.g1{left:3%;right:3%;bottom:13px;background:rgba(13,19,29,.65)}
+.alert{min-height:330px;display:flex;flex-direction:column}
+.alert-in{display:flex;flex-direction:column;flex:1;padding:20px;gap:14px;animation:alertIn .6s cubic-bezier(.2,.8,.2,1) both}
+.alert-in.out{animation:alertOut .45s ease forwards}
+@keyframes alertIn{from{opacity:0;transform:translateY(22px) scale(.98);filter:blur(6px)}}
+@keyframes alertOut{to{opacity:0;transform:translateY(-16px) scale(.98);filter:blur(6px)}}
+.a-top{display:flex;justify-content:space-between;gap:10px;font:400 10px var(--f-mono);color:var(--mute);letter-spacing:.04em}
+.a-top .z{display:inline-flex;gap:8px;align-items:center;color:var(--acc)}
+.a-top .z i{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc);animation:blink 1.6s infinite}
+.a-title{font:500 22px/1.15 var(--f-display);letter-spacing:-.025em}
+.a-body{color:#a3adbd;font-size:14.5px;margin:0}
+.a-spec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.a-spec div{padding:10px 12px;border-right:1px solid var(--line);min-width:0}
+.a-spec div:last-child{border-right:0}
+.a-spec span{display:block;font:400 9px var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.a-spec b{display:block;font-weight:500;font-size:13.5px;margin-top:4px;font-variant-numeric:tabular-nums}
+.a-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+.a-done{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:12px;background:rgba(95,227,161,.07);border:1px solid rgba(95,227,161,.25);color:#cdeedd;font-size:14px;margin-top:auto;animation:alertIn .5s ease both}
+.a-done svg{flex:none;width:20px;height:20px;color:var(--ok)}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+
+/* morph */
+#morph-sec{position:relative;height:300vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center}
+.seed-wrap{display:flex;flex-direction:column;align-items:center;gap:18px}
+.seed{position:relative;width:76px;height:76px;border-radius:20px;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;box-shadow:0 0 0 1px rgba(220,235,252,.6) inset,0 0 60px rgba(132,178,227,.55)}
+.seed::after{content:"";position:absolute;inset:-10px;border-radius:26px;border:1px solid rgba(132,178,227,.45);animation:ping 2.2s cubic-bezier(.2,.6,.3,1) infinite}
+@keyframes ping{from{transform:scale(.9);opacity:.9}to{transform:scale(1.5);opacity:0}}
+.static-statement{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#morph{position:fixed;left:0;top:0;width:76px;height:76px;z-index:40;background:var(--acc);color:var(--on-acc);border-radius:20px;pointer-events:none;visibility:hidden;overflow:hidden;box-shadow:0 0 0 1px rgba(220,235,252,.6) inset,0 0 70px rgba(132,178,227,.5);will-change:transform,width,height;background-image:radial-gradient(rgba(7,21,48,.14) 1px,transparent 1.4px);background-size:22px 22px}
+.m-glyph{position:absolute;inset:0;display:grid;place-items:center}
+.m-glyph svg{width:62%;height:62%;--lg-sko:var(--on-acc);--lg-arc:var(--on-acc)}
+.m-text{position:absolute;left:50%;top:50%;width:min(980px,88vw);transform:translate(-50%,-50%);text-align:center;color:var(--on-acc)}
+.m-eyebrow{display:block;font:400 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:22px}
+.m-title{margin:0;font:500 clamp(32px,5.2vw,78px)/1.02 var(--f-display);letter-spacing:-.045em;text-wrap:balance;color:var(--on-acc)}
+.m-title em{color:#1d3a78}
+.m-title .w{display:inline-block;will-change:transform,opacity}
+.m-foot{display:block;margin-top:26px;font:400 11px var(--f-mono);letter-spacing:.06em;opacity:.65}
+
+/* one roof */
+.rel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.card-t{padding:22px 22px 0}
+.card-t p{color:#9aa4b4;font-size:14.5px;margin:10px 0 0;max-width:46ch}
+.card-hub,.card-prep{display:flex;flex-direction:column;padding-bottom:20px}
+.card-hub .mono-note,.card-prep .mono-note{padding-inline:22px}
+.hub{position:relative;height:300px;margin:14px 10px 0}
+.spokes{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.spokes line{stroke:rgba(160,190,230,.18);stroke-width:1.2;stroke-dasharray:3 5;transition:stroke .6s}
+.hub.landed .spokes line{stroke:rgba(132,178,227,.5);stroke-dasharray:none}
+.spokes circle{fill:var(--acc-2);opacity:0;transition:opacity .4s;filter:drop-shadow(0 0 5px var(--acc))}
+.hub.landed .spokes circle{opacity:1}
+.hub-slot{position:absolute;left:50%;top:52%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:22px;border:1px dashed rgba(188,214,244,.35);background:rgba(132,178,227,.03)}
+.hub-icon{position:absolute;inset:0;border-radius:22px;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;box-shadow:0 0 0 1px rgba(220,235,252,.6) inset,0 0 50px rgba(132,178,227,.6)}
+.js:not(.rm) .hub:not(.landed) .hub-icon{visibility:hidden}
+.hub.landed .hub-icon{animation:land .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes land{0%{transform:scale(1.22,.78)}40%{transform:scale(.92,1.08)}70%{transform:scale(1.03,.97)}100%{transform:none}}
+.hub-slot .rip{position:absolute;inset:-2px;border-radius:24px;border:1.5px solid var(--acc);opacity:0;pointer-events:none}
+.hub.landed .rip{animation:rip 1.1s ease-out}
+.hub.landed .rip.r2{animation-delay:.18s}
+@keyframes rip{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(2.4)}}
+.sat{position:absolute;left:clamp(56px,var(--x),calc(100% - 56px));top:var(--y);transform:translate(-50%,-50%);padding:7px 11px;border-radius:9px;border:1px solid var(--line-2);background:rgba(9,14,22,.92);font:400 10px var(--f-mono);letter-spacing:.04em;color:var(--mute);transition:color .5s,border-color .5s,box-shadow .5s;white-space:nowrap}
+.hub.landed .sat{color:var(--fg);border-color:rgba(132,178,227,.45);box-shadow:0 0 22px -8px rgba(132,178,227,.75)}
+.prep{display:grid;padding:18px 22px 0;margin-top:auto}
+.prep .mono-label{margin-bottom:6px}
+.prep-row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr) 18px;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.prep-row b{font:400 11px var(--f-mono);color:var(--fg);letter-spacing:.02em}
+.prep-row span{font-size:13.5px;color:#b3bccb}
+.prep-row i{width:16px;height:16px;border-radius:50%;border:1px solid rgba(95,227,161,.5);background:radial-gradient(circle,var(--ok) 0 3px,transparent 3.5px);box-shadow:0 0 10px rgba(95,227,161,.3)}
+@media (max-width:860px){.rel-grid{grid-template-columns:1fr}}
+
+/* order */
+.order{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:18px;align-items:start}
+.form{padding:24px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font:400 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.field input,.field select,.field textarea{font:400 15px var(--f-body);color:var(--fg);background:rgba(4,7,13,.6);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;width:100%;min-width:0;transition:border-color .2s,box-shadow .2s}
+.field textarea{min-height:96px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:var(--dim)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(132,178,227,.7);box-shadow:0 0 0 4px rgba(132,178,227,.12)}
+.field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 15px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
+.form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding-top:6px}
+.form-foot .mono-note{margin:0;max-width:40ch}
+.out{grid-column:1/-1;border:1px solid rgba(95,227,161,.28);background:rgba(95,227,161,.06);border-radius:12px;padding:16px;display:grid;gap:12px;animation:alertIn .5s ease both}
+.out pre{margin:0;font:400 12px/1.6 var(--f-mono);color:#d6f2e4;white-space:pre-wrap;word-break:break-word}
+.out p{margin:0;font-size:13.5px;color:#cdeedd}
+.out .row{display:flex;flex-wrap:wrap;gap:10px}
+.contact{padding:24px;display:flex;flex-direction:column;gap:18px}
+.contact .person{display:flex;gap:14px;align-items:center}
+.avatar{width:52px;height:52px;border-radius:14px;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;font:600 18px var(--f-display);letter-spacing:-.03em;flex:none;box-shadow:0 0 30px -6px rgba(132,178,227,.7)}
+.person b{display:block;font:500 20px var(--f-display);letter-spacing:-.025em}
+.person span{display:block;font:400 10px var(--f-mono);letter-spacing:.05em;color:var(--mute);text-transform:uppercase;margin-top:3px}
+.cline{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.cline span{display:block;font:400 9.5px var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.cline a,.cline output{display:block;font:500 17px var(--f-display);letter-spacing:-.02em;color:var(--fg);text-decoration:none;margin-top:4px;user-select:all;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.copy{all:unset;box-sizing:border-box;height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);font:400 10.5px var(--f-mono);color:var(--mute);cursor:pointer;transition:color .2s,border-color .2s}
+.copy:hover{color:var(--fg);border-color:rgba(188,214,244,.45)}
+.copy:focus-visible{outline:2px solid var(--acc-2);outline-offset:2px}
+.contact .paper{border-radius:12px;background:var(--paper);padding:18px 20px;display:grid;place-items:center}
+.contact .paper .logo{height:42px;width:calc(42px * 146 / 49)}
+@media (max-width:960px){.order{grid-template-columns:1fr}}
+@media (max-width:560px){.form{grid-template-columns:1fr}}
+
+/* final */
+.final{padding-block:clamp(80px,12vw,150px) 0;text-align:center;overflow:hidden}
+.final h2{max-width:16ch;margin-inline:auto}
+.final .hero-cta{justify-content:center}
+.wordmark{--lx:50%;--ly:50%;margin-top:clamp(40px,6vw,70px);font:700 clamp(64px,15vw,232px)/.8 var(--f-display);letter-spacing:-.06em;background:radial-gradient(circle at var(--lx) var(--ly),#ffffff 0,var(--acc-2) 6%,var(--acc) 16%,rgba(51,88,162,.35) 34%,rgba(160,190,230,.06) 60%);-webkit-background-clip:text;background-clip:text;color:transparent;user-select:none;padding-bottom:.06em;white-space:nowrap}
+.foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-block:28px 40px;border-top:1px solid var(--line)}
+.foot nav{display:flex;gap:20px;flex-wrap:wrap}
+.foot nav a{color:var(--mute);font-size:13.5px;text-decoration:none}
+.foot nav a:hover{color:var(--fg)}
+
+/* reduced motion */
+.rm .mq-track,.rm .seed::after,.rm .dot{animation:none}
+.rm #morph{display:none}
+.rm #morph-sec{height:auto;padding-block:40px}
+.rm .stage{position:relative;height:auto;padding:clamp(48px,8vw,100px) clamp(16px,4vw,40px);background:var(--acc);border-radius:0}
+.rm .seed-wrap{display:none}
+.rm .static-statement{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;text-align:center;color:var(--on-acc);max-width:980px}
+.rm .static-statement span{font:400 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.rm .static-statement p{font:500 clamp(30px,5vw,66px)/1.04 var(--f-display);letter-spacing:-.045em;margin:18px 0 0}
+.rm .static-statement em{font-family:var(--f-serif);font-style:italic;font-weight:400;color:#1d3a78}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<symbol id="skologo" viewBox="60 34 146 49"><g id="lgMark"><path style="fill:var(--lg-sko)" d="M 61.69 63.92 C 61.85 64.06 62.02 64.20 62.21 64.32 C 63.15 65.00 64.61 65.31 65.67 65.31 C 67.79 65.31 68.00 64.15 68.00 63.75 C 68.00 62.83 67.03 62.43 66.33 62.13 L 65.15 61.66 C 63.53 60.93 61.32 59.92 61.32 56.69 C 61.32 55.40 61.62 54.03 62.82 52.90 C 63.95 51.87 65.41 51.44 67.53 51.44 C 69.93 51.44 71.32 52.05 72.02 52.36 L 72.12 52.50 L 71.91 56.17 L 71.69 56.27 C 71.36 56.01 71.03 55.75 70.66 55.54 C 69.86 55.07 68.89 54.83 68.14 54.83 C 67.27 54.83 66.94 55.07 66.78 55.18 C 66.49 55.42 66.26 55.84 66.26 56.27 C 66.26 57.16 67.32 57.58 67.83 57.80 L 69.13 58.34 C 69.53 58.50 70.64 58.91 71.62 59.82 C 72.82 60.93 72.99 62.34 72.99 63.21 C 72.99 64.79 72.26 65.96 72.05 66.30 C 70.66 68.34 68.26 68.79 65.88 68.79 C 63.53 68.79 62.18 68.27 61.50 68.01 L 61.32 67.78 C 61.43 65.99 61.46 65.71 61.48 63.99ZM 61.69 63.92"/><path style="fill:var(--lg-sko)" d="M 80.40 59.87 C 80.42 61.05 80.47 62.25 80.47 63.42 C 80.52 66.01 80.52 66.20 80.66 68.32 L 80.52 68.44 C 78.5 68.41 77.86 68.41 75.69 68.51 L 75.53 68.37 C 75.60 65.78 75.65 64.17 75.65 61.64 C 75.65 56.19 75.53 54.36 75.37 51.96 L 75.51 51.82 C 77.53 51.84 78.14 51.84 80.45 51.75 L 80.59 51.87 L 80.42 59.14 L 83.35 53.96 L 84.48 51.91 L 84.64 51.82 L 89.82 51.75 L 89.96 51.91 C 87.16 55.58 86.62 56.43 85.09 58.81 L 88.15 64.44 C 89.51 66.79 89.66 67.05 90.38 68.11 L 90.31 68.32 L 84.90 68.53 L 84.69 68.44 C 83.93 66.79 83.82 66.53 82.87 64.60ZM 80.40 59.87"/><path style="fill:var(--lg-sko)" d="M 98.65 55 C 96.46 55 95.92 57.28 95.92 60.25 C 95.92 61.75 96.06 65.16 98.55 65.16 C 101.03 65.16 101.24 61.94 101.22 60.06 C 101.19 57.35 100.67 55 98.65 55 M 105.26 65.42 C 103.57 68.30 100.51 68.76 98.48 68.76 C 93.47 68.76 90.74 65.75 90.74 60.36 C 90.74 58.43 90.98 56.46 91.96 54.81 C 92.98 53.11 94.83 51.44 98.55 51.44 C 100.06 51.44 102.39 51.75 104 53.25 C 105.26 54.48 106.30 56.34 106.39 59.92 C 106.42 61.21 106.30 63.66 105.26 65.42"/><path style="fill:var(--lg-arc)" d="M 83.00 35.25 C 89.86 35.44 96.73 37.53 102.23 41.70 C 104.97 43.77 107.36 46.37 109.02 49.42 C 110.69 52.46 111.60 55.94 111.50 59.39 C 111.41 62.85 110.33 66.23 108.55 69.09 C 106.77 71.97 104.33 74.35 101.60 76.20 C 96.10 79.92 89.46 81.52 83.00 81.35 C 82.91 81.35 82.83 81.27 82.83 81.18 C 82.83 81.08 82.91 81.01 83.00 81.01 C 86.20 80.91 89.38 80.37 92.40 79.38 C 95.42 78.39 98.26 76.93 100.76 75.03 C 103.25 73.14 105.38 70.79 106.84 68.09 C 108.30 65.41 109.07 62.39 108.98 59.39 C 108.89 56.40 107.94 53.49 106.37 50.97 C 104.80 48.44 102.61 46.31 100.12 44.64 C 97.63 42.96 94.84 41.74 91.93 40.97 C 89.02 40.20 86.00 39.88 83.00 39.96 L 83.00 39.96 C 81.70 39.99 80.62 38.96 80.58 37.67 C 80.55 36.37 81.57 35.28 82.87 35.25 C 82.91 35.25 82.96 35.25 83.00 35.25"/></g><path style="fill:var(--lg-rek)" d="M 113.83 59.07 C 114.70 59.09 116.96 59.12 116.96 56.97 C 116.96 55.94 116.44 55.14 115.05 55.14 C 114.77 55.14 114.16 55.16 113.88 55.16ZM 113.83 62.29 C 113.83 65.12 113.85 65.73 114 68.30 L 113.85 68.44 L 109.01 68.51 L 108.89 68.37 C 108.94 65.33 109.01 62.29 109.01 59.26 C 109.01 55.49 108.91 54.12 108.75 51.94 L 108.87 51.82 L 113.10 51.82 L 114.33 51.80 C 116.66 51.75 118.80 51.73 120.16 52.78 C 120.78 53.25 121.81 54.48 121.81 56.57 C 121.81 57.70 121.53 58.53 121.27 59.07 C 120.64 60.41 119.72 60.83 118.94 61.19 L 121.08 65.35 L 122.68 68.11 L 122.59 68.32 L 117.62 68.53 L 117.36 68.34 L 116.09 65.38 L 114.61 62.27ZM 113.83 62.29"/><path style="fill:var(--lg-rek)" d="M 129.69 61.56 L 129.69 64.81 C 131.53 64.81 133.25 64.76 135.67 64.67 L 135.82 64.81 L 135.58 68.30 L 135.37 68.44 C 132.14 68.44 131.60 68.41 130.90 68.41 C 128.31 68.41 126.96 68.46 124.73 68.51 L 124.61 68.34 C 124.68 65.64 124.71 64.17 124.71 60.98 C 124.71 55.33 124.66 54.36 124.54 51.96 L 124.68 51.82 L 135.28 51.82 L 135.39 51.91 L 135.23 55.16 L 135.08 55.28 L 129.65 55.28 L 129.65 58.27 L 134.80 58.17 L 134.94 58.34 L 134.76 61.42 L 134.59 61.56ZM 129.69 61.56"/><path style="fill:var(--lg-rek)" d="M 143.21 59.87 C 143.23 61.05 143.28 62.25 143.28 63.42 C 143.32 66.01 143.32 66.20 143.47 68.32 L 143.32 68.44 C 141.30 68.41 140.66 68.41 138.50 68.51 L 138.33 68.37 C 138.41 65.78 138.45 64.17 138.45 61.64 C 138.45 56.19 138.33 54.36 138.17 51.96 L 138.31 51.82 C 140.33 51.84 140.95 51.84 143.25 51.75 L 143.39 51.87 L 143.23 59.14 L 146.15 53.96 L 147.28 51.91 L 147.44 51.82 L 152.62 51.75 L 152.76 51.91 C 149.96 55.58 149.42 56.43 147.89 58.81 L 150.95 64.44 C 152.32 66.79 152.46 67.05 153.19 68.11 L 153.12 68.32 L 147.70 68.53 L 147.49 68.44 C 146.74 66.79 146.62 66.53 145.68 64.60ZM 143.21 59.87"/><path style="fill:var(--lg-rek)" d="M 160.41 51.84 C 160.39 52.43 160.34 53.04 160.32 53.63 C 160.25 55.61 160.23 62.48 160.20 64.76 C 163.12 64.74 163.66 64.72 166.04 64.62 L 166.16 64.76 L 165.92 68.30 L 165.80 68.44 C 160.76 68.39 159.47 68.41 155.26 68.51 L 155.14 68.37 C 155.16 66.81 155.16 66.25 155.16 65.35 C 155.16 63.35 155.14 61.35 155.12 59.35 C 155.12 54.81 155.12 54.31 155.05 51.91 L 155.19 51.80 L 160.25 51.75ZM 160.41 51.84"/><path style="fill:var(--lg-rek)" d="M 176.32 61.00 L 175.74 58.50 L 174.96 54.95 C 174.68 56.19 174.53 56.74 174.02 58.62 L 173.41 61.00ZM 172.53 64.39 L 171.62 68.34 L 171.45 68.44 L 167.12 68.44 L 167.00 68.27 L 172.14 51.94 L 172.28 51.82 L 178.25 51.75 L 178.42 51.87 L 183.20 68.25 L 183.03 68.44 L 180.61 68.44 C 179.81 68.44 179.01 68.48 178.18 68.51 L 178.02 68.39 L 177.12 64.39ZM 172.53 64.39"/><path style="fill:var(--lg-rek)" d="M 194.28 61.89 C 194.45 61.26 194.59 60.62 194.76 59.96 C 195.18 58.29 195.67 56.62 196.12 54.95 C 196.38 53.94 196.64 52.92 196.87 51.91 L 197.04 51.82 L 203.42 51.75 L 203.56 51.89 C 203.63 54.74 203.68 55.98 203.89 59.89 C 204.03 62.69 204.19 65.5 204.33 68.30 L 204.19 68.44 C 202.26 68.41 201.58 68.44 199.58 68.51 L 199.46 68.37 L 199.28 59.16 L 199.28 55.63 L 198.41 58.83 L 198.03 60.27 L 195.89 68.30 L 195.70 68.44 C 194.14 68.41 193.72 68.41 192.02 68.51 L 191.86 68.37 C 190.92 64.69 190.68 63.78 189.93 60.95 L 189.55 59.56 L 188.45 55.49 L 188.35 58.83 C 188.30 60.83 188.26 62.83 188.26 64.83 C 188.26 66.06 188.28 67.05 188.30 68.30 L 188.14 68.44 L 184.21 68.51 L 184.09 68.37 C 184.56 61.78 184.66 59.77 184.87 51.94 L 185.01 51.82 L 188.19 51.82 C 189.32 51.80 190.42 51.77 191.53 51.75 L 191.67 51.82ZM 194.28 61.89"/><path style="fill:var(--lg-sub)" d="M 111.55 73.45 C 111.70 73.32 111.78 73.13 111.78 72.93 C 111.78 72.80 111.75 72.64 111.66 72.50 C 111.47 72.20 111.13 72.18 110.67 72.18 C 110.59 72.18 110.48 72.18 110.27 72.19 C 110.26 72.91 110.26 73.00 110.27 73.69 C 110.74 73.69 111.25 73.71 111.55 73.45 M 110.29 76.05 C 109.93 76.05 109.93 76.05 109.61 76.07 L 109.57 76.02 C 109.59 75.42 109.59 74.82 109.59 74.22 C 109.59 72.83 109.57 72.35 109.53 71.73 L 109.57 71.69 L 109.73 71.69 C 109.83 71.69 110.14 71.68 110.35 71.68 L 110.73 71.67 C 111.07 71.67 111.39 71.67 111.69 71.78 C 112.17 71.94 112.47 72.28 112.47 72.87 C 112.47 73.37 112.21 73.87 111.42 74.08 C 111.52 74.23 112.00 74.93 112.11 75.09 C 112.30 75.36 112.39 75.49 112.78 75.99 L 112.75 76.05 C 112.63 76.05 112.50 76.05 112.37 76.06 C 112.25 76.07 112.11 76.07 111.98 76.08 L 111.94 76.05 C 111.92 76.01 111.89 75.97 111.87 75.92 C 111.69 75.61 111.48 75.31 111.28 75.01 C 110.91 74.45 110.87 74.39 110.73 74.19 C 110.53 74.19 110.5 74.20 110.28 74.19 C 110.28 74.53 110.29 75.49 110.32 76.00ZM 110.29 76.05"/><path style="fill:var(--lg-sub)" d="M 118.17 75.54 C 118.16 75.75 118.16 75.80 118.14 76.00 L 118.10 76.05 C 116.90 76.05 116.71 76.05 115.53 76.07 L 115.50 76.02 C 115.52 75.53 115.54 75.20 115.54 74.07 C 115.54 73.03 115.54 72.44 115.5 71.73 L 115.53 71.69 C 116.75 71.68 116.99 71.68 118.12 71.67 L 118.16 71.71 C 118.14 71.90 118.13 71.97 118.12 72.19 L 118.08 72.24 C 117.28 72.21 117.02 72.21 116.24 72.21 C 116.22 72.78 116.22 72.95 116.22 73.52 C 116.98 73.53 117.21 73.52 117.96 73.51 L 118 73.55 C 117.97 73.77 117.97 73.83 117.96 74.03 L 117.93 74.07 C 117.21 74.05 117.06 74.05 116.22 74.05 C 116.20 74.77 116.21 74.94 116.22 75.53 C 117.15 75.53 117.34 75.53 118.14 75.50ZM 118.17 75.54"/><path style="fill:var(--lg-sub)" d="M 123.99 71.72 C 123.60 72.17 122.89 73.02 122.40 73.64 C 122.98 74.44 123.58 75.21 124.21 75.98 L 124.18 76.05 C 123.81 76.05 123.78 76.05 123.38 76.07 L 123.33 76.03 C 122.99 75.53 121.82 73.98 121.66 73.78 C 121.66 74.09 121.66 75.25 121.71 76.00 L 121.67 76.05 C 121.32 76.05 121.31 76.05 120.98 76.07 L 120.96 76.02 C 120.98 75.34 120.98 75.21 120.98 73.50 C 120.98 72.58 120.97 72.22 120.93 71.73 L 120.97 71.69 C 121.30 71.68 121.35 71.68 121.66 71.67 L 121.69 71.71 C 121.66 72.66 121.66 72.85 121.66 73.68 C 121.71 73.63 121.76 73.57 121.81 73.50 C 121.84 73.47 122.92 72.13 123.20 71.73 L 123.25 71.69 C 123.59 71.69 123.62 71.68 123.95 71.67ZM 123.99 71.72"/><path style="fill:var(--lg-sub)" d="M 129.23 75.53 C 129.21 75.73 129.21 75.82 129.19 76.00 L 129.16 76.05 C 128.07 76.05 127.97 76.05 126.81 76.07 L 126.77 76.02 C 126.79 75.52 126.80 74.78 126.80 73.70 C 126.80 72.75 126.79 72.23 126.76 71.73 L 126.80 71.69 C 127.13 71.68 127.19 71.68 127.51 71.67 L 127.55 71.71 C 127.48 72.86 127.48 74.34 127.48 74.49 C 127.48 74.97 127.49 75.22 127.50 75.51 C 128.18 75.51 128.37 75.50 129.19 75.48ZM 129.23 75.53"/><path style="fill:var(--lg-sub)" d="M 132.71 74.22 C 132.91 74.22 133.10 74.23 133.30 74.23 C 133.51 74.23 133.73 74.22 133.95 74.22 L 133.36 72.13ZM 133.93 71.82 C 134.14 72.5 134.37 73.26 134.56 73.85 C 134.75 74.44 135.06 75.39 135.24 75.99 L 135.22 76.03 C 134.90 76.04 134.76 76.05 134.50 76.06 L 134.46 76.02 C 134.30 75.44 134.25 75.27 134.09 74.71 C 133.85 74.71 133.60 74.71 133.36 74.71 C 133.09 74.71 132.80 74.71 132.56 74.71 C 132.38 75.29 132.34 75.44 132.19 75.99 L 132.15 76.03 C 131.88 76.03 131.82 76.03 131.51 76.05 L 131.49 76.01 C 131.51 75.94 131.53 75.88 131.55 75.82 C 131.79 75.15 132.02 74.49 132.24 73.82 C 132.61 72.73 132.75 72.32 132.92 71.73 L 132.98 71.69 C 133.41 71.68 133.46 71.68 133.86 71.66 L 133.90 71.71ZM 133.93 71.82"/><path style="fill:var(--lg-sub)" d="M 142.06 71.71 C 142.09 73.14 142.14 74.57 142.22 76.00 L 142.19 76.05 C 141.88 76.05 141.84 76.05 141.52 76.07 L 141.49 76.02 C 141.49 75.32 141.49 75.11 141.47 74.43 L 141.46 73.78 C 141.46 73.33 141.45 72.39 141.45 72.16 C 141.35 72.51 141.26 72.84 141.00 73.71 L 140.71 74.60 C 140.49 75.29 140.41 75.53 140.27 76.00 L 140.23 76.05 C 139.90 76.05 139.87 76.05 139.52 76.07 L 139.48 76.02 C 139.45 75.92 139.42 75.82 139.39 75.71 C 139.34 75.52 139.07 74.60 139.00 74.40 L 138.76 73.53 C 138.51 72.65 138.49 72.55 138.40 72.16 C 138.39 72.78 138.39 72.91 138.37 73.53 L 138.32 74.63 C 138.30 75.36 138.30 75.52 138.29 76.00 L 138.26 76.05 C 137.97 76.05 137.93 76.05 137.67 76.07 L 137.64 76.02 C 137.65 75.90 137.66 75.77 137.68 75.65 C 137.74 74.91 137.76 74.17 137.80 73.44 C 137.87 72.34 137.87 72.28 137.87 71.73 L 137.91 71.69 C 138.36 71.69 138.47 71.68 138.86 71.67 L 138.91 71.71 C 139.02 72.21 139.12 72.57 139.25 72.98 L 139.92 75.48 L 140.70 72.91 C 140.95 72.10 140.96 72.07 141.05 71.73 L 141.09 71.69 C 141.54 71.69 141.60 71.68 142.02 71.67ZM 142.06 71.71"/><path style="fill:var(--lg-sub)" d="M 148.74 76.00 L 148.71 76.05 C 148.34 76.05 148.32 76.05 147.94 76.07 L 147.90 76.02 C 147.53 75.37 147.17 74.73 146.80 74.08 L 145.82 72.33 L 145.89 74.45 C 145.89 74.71 145.90 74.97 145.91 75.23 C 145.93 75.74 145.93 75.75 145.94 76.00 L 145.90 76.05 C 145.63 76.05 145.60 76.05 145.31 76.07 L 145.27 76.02 C 145.30 75.44 145.30 74.84 145.30 74.26 C 145.30 73.42 145.30 72.57 145.27 71.73 L 145.30 71.69 C 145.68 71.68 145.74 71.68 146.09 71.67 L 146.16 71.71 C 146.58 72.46 147.01 73.25 147.41 73.97 L 148.18 75.32 L 148.13 73.27 C 148.11 72.30 148.10 72.16 148.08 71.73 L 148.11 71.69 C 148.39 71.69 148.45 71.68 148.70 71.67 L 148.74 71.71 C 148.72 72.46 148.71 73.24 148.71 74.00 C 148.71 74.58 148.72 75.16 148.73 75.75ZM 148.74 76.00"/><path style="fill:var(--lg-sub)" d="M 152.62 71.71 C 152.60 72.13 152.59 72.61 152.59 73.67 C 152.59 74.86 152.60 75.37 152.64 76.00 L 152.60 76.05 C 152.33 76.05 152.25 76.05 151.92 76.07 L 151.88 76.02 C 151.89 75.65 151.91 75.32 151.91 74.52 C 151.91 73.59 151.91 72.66 151.86 71.74 L 151.89 71.69 C 152.17 71.69 152.26 71.69 152.58 71.67ZM 153.04 70.73 C 152.74 71.03 152.68 71.10 152.41 71.44 L 152.34 71.46 C 152.17 71.45 152.10 71.45 151.89 71.45 L 151.86 71.42 C 151.92 71.31 152.10 71.01 152.24 70.71 L 152.28 70.69 L 152.99 70.69ZM 153.04 70.73"/><path style="fill:var(--lg-sub)" d="M 160.30 74.22 C 160.5 74.22 160.69 74.23 160.89 74.23 C 161.10 74.23 161.32 74.22 161.54 74.22 L 160.95 72.13ZM 161.52 71.82 C 161.73 72.5 161.96 73.26 162.14 73.85 C 162.33 74.44 162.64 75.39 162.83 75.99 L 162.81 76.03 C 162.48 76.04 162.35 76.05 162.09 76.06 L 162.05 76.02 C 161.89 75.44 161.84 75.27 161.68 74.71 C 161.44 74.71 161.19 74.71 160.95 74.71 C 160.67 74.71 160.39 74.71 160.14 74.71 C 159.96 75.29 159.93 75.44 159.78 75.99 L 159.74 76.03 C 159.47 76.03 159.41 76.03 159.10 76.05 L 159.08 76.01 C 159.09 75.94 159.12 75.88 159.14 75.82 C 159.38 75.15 159.61 74.49 159.83 73.82 C 160.20 72.73 160.33 72.32 160.51 71.73 L 160.57 71.69 C 161 71.68 161.05 71.68 161.45 71.66 L 161.49 71.71ZM 161.52 71.82"/><path style="fill:var(--lg-sub)" d="M 168.72 73.94 C 168.69 74.43 168.69 74.92 168.69 75.29 C 168.69 75.55 168.69 75.66 168.70 75.84 L 168.66 75.89 C 168.23 76.06 167.82 76.14 167.35 76.14 C 166.75 76.14 166.08 75.99 165.62 75.50 C 165.32 75.17 165.08 74.63 165.08 73.92 C 165.08 73.21 165.32 72.63 165.67 72.25 C 166.22 71.63 166.94 71.60 167.27 71.60 C 167.94 71.60 168.36 71.78 168.53 71.86 L 168.57 71.91 C 168.53 72.12 168.52 72.22 168.5 72.50 L 168.45 72.51 C 168.25 72.39 167.89 72.14 167.31 72.14 C 167.09 72.14 166.55 72.17 166.17 72.69 C 165.86 73.11 165.83 73.64 165.83 73.92 C 165.83 74.94 166.36 75.60 167.35 75.60 C 167.66 75.60 167.85 75.54 167.99 75.50 L 168 75.03 C 168 74.56 167.97 74.19 167.96 73.96 L 168 73.92 C 168.33 73.92 168.40 73.92 168.69 73.91ZM 168.72 73.94"/><path style="fill:var(--lg-sub)" d="M 174.26 75.54 C 174.24 75.75 174.24 75.80 174.23 76.00 L 174.18 76.05 C 172.98 76.05 172.79 76.05 171.62 76.07 L 171.58 76.02 C 171.60 75.53 171.62 75.20 171.62 74.07 C 171.62 73.03 171.62 72.44 171.58 71.73 L 171.62 71.69 C 172.83 71.68 173.07 71.68 174.21 71.67 L 174.25 71.71 C 174.23 71.90 174.21 71.97 174.20 72.19 L 174.16 72.24 C 173.37 72.21 173.10 72.21 172.32 72.21 C 172.30 72.78 172.30 72.95 172.30 73.52 C 173.06 73.53 173.30 73.52 174.05 73.51 L 174.08 73.55 C 174.05 73.77 174.05 73.83 174.05 74.03 L 174.01 74.07 C 173.30 74.05 173.14 74.05 172.30 74.05 C 172.29 74.77 172.30 74.94 172.30 75.53 C 173.23 75.53 173.42 75.53 174.22 75.50ZM 174.26 75.54"/><path style="fill:var(--lg-sub)" d="M 180.49 76.00 L 180.46 76.05 C 180.10 76.05 180.07 76.05 179.70 76.07 L 179.65 76.02 C 179.28 75.37 178.92 74.73 178.55 74.08 L 177.57 72.33 L 177.64 74.45 C 177.64 74.71 177.66 74.97 177.66 75.23 C 177.68 75.74 177.68 75.75 177.69 76.00 L 177.66 76.05 C 177.39 76.05 177.36 76.05 177.06 76.07 L 177.03 76.02 C 177.05 75.44 177.06 74.84 177.06 74.26 C 177.06 73.42 177.05 72.57 177.02 71.73 L 177.05 71.69 C 177.43 71.68 177.5 71.68 177.85 71.67 L 177.91 71.71 C 178.33 72.46 178.76 73.25 179.17 73.97 L 179.93 75.32 L 179.89 73.27 C 179.86 72.30 179.85 72.16 179.83 71.73 L 179.87 71.69 C 180.14 71.69 180.21 71.68 180.45 71.67 L 180.49 71.71 C 180.48 72.46 180.46 73.24 180.46 74.00 C 180.46 74.58 180.47 75.16 180.48 75.75ZM 180.49 76.00"/><path style="fill:var(--lg-sub)" d="M 186.07 72.22 C 185.55 72.21 185.47 72.21 184.94 72.21 C 184.92 72.82 184.92 72.92 184.92 73.47 C 184.92 75.02 184.95 75.64 184.97 76.00 L 184.93 76.05 C 184.58 76.05 184.56 76.05 184.22 76.07 L 184.19 76.02 C 184.22 75.16 184.23 74.30 184.23 73.43 C 184.23 72.80 184.21 72.47 184.21 72.21 C 183.67 72.21 183.61 72.21 183.06 72.23 L 183.02 72.19 C 183.03 71.97 183.03 71.95 183.05 71.73 L 183.08 71.69 C 183.52 71.69 184.23 71.69 184.68 71.68 C 185.15 71.68 185.63 71.67 186.10 71.67 L 186.14 71.71 C 186.12 71.93 186.11 72 186.11 72.17ZM 186.07 72.22"/><path style="fill:var(--lg-sub)" d="M 192.01 71.71 C 192.00 72.28 191.99 72.42 191.99 72.91 C 191.99 73.17 191.99 73.37 192.00 73.83 L 192.00 74.39 C 192.00 74.76 192.00 75.29 191.64 75.68 C 191.35 76.00 190.87 76.14 190.37 76.14 C 189.58 76.14 189.18 75.82 189.02 75.64 C 188.69 75.26 188.69 74.89 188.69 74.16 L 188.69 73.53 C 188.69 72.64 188.69 72.53 188.67 71.73 L 188.71 71.69 C 189.05 71.68 189.10 71.68 189.41 71.67 L 189.43 71.71 C 189.41 72.35 189.41 73.47 189.41 74.07 C 189.41 74.69 189.42 75.07 189.64 75.32 C 189.75 75.45 189.98 75.62 190.41 75.62 C 190.57 75.62 191.05 75.61 191.29 75.15 C 191.42 74.89 191.42 74.54 191.42 74.06 C 191.42 73.34 191.42 72.44 191.37 71.73 L 191.41 71.69 C 191.69 71.68 191.73 71.68 191.97 71.67ZM 192.01 71.71"/><path style="fill:var(--lg-sub)" d="M 197.15 73.45 C 197.30 73.32 197.38 73.13 197.38 72.93 C 197.38 72.80 197.35 72.64 197.26 72.50 C 197.07 72.20 196.73 72.18 196.27 72.18 C 196.19 72.18 196.08 72.18 195.87 72.19 C 195.86 72.91 195.86 73.00 195.87 73.69 C 196.34 73.69 196.85 73.71 197.15 73.45 M 195.89 76.05 C 195.54 76.05 195.53 76.05 195.21 76.07 L 195.17 76.02 C 195.19 75.42 195.19 74.82 195.19 74.22 C 195.19 72.83 195.17 72.35 195.14 71.73 L 195.17 71.69 L 195.33 71.69 C 195.44 71.69 195.74 71.68 195.95 71.68 L 196.33 71.67 C 196.67 71.67 197 71.67 197.30 71.78 C 197.77 71.94 198.07 72.28 198.07 72.87 C 198.07 73.37 197.81 73.87 197.02 74.08 C 197.12 74.23 197.60 74.93 197.71 75.09 C 197.91 75.36 197.99 75.49 198.38 75.99 L 198.35 76.05 C 198.23 76.05 198.10 76.05 197.98 76.06 C 197.85 76.07 197.71 76.07 197.58 76.08 L 197.54 76.05 C 197.52 76.01 197.49 75.97 197.47 75.92 C 197.29 75.61 197.08 75.31 196.88 75.01 C 196.51 74.45 196.48 74.39 196.33 74.19 C 196.14 74.19 196.10 74.20 195.88 74.19 C 195.88 74.53 195.89 75.49 195.92 76.00ZM 195.89 76.05"/><path style="fill:var(--lg-sub)" d="M 201.86 74.22 C 202.06 74.22 202.26 74.23 202.46 74.23 C 202.66 74.23 202.89 74.22 203.10 74.22 L 202.51 72.13ZM 203.08 71.82 C 203.29 72.5 203.52 73.26 203.71 73.85 C 203.90 74.44 204.21 75.39 204.39 75.99 L 204.37 76.03 C 204.05 76.04 203.91 76.05 203.65 76.06 L 203.61 76.02 C 203.46 75.44 203.41 75.27 203.25 74.71 C 203.00 74.71 202.76 74.71 202.51 74.71 C 202.24 74.71 201.95 74.71 201.71 74.71 C 201.53 75.29 201.49 75.44 201.34 75.99 L 201.30 76.03 C 201.03 76.03 200.97 76.03 200.66 76.05 L 200.64 76.01 C 200.66 75.94 200.68 75.88 200.71 75.82 C 200.94 75.15 201.17 74.49 201.39 73.82 C 201.76 72.73 201.90 72.32 202.08 71.73 L 202.13 71.69 C 202.56 71.68 202.62 71.68 203.01 71.66 L 203.05 71.71ZM 203.08 71.82"/></symbol><symbol id="skomark" viewBox="58 33 57 51"><use href="#lgMark"/></symbol>
+</svg>
+
+<canvas id="field" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" data-scroll aria-label="Skoreklam, reklamní agentura"><svg class="logo" aria-hidden="true"><use href="#skologo" width="100%" height="100%"/></svg></a>
+    <nav class="nav-links" aria-label="Hlavní navigace">
+      <a href="#sluzby" data-scroll>Služby</a>
+      <a href="#korektura" data-scroll>Jak to probíhá</a>
+      <a href="#podklady" data-scroll>Podklady</a>
+      <a href="#poptavka" data-scroll>Kontakt</a>
+    </nav>
+    <a class="status" href="tel:+420739377083"><i class="dot"></i><span>+420 739 377 083</span></a>
+    <a class="btn btn-primary btn-sm" href="#poptavka" data-scroll>Poptávka</a>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero wrap" data-tone="blue">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <span class="chip rv"><span class="cmyk" aria-hidden="true"><i style="background:#ffc98a"></i><i style="background:#eef4ff"></i><i style="background:var(--acc)"></i><i style="background:var(--pm)"></i></span>světelná reklama · 3D tisk · LED</span>
+      <h1 class="rv">Navrhneme, vytiskneme, <em>rozsvítíme.</em></h1>
+      <p class="lede rv">Světelné boxy, LED lišty, chytré digitální LED a 3D písmena. Navrhneme je, vyrobíme, postavíme konstrukci a namontujeme. K tomu vizitky, katalogy a tašky ve stejném stylu.</p>
+      <div class="hero-cta rv">
+        <a class="btn btn-primary mag" href="#poptavka" data-scroll>Poptat reklamu</a>
+        <a class="btn btn-ghost mag" href="#sluzby" data-scroll><span class="arr"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1v8M1.5 5.5 5 9l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Co rozsvítíme</a>
+      </div>
+      <p class="fine rv">Poptávky vyřizuje přímo Jakub Skořepa · <a href="tel:+420739377083">+420 739 377 083</a></p>
+    </div>
+
+    <div class="glass hero-panel" id="heroPanel">
+      <div class="ph"><span>cesta zakázky · ukázka</span><span class="live"><i class="dot"></i>ve výrobě</span></div>
+      <div class="flow" id="flow">
+        <svg class="flow-svg" id="flowSvg" aria-hidden="true"></svg>
+        <div class="node n-t" id="n-t"><span class="k">poptávka</span><span class="v" id="jobName">Světelný box 240 × 80 cm</span><span class="s" id="jobSpec">hotel · fasáda nad vchodem</span></div>
+        <div class="node n-c" id="n-c"><span class="k">zaměření a návrh</span><span class="v">Vizualizace na fotce místa</span><span class="s">ve dne i v noci · ke schválení</span></div>
+        <div class="node n-a" id="n-a"><span class="k"><i class="sw" style="--c:#84b2e3"></i>3D tisk</span><span class="v">Písmena a loga</span><span class="s">PETG · podsvícení</span></div>
+        <div class="node n-b" id="n-b"><span class="k"><i class="sw" style="--c:#ffb86b"></i>LED a elektro</span><span class="v">Boxy, lišty, chytré LED</span><span class="s">zdroje · řízení · scény</span></div>
+        <div class="node n-o" id="n-o"><span class="k">montáž</span><span class="v">Svítí na místě</span><div class="strip" id="strip"></div></div>
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+</section>
+
+<section class="protocols" data-tone="blue" aria-label="Materiály">
+  <div class="wrap proto-head"><span class="mono-label">Z čeho stavíme světlo</span><span class="mono-label dim">a další materiály podle zakázky</span></div>
+  <div class="mq"><div class="mq-track" id="mq"></div></div>
+</section>
+
+<section class="sec wrap" id="sluzby" data-tone="light">
+  <div class="sec-head">
+    <div><span class="eyebrow rv"><i></i>co rozsvítíme</span><h2 class="rv">Od nápisu <em>po celou fasádu.</em></h2></div>
+    <p class="rv">Vyberte službu a posuňte den do noci. Barvu světla zvolíte pod náhledem, u chytrých LED i efekt. U 3D písmen zkuste pohnout myší.</p>
+  </div>
+  <div class="glass editor rv">
+    <div class="cues">
+      <div class="ph"><span>služby</span><span>5 + 3 tiskoviny</span></div>
+      <div id="cueList" role="group" aria-label="Služby"></div>
+    </div>
+    <div class="preview">
+      <div class="sheet-wrap"><canvas id="scene" role="img" aria-label="Náhled služby na fasádě"></canvas><span class="ro" id="sceneTag">ukázka · fasáda</span></div>
+      <div class="svc-info">
+        <div><h3 id="svcName">Světelné boxy</h3><p id="svcText"></p></div>
+        <dl class="specs" id="svcSpecs"></dl>
+      </div>
+      <div class="controls">
+        <div class="ctl" id="colorCtl"><span>Barva světla <output id="oColor">teplá bílá</output></span><div class="plates" id="colors" role="group" aria-label="Barva světla"></div></div>
+        <div class="ctl" id="fxCtl" hidden><span>Efekt <output id="oFx">duha</output></span><div class="plates" id="fxs" role="group" aria-label="Efekt chytrých LED"></div></div>
+        <label class="ctl" for="nightSlider"><span><span id="nightLbl">Den ↔ Noc</span><output id="oNight">20:30</output></span><input type="range" id="nightSlider" min="0" max="1" step="0.01" value="0.85"></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec wrap split" id="korektura" data-tone="cyan">
+  <div class="split-copy">
+    <span class="eyebrow rv"><i></i>vizualizace</span>
+    <h2 class="rv">Uvidíte to <em>dřív, než to svítí.</em></h2>
+    <p class="rv">Než začneme vyrábět, pošleme vizualizaci na fotce vašeho místa, ve dne i v noci. Schválíte jedním kliknutím, nebo napíšete, co změnit.</p>
+    <ul class="ticks rv">
+      <li>Zaměření na místě a fotka fasády</li>
+      <li>Vizualizace ve dne i v noci</li>
+      <li>Výroba začne až po vašem schválení</li>
+    </ul>
+  </div>
+  <div class="alert-stack rv">
+    <div class="ghost-card"></div><div class="ghost-card g1"></div>
+    <div class="glass alert" id="alert" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="morph-sec" data-tone="deep" aria-label="Proč Skoreklam">
+  <div class="stage">
+    <div class="seed-wrap" aria-hidden="true">
+      <div class="seed" id="seed"><svg class="mark-svg"><use href="#skomark" width="100%" height="100%"/></svg></div>
+      <span class="mono-label dim" id="seedHint">posuňte dál</span>
+    </div>
+    <div class="static-statement"><span>[ proč skoreklam ]</span><p>Rozumíme světlu i tisku. Vaši značku <em>uvidí i po setmění.</em></p></div>
+  </div>
+</section>
+
+<section class="sec wrap" id="podklady" data-tone="mix">
+  <div class="sec-head">
+    <div><span class="eyebrow rv"><i></i>pod jednou střechou</span><h2 class="rv">Jedna zakázka, <em>jeden kontakt.</em></h2></div>
+    <p class="rv">Návrh, 3D tisk, elektro, konstrukce i montáž. Nemusíte koordinovat pět firem, všechno vyřešíte s jedním člověkem.</p>
+  </div>
+  <div class="rel-grid">
+    <div class="glass card-hub rv">
+      <div class="card-t"><h3>Od návrhu po montáž</h3><p>Světelnou reklamu navrhneme, vyrobíme, zapojíme a namontujeme. Tiskoviny k ní dodáme ve stejném stylu.</p></div>
+      <div class="hub" id="hub">
+        <svg class="spokes" id="spokes" aria-hidden="true"></svg>
+        <div class="hub-slot" id="hubSlot"><span class="rip"></span><span class="rip r2"></span><div class="hub-icon" id="hubIcon"><svg class="mark-svg" aria-hidden="true"><use href="#skomark" width="100%" height="100%"/></svg></div></div>
+        <span class="sat" style="--x:16%;--y:14%">Světelné boxy</span>
+        <span class="sat" style="--x:84%;--y:14%">LED lišty</span>
+        <span class="sat" style="--x:12%;--y:54%">Chytré LED</span>
+        <span class="sat" style="--x:88%;--y:54%">3D tisk</span>
+        <span class="sat" style="--x:22%;--y:90%">Konstrukce</span>
+        <span class="sat" style="--x:78%;--y:90%">Tiskoviny</span>
+      </div>
+      <p class="mono-note">boxy · lišty · chytré LED · 3D písmena · konstrukce · montáž · tiskoviny</p>
+    </div>
+    <div class="glass card-prep rv">
+      <div class="card-t"><h3>Co potřebujeme k nacenění</h3><p>Nemáte všechno? Nevadí. Pošlete, co máte, zbytek doladíme při zaměření.</p></div>
+      <div class="prep">
+        <span class="mono-label dim">pro první návrh</span>
+        <div class="prep-row"><b>Fotka místa</b><span>fasáda, výloha nebo stěna zepředu</span><i></i></div>
+        <div class="prep-row"><b>Rozměry</b><span>šířka a výška plochy, výška nad zemí</span><i></i></div>
+        <div class="prep-row"><b>Logo</b><span>ve vektoru: PDF, AI, EPS nebo SVG</span><i></i></div>
+        <div class="prep-row"><b>Elektřina</b><span>kde je nejbližší přívod nebo rozvaděč</span><i></i></div>
+      </div>
+      <p class="mono-note">◆ zaměření na místě domluvíme</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec wrap" id="poptavka" data-tone="blue">
+  <div class="sec-head">
+    <div><span class="eyebrow rv"><i></i>poptávka</span><h2 class="rv">Napište, co <em>potřebujete.</em></h2></div>
+    <p class="rv">Stačí pár řádků a ideálně fotka místa. Ozveme se s návrhem a cenou.</p>
+  </div>
+  <div class="order">
+    <form class="glass form rv" id="orderForm" novalidate>
+      <div class="field"><label for="fWhat">Co potřebujete</label><select id="fWhat"></select></div>
+      <div class="field"><label for="fSize">Rozměr nebo počet</label><input id="fSize" type="text" placeholder="např. 240 × 80 cm"></div>
+      <div class="field"><label for="fName">Jméno nebo firma</label><input id="fName" type="text" autocomplete="name" placeholder="Jana Nováková"></div>
+      <div class="field"><label for="fContact">Telefon nebo e-mail</label><input id="fContact" type="text" autocomplete="email" placeholder="jana@firma.cz"></div>
+      <div class="field"><label for="fDate">Kdy to potřebujete</label><input id="fDate" type="date"></div>
+      <div class="field"><label for="fFiles">Kde to bude</label><select id="fFiles"><option>Fasáda</option><option>Výloha</option><option>Střecha</option><option>Interiér</option><option>Jinde</option></select></div>
+      <div class="field full"><label for="fNote">Poznámka</label><textarea id="fNote" placeholder="Barva světla, provoz celou noc nebo časovač, přívod elektřiny, cokoli dalšího."></textarea></div>
+      <div class="form-foot"><p class="mono-note" id="formHint">Vyplňte aspoň službu a kontakt.</p><button class="btn btn-primary" type="submit">Připravit poptávku</button></div>
+      <div class="out" id="orderOut" hidden></div>
+    </form>
+    <aside class="glass contact rv" aria-label="Kontakt">
+      <div class="paper"><svg class="logo logo-paper" role="img" aria-label="Skoreklam, reklamní agentura"><use href="#skologo" width="100%" height="100%"/></svg></div>
+      <div class="person"><span class="avatar" aria-hidden="true">JS</span><div><b>Jakub Skořepa</b><span>poptávky a zakázky</span></div></div>
+      <div>
+        <div class="cline"><div><span>telefon</span><a id="cPhone" href="tel:+420739377083">+420 739 377 083</a></div><button class="copy" type="button" data-copy="+420 739 377 083">kopírovat</button></div>
+        <div class="cline"><div><span>e-mail</span><a id="cMail" href="mailto:jakubskorepa@centrum.cz">jakubskorepa@centrum.cz</a></div><button class="copy" type="button" data-copy="jakubskorepa@centrum.cz">kopírovat</button></div>
+      </div>
+      <p class="mono-note">Fotku místa a logo pošlete e-mailem, větší soubory přes úschovnu.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="final wrap" id="final" data-tone="blue">
+  <span class="eyebrow rv"><i></i>skoreklam · světelná reklama</span>
+  <h2 class="rv">Ať vás vidí <em>i po setmění.</em></h2>
+  <div class="hero-cta rv">
+    <a class="btn btn-primary mag" href="#poptavka" data-scroll>Poptat reklamu</a>
+    <a class="btn btn-ghost mag" href="tel:+420739377083">Zavolat +420 739 377 083</a>
+  </div>
+  <div class="wordmark" id="wordmark" aria-hidden="true">skoreklam</div>
+</section>
+</main>
+
+<footer class="foot wrap">
+  <a class="brand" href="#top" data-scroll aria-label="Skoreklam, nahoru"><svg class="logo" aria-hidden="true"><use href="#skologo" width="100%" height="100%"/></svg></a>
+  <span class="mono-label dim">© 2026 Skoreklam · Jakub Skořepa</span>
+  <nav aria-label="Patička"><a href="#sluzby" data-scroll>Služby</a><a href="#podklady" data-scroll>Podklady</a><a href="#poptavka" data-scroll>Kontakt</a><a href="#top" data-scroll>Nahoru</a></nav>
+</footer>
+
+<div id="morph" aria-hidden="true">
+  <div class="m-glyph"><svg><use href="#skomark" width="100%" height="100%"/></svg></div>
+  <div class="m-text">
+    <span class="m-eyebrow">[ proč skoreklam ]</span>
+    <p class="m-title" id="mTitle">Rozumíme světlu i tisku. Vaši značku <em>uvidí i po setmění.</em></p>
+    <span class="m-foot">zaměření · návrh · výroba · montáž</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(() => {
+'use strict';
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const easeIO = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const root = document.documentElement;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = matchMedia('(pointer: fine)').matches;
+root.lang = 'cs';
+root.classList.add('js');
+if (reduced) root.classList.add('rm');
+
+/* ================= light field (WebGL) ================= */
+const field = (() => {
+  const st = { m: [.62, .55], mt: [.62, .55], amt: 0, A: [.52, .72, .95], B: [.22, .42, .95], tA: [.52, .72, .95], tB: [.22, .42, .95], g: 1.1, tg: 1.1 };
+  const cv = $('#field');
+  let gl = null;
+  try { gl = cv.getContext('webgl', { antialias: false, alpha: false, premultipliedAlpha: false, powerPreference: 'high-performance' }); } catch (e) {}
+  const fail = () => { document.body.classList.add('no-gl'); cv.style.display = 'none'; return { st, tick() {}, pulseAt() {} }; };
+  if (!gl) return fail();
+  const COMMON = `precision highp float;
+uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform float uAmt;uniform float uScroll;uniform vec3 uA;uniform vec3 uB;uniform float uGain;uniform vec4 uP[4];uniform float uDpr;
+vec2 orig(float sc,float asp){return vec2(-.02*asp+.07*sin(sc*.7+.4),-.1+.05*sin(sc*.45));}
+float tiltF(float sc){return .3+.07*sin(sc*.3+1.);}
+float sY(float fi,float px,float t,float sc,vec2 o,float tilt,vec2 m){
+  float k=fi/17.*2.-1.;
+  float dx=px-o.x;float ax=abs(dx);
+  float env=.006+.15*ax+.13*ax*ax;
+  float y=o.y+tilt*dx+k*env*(.8+.35*sin(fi*1.7+t*.17));
+  y+=sin(dx*2.3-t*.33+fi*.5+sc*.9)*.075*ax;
+  y+=sin(dx*5.7+t*.21+fi*1.9)*.014*ax;
+  float q=(px-m.x)*2.2;
+  y+=(m.y-y)*.34*exp(-q*q)*uAmt*(.35+.65*abs(k));
+  return y;
+}
+float pulseB(float px){
+  float b=0.;
+  for(int j=0;j<4;j++){
+    vec4 P=uP[j];float age=uTime-P.z;
+    if(age>0.&&age<3.5){float e=(abs(px-P.x)-age*.62)/.045;b+=exp(-e*e)*exp(-age*.9)*P.w;}
+  }
+  return b;
+}`;
+  const VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const FS = COMMON + `
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+void main(){
+  vec2 uv=gl_FragCoord.xy/uRes;float asp=uRes.x/uRes.y;
+  vec2 p=vec2((uv.x-.5)*asp,uv.y-.5);vec2 m=vec2((uMouse.x-.5)*asp,uMouse.y-.5);
+  float t=uTime,sc=uScroll;
+  vec2 o=orig(sc,asp);float tilt=tiltF(sc);
+  float pb=pulseB(p.x);
+  vec3 col=vec3(0.);
+  vec2 o2=vec2(o.x+.12*asp,o.y-.06+.04*sin(sc*.3));
+  float tilt2=tilt*.65+.06;
+  float fade2=smoothstep(-.6*asp,.1,p.x-o2.x);
+  for(int i=0;i<10;i++){
+    float fi=float(i);float k=fi/9.*2.-1.;
+    float dx=p.x-o2.x;float ax=abs(dx);
+    float env=.03+.24*ax+.1*ax*ax;
+    float y=o2.y+tilt2*dx+k*env+sin(dx*1.6-t*.18+fi*.8+sc*.5)*.09*ax;
+    float d=abs(p.y-y);
+    float s=exp(-d*d/(.0006+.004*ax));
+    col+=mix(uB,uA,.35+.3*sin(fi))*s*(.05+.02*sin(t*.4+fi*2.))*fade2;
+  }
+  for(int i=0;i<18;i++){
+    float fi=float(i);
+    float r1=fract(fi*.618034+.13);
+    float y=sY(fi,p.x,t,sc,o,tilt,m);
+    float dx=p.x-o.x;float ax=abs(dx);
+    float d=abs(p.y-y);
+    float w=.0009+.0026*ax*(.45+r1);
+    float core=w/(d+w);core*=core;
+    float halo=exp(-d*d/(.001+.004*ax))*.055;
+    float bloom=exp(-d*d/(.008+.02*ax))*.018;
+    float fade=mix(.18,1.,smoothstep(-.55*asp,.02,dx));
+    float sh=.55+.45*sin(t*.6+fi*2.3-dx*2.6);
+    vec3 c=mix(uA,uB,smoothstep(.25,1.,r1*.85+dx*.22+.15*sin(t*.2+fi)));
+    col+=c*((core*.95+halo+bloom)*sh*(1.+pb*2.)+core*pb*2.2)*fade;
+  }
+  float r=length((p-o)*vec2(.55,1.));
+  col+=uA*(.5*exp(-r*r*26.)+.07*exp(-r*2.6));
+  col+=mix(uA,uB,.5)*.2*exp(-dot(p-m,p-m)*12.)*uAmt;
+  for(int j=0;j<4;j++){vec4 P=uP[j];float age=uTime-P.z;if(age>0.&&age<2.){float e=(length(p-P.xy)-age*.5)/.012;col+=mix(uA,vec3(1.),.4)*exp(-e*e)*exp(-age*2.2)*.12*P.w;}}
+  col+=uB*.03*(1.-uv.y)+uA*.018*uv.x;
+  col=1.-exp(-col*uGain);
+  float v=smoothstep(1.3,.2,length(p*vec2(.72,1.05)));
+  col*=.45+.55*v;
+  col+=vec3(.008,.014,.026);
+  col+=(hash(gl_FragCoord.xy+fract(t*.37)*91.)-.5)*.0045;
+  gl_FragColor=vec4(col,1.);
+}`;
+  const PVS = COMMON + `
+attribute vec4 aS;
+varying float vB;varying vec3 vC;
+void main(){
+  float asp=uRes.x/uRes.y;float t=uTime;float sc=uScroll;
+  float x=(fract(aS.x+t*.006*(.4+aS.w))-.5)*asp*1.08+sin(t*.23+aS.w*12.)*.02;
+  float y=fract(aS.y+t*.009*(.3+aS.w)-sc*.1*(.4+aS.z))-.5+sin(t*.31+aS.w*6.28)*.012;
+  vec2 p=vec2(x,y);vec2 m=vec2((uMouse.x-.5)*asp,uMouse.y-.5);
+  vec2 o=orig(sc,asp);float tilt=tiltF(sc);
+  float dm=1.;
+  for(int i=0;i<18;i+=2){dm=min(dm,abs(y-sY(float(i),x,t,sc,o,tilt,m)));}
+  float near=exp(-dm*dm/.0014);
+  float mg=exp(-dot(p-m,p-m)*25.)*uAmt;
+  float tw=.55+.45*sin(t*(1.5+aS.w*2.)+aS.w*40.);
+  vB=(.07+near*.85+mg*.6+pulseB(x)*1.2)*tw;
+  vC=mix(uA,uB,step(.7,fract(aS.w*7.)));
+  gl_Position=vec4(x/asp*2.,y*2.,0.,1.);
+  gl_PointSize=(1.2+aS.z*2.8)*uDpr*(1.+near*.6);
+}`;
+  const PFS = `precision mediump float;varying float vB;varying vec3 vC;
+void main(){vec2 c=gl_PointCoord-.5;float r=length(c);float a=smoothstep(.5,.0,r);a*=a;gl_FragColor=vec4(mix(vC,vec3(1.),.35)*vB*a,1.);}`;
+  const mk = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.warn(gl.getShaderInfoLog(s)); return s; };
+  const prog = (v, f) => { const p = gl.createProgram(); gl.attachShader(p, mk(gl.VERTEX_SHADER, v)); gl.attachShader(p, mk(gl.FRAGMENT_SHADER, f)); gl.linkProgram(p); return gl.getProgramParameter(p, gl.LINK_STATUS) ? p : null; };
+  const P1 = prog(VS, FS); if (!P1) return fail();
+  const P2 = prog(PVS, PFS);
+  const NAMES = ['uRes', 'uTime', 'uMouse', 'uAmt', 'uScroll', 'uA', 'uB', 'uGain', 'uP', 'uDpr'];
+  const locs = pr => Object.fromEntries(NAMES.map(n => [n, gl.getUniformLocation(pr, n)]));
+  const U1 = locs(P1), U2 = P2 ? locs(P2) : null;
+  const quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const aP = gl.getAttribLocation(P1, 'p');
+  const NP = 240, seeds = new Float32Array(NP * 4);
+  for (let i = 0; i < NP; i++) { seeds[i * 4] = Math.random(); seeds[i * 4 + 1] = Math.random(); seeds[i * 4 + 2] = Math.pow(Math.random(), 2.2); seeds[i * 4 + 3] = Math.random(); }
+  const pbuf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, pbuf); gl.bufferData(gl.ARRAY_BUFFER, seeds, gl.STATIC_DRAW);
+  const aS = P2 ? gl.getAttribLocation(P2, 'aS') : -1;
+  const pulses = new Float32Array(16); let pi = 0;
+  for (let j = 0; j < 4; j++) pulses[j * 4 + 2] = -99;
+  let q = 1, scale = 1, ema = 16, lastT = 0, frames = 0, curT = 0;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    scale = dpr * q * (innerWidth < 700 ? .85 : 1);
+    cv.width = Math.max(2, Math.round(innerWidth * scale)); cv.height = Math.max(2, Math.round(innerHeight * scale));
+    gl.viewport(0, 0, cv.width, cv.height);
+  }
+  resize(); addEventListener('resize', resize);
+  addEventListener('pointermove', e => { st.mt = [e.clientX / innerWidth, 1 - e.clientY / innerHeight]; st.amt = Math.min(1, st.amt + .07); }, { passive: true });
+  function pulseAt(cx, cy, s = 1) {
+    if (reduced) return;
+    const asp = innerWidth / innerHeight;
+    pulses.set([(cx / innerWidth - .5) * asp, .5 - cy / innerHeight, curT, s], pi * 4); pi = (pi + 1) % 4;
+  }
+  const t0 = performance.now();
+  function setU(U, t) {
+    gl.uniform2f(U.uRes, cv.width, cv.height);
+    gl.uniform1f(U.uTime, t);
+    gl.uniform2f(U.uMouse, st.m[0], st.m[1]);
+    gl.uniform1f(U.uAmt, st.amt);
+    gl.uniform1f(U.uScroll, scrollY / Math.max(1, innerHeight));
+    gl.uniform3f(U.uA, st.A[0], st.A[1], st.A[2]);
+    gl.uniform3f(U.uB, st.B[0], st.B[1], st.B[2]);
+    gl.uniform1f(U.uGain, st.g);
+    gl.uniform4fv(U.uP, pulses);
+    gl.uniform1f(U.uDpr, scale);
+  }
+  function tick(now) {
+    const dt = now - lastT; lastT = now;
+    if (dt > 0 && dt < 250) ema = ema * .95 + dt * .05;
+    if (++frames > 120 && ema > 24 && q > .5) { q = Math.max(.5, q * .82); resize(); frames = 0; }
+    const t = reduced ? 14 : (now - t0) / 1000; curT = t;
+    st.m[0] += (st.mt[0] - st.m[0]) * .06; st.m[1] += (st.mt[1] - st.m[1]) * .06;
+    st.amt *= .993;
+    for (let i = 0; i < 3; i++) { st.A[i] += (st.tA[i] - st.A[i]) * .035; st.B[i] += (st.tB[i] - st.B[i]) * .035; }
+    st.g += (st.tg - st.g) * .04;
+    gl.useProgram(P1); setU(U1, t);
+    gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (P2 && aS >= 0) {
+      gl.useProgram(P2); setU(U2, t);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pbuf); gl.enableVertexAttribArray(aS); gl.vertexAttribPointer(aS, 4, gl.FLOAT, false, 0, 0);
+      gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE);
+      gl.drawArrays(gl.POINTS, 0, NP);
+      gl.disable(gl.BLEND);
+    }
+  }
+  return { st, tick, pulseAt };
+})();
+
+/* ================= tone per section ================= */
+let lightTone = null;
+const TONES = {
+  blue: { A: [.52, .72, .95], B: [.22, .42, .95], g: 1.1 },
+  cyan: { A: [.38, .82, 1], B: [.5, .4, 1], g: 1.0 },
+  light: { A: [1, .74, .45], B: [.3, .5, .95], g: 1.0 },
+  mix: { A: [.6, .8, 1], B: [.95, .85, .25], g: 1.0 },
+  deep: { A: [.42, .62, 1], B: [.18, .3, .85], g: .75 }
+};
+const toneSecs = $$('[data-tone]');
+function updateTone() {
+  const mid = innerHeight * .5; let cur = toneSecs[0];
+  for (const s of toneSecs) { const r = s.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) { cur = s; break; } }
+  const T = (cur.dataset.tone === 'light' && lightTone) ? lightTone : (TONES[cur.dataset.tone] || TONES.blue);
+  field.st.tA = T.A; field.st.tB = T.B; field.st.tg = T.g;
+}
+
+/* ================= cursor: knot of light strands ================= */
+const cursorFx = (() => {
+  if (!finePointer || reduced) return { tick() {} };
+  root.classList.add('cc');
+  const S = 200, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const c = document.createElement('canvas'); c.id = 'cc'; c.width = S * dpr; c.height = S * dpr; c.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(c);
+  const x = c.getContext('2d');
+  let px = -400, py = -400, lx = px, ly = py, vx = 0, vy = 0, vis = 0, visT = 0, hov = 0, hovT = 0, press = 0, flashes = [];
+  const lag = [0, 1, 2, 3].map(() => ({ x: 0, y: 0 })), K = [.09, .13, .17, .23];
+  addEventListener('pointermove', e => { if (e.pointerType && e.pointerType !== 'mouse') return; if (vis < .05) { lx = e.clientX; ly = e.clientY; } px = e.clientX; py = e.clientY; visT = 1; }, { passive: true });
+  document.addEventListener('mouseout', e => { if (!e.relatedTarget) visT = 0; });
+  document.addEventListener('pointerover', e => { hovT = e.target.closest && e.target.closest('a,button,input,select,textarea,label,.cue,.plate,.tile') ? 1 : 0; });
+  addEventListener('pointerdown', e => { press = 1; flashes.push({ r: 5, a: 1 }); field.pulseAt(e.clientX, e.clientY, 1); });
+  function tick(now) {
+    const t = now / 1000;
+    vx = vx * .7 + (px - lx) * .3; vy = vy * .7 + (py - ly) * .3; lx = px; ly = py;
+    vis += (visT - vis) * .15; hov += (hovT - hov) * .14; press *= .9;
+    c.style.transform = `translate3d(${px - S / 2}px,${py - S / 2}px,0)`;
+    c.style.opacity = vis.toFixed(3);
+    x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, S, S);
+    if (vis < .01) return;
+    const A = field.st.A, col = A.map(v => Math.round(Math.min(255, (v * .8 + .2) * 255)));
+    const rgba = a => `rgba(${col[0]},${col[1]},${col[2]},${Math.max(0, a).toFixed(3)})`;
+    const cx = S / 2, cy = S / 2;
+    x.globalCompositeOperation = 'lighter';
+    const g = x.createRadialGradient(cx, cy, 0, cx, cy, 36 + hov * 16);
+    g.addColorStop(0, rgba(.38 + hov * .25 + press * .4)); g.addColorStop(.35, rgba(.1 + hov * .08)); g.addColorStop(1, rgba(0));
+    x.fillStyle = g; x.beginPath(); x.arc(cx, cy, 54, 0, Math.PI * 2); x.fill();
+    const sA = 1 - hov;
+    for (let i = 0; i < 4; i++) {
+      const L = lag[i], k = K[i];
+      L.x += (-vx * 2.4 - L.x) * k; L.y += (-vy * 2.4 - L.y) * k;
+      const m = Math.hypot(L.x, L.y); if (m > 55) { L.x *= 55 / m; L.y *= 55 / m; }
+      if (sA < .02) continue;
+      const th = i * Math.PI / 4 + .35 + Math.sin(t * .8 + i * 1.7) * .22 + t * .12;
+      const len = (19 + 6 * Math.sin(t * 1.4 + i * 2.1)) * (1 + press * .6);
+      const dx = Math.cos(th) * len, dy = Math.sin(th) * len;
+      const e1x = cx + dx + L.x, e1y = cy + dy + L.y, e2x = cx - dx + L.x * .55, e2y = cy - dy + L.y * .55;
+      const qx = 2 * cx - (e1x + e2x) / 2, qy = 2 * cy - (e1y + e2y) / 2;
+      const gr = x.createLinearGradient(e1x, e1y, e2x, e2y);
+      gr.addColorStop(0, rgba(0)); gr.addColorStop(.28, rgba(.5 * sA)); gr.addColorStop(.5, `rgba(236,244,255,${(.95 * sA).toFixed(3)})`); gr.addColorStop(.72, rgba(.5 * sA)); gr.addColorStop(1, rgba(0));
+      x.strokeStyle = gr; x.lineWidth = i === 0 ? 1.5 : 1.05; x.shadowColor = rgba(.9); x.shadowBlur = 7;
+      x.beginPath(); x.moveTo(e1x, e1y); x.quadraticCurveTo(qx, qy, e2x, e2y); x.stroke();
+    }
+    if (hov > .02) {
+      const R = 9 + hov * 13;
+      x.globalCompositeOperation = 'source-over'; x.shadowBlur = 0;
+      for (let i = 0; i < 4; i++) {
+        const a0 = t * 1.1 + i * Math.PI / 2 + .3, a1 = a0 + Math.PI / 2 - .55;
+        x.lineWidth = 3.2; x.strokeStyle = `rgba(3,8,16,${(.35 * hov).toFixed(3)})`; x.beginPath(); x.arc(cx, cy, R, a0, a1); x.stroke();
+        x.lineWidth = 1.4; x.shadowBlur = 8; x.shadowColor = rgba(.9); x.strokeStyle = `rgba(232,242,255,${(.95 * hov).toFixed(3)})`; x.beginPath(); x.arc(cx, cy, R, a0, a1); x.stroke(); x.shadowBlur = 0;
+      }
+      x.globalCompositeOperation = 'lighter';
+    }
+    x.shadowBlur = 12; x.shadowColor = 'rgba(220,236,255,1)'; x.fillStyle = 'rgba(245,250,255,1)';
+    x.beginPath(); x.arc(cx, cy, Math.max(1.2, 2.2 + press * 1.6 - hov * .7), 0, Math.PI * 2); x.fill();
+    flashes = flashes.filter(f => f.a > .02);
+    flashes.forEach(f => { f.r += (62 - f.r) * .1; f.a *= .9; x.strokeStyle = rgba(f.a * .85); x.lineWidth = 1.2; x.beginPath(); x.arc(cx, cy, f.r, 0, Math.PI * 2); x.stroke(); });
+    x.shadowBlur = 0; x.globalCompositeOperation = 'source-over';
+  }
+  return { tick };
+})();
+
+/* ================= glass spotlight, magnetic ================= */
+$$('.glass').forEach(el => el.addEventListener('pointermove', e => {
+  const r = el.getBoundingClientRect();
+  el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+}, { passive: true }));
+if (finePointer && !reduced) $$('.mag').forEach(b => {
+  b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .18}px,${(e.clientY - r.top - r.height / 2) * .28}px)`; });
+  b.addEventListener('pointerleave', () => { b.style.transition = 'transform .5s cubic-bezier(.3,1.6,.5,1),background .25s,box-shadow .25s'; b.style.transform = ''; setTimeout(() => b.style.transition = '', 500); });
+});
+
+/* ================= hero: job flow ================= */
+const flow = $('#flow'), fsvg = $('#flowSvg'), strip = $('#strip'), logEl = $('#log');
+const N = { t: $('#n-t'), c: $('#n-c'), a: $('#n-a'), b: $('#n-b'), o: $('#n-o') };
+const EDGES = [['t', 'c'], ['c', 'a'], ['c', 'b'], ['a', 'o'], ['b', 'o']];
+const SVGNS = 'http://www.w3.org/2000/svg';
+const px = [];
+for (let i = 0; i < 32; i++) { const d = document.createElement('i'); strip.appendChild(d); px.push(d); }
+function paintStrip(level, sweep, col = '#ffd29a') {
+  px.forEach((d, i) => {
+    const color = col === 'rainbow' ? `hsl(${Math.round(i / 32 * 300)},95%,62%)` : col;
+    const apply = () => { d.style.background = color; d.style.opacity = (.2 + .8 * level).toFixed(2); d.style.boxShadow = level > .3 ? `0 0 ${4 + 8 * level}px ${color}` : 'none'; };
+    sweep ? setTimeout(apply, i * 26) : apply();
+  });
+}
+paintStrip(.9, false, '#ffd29a');
+let paths = {}, sparkDot;
+function layoutFlow() {
+  const fr = flow.getBoundingClientRect(); if (!fr.width) return;
+  fsvg.setAttribute('viewBox', `0 0 ${fr.width} ${fr.height}`);
+  fsvg.innerHTML = ''; paths = {};
+  EDGES.forEach(([s, d]) => {
+    const a = N[s].getBoundingClientRect(), b = N[d].getBoundingClientRect();
+    const acx = a.left + a.width / 2, bcx = b.left + b.width / 2;
+    const x1 = clamp(bcx, a.left + 18, a.right - 18) - fr.left, y1 = a.bottom - fr.top;
+    const x2 = clamp(acx, b.left + 18, b.right - 18) - fr.left, y2 = b.top - fr.top;
+    const my = (y1 + y2) / 2;
+    const dstr = `M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`;
+    const base = document.createElementNS(SVGNS, 'path'); base.setAttribute('d', dstr); base.setAttribute('class', 'base');
+    const fp = document.createElementNS(SVGNS, 'path'); fp.setAttribute('d', dstr); fp.setAttribute('class', 'flowp'); fp.style.opacity = 0;
+    fsvg.append(base, fp);
+    paths[s + d] = { fp, len: fp.getTotalLength() };
+  });
+  sparkDot = document.createElementNS(SVGNS, 'circle'); sparkDot.setAttribute('r', 3.5); sparkDot.setAttribute('class', 'spark'); sparkDot.setAttribute('fill', '#eaf3ff'); sparkDot.style.opacity = 0;
+  fsvg.appendChild(sparkDot);
+}
+function travel(key, color, dur = 560) {
+  return new Promise(res => {
+    const e = paths[key]; if (!e) return res();
+    const { fp, len } = e; fp.style.transition = 'none'; fp.style.opacity = 1; fp.style.stroke = color; fp.style.color = color;
+    fp.style.strokeDasharray = len; fp.style.strokeDashoffset = len;
+    const t0 = performance.now();
+    const step = now => {
+      const t = clamp((now - t0) / dur), et = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      fp.style.strokeDashoffset = len * (1 - et);
+      const pt = fp.getPointAtLength(len * et); sparkDot.setAttribute('cx', pt.x); sparkDot.setAttribute('cy', pt.y); sparkDot.style.opacity = 1;
+      if (t < 1) requestAnimationFrame(step);
+      else { sparkDot.style.opacity = 0; setTimeout(() => { fp.style.transition = 'opacity 1.4s ease'; fp.style.opacity = 0; }, 500); res(); }
+    };
+    requestAnimationFrame(step);
+  });
+}
+const hit = n => { n.classList.add('hit'); setTimeout(() => n.classList.remove('hit'), 1000); };
+const hhmm = () => new Date().toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+function log(html) {
+  const d = document.createElement('div'); d.innerHTML = `<time>${hhmm()}</time><span>${html}</span>`;
+  logEl.appendChild(d); while (logEl.children.length > 7) logEl.firstElementChild.remove();
+}
+const JOBS = [
+  { n: 'Světelný box 240 × 80 cm', s: 'hotel · fasáda nad vchodem', b: 'b', c: '#ffd29a' },
+  { n: '3D písmena s halo efektem', s: 'recepce · výška 25 cm', b: 'a', c: '#bcd6f4' },
+  { n: 'LED lišta kolem výlohy', s: 'kavárna · 12 m', b: 'b', c: '#ffe2b8' },
+  { n: 'Chytré LED na fasádu', s: 'efekty podle času · 40 m', b: 'b', c: 'rainbow' },
+  { n: '3D logo na stěnu', s: 'kancelář · ø 90 cm', b: 'a', c: '#84b2e3' },
+  { n: 'Konstrukce a box na střechu', s: 'hotel · 6 × 1,8 m', b: 'b', c: '#e6f1ff' }
+];
+log('ukázka · tak prochází zakázka dílnou');
+log('poptávka · <b>Světelný box 240 × 80 cm</b>');
+let heroVisible = true, jobI = 1;
+new IntersectionObserver(es => es.forEach(e => heroVisible = e.isIntersecting)).observe($('#heroPanel'));
+async function flowLoop() {
+  await sleep(900);
+  for (;;) {
+    if (!document.hidden && heroVisible && Object.keys(paths).length) {
+      const job = JOBS[jobI++ % JOBS.length];
+      const col = job.b === 'a' ? '#84b2e3' : '#ffb86b';
+      $('#jobName').textContent = job.n; $('#jobSpec').textContent = job.s;
+      paintStrip(.08, false, job.c);
+      hit(N.t); log(`poptávka · <b>${job.n}</b>`);
+      await travel('tc', '#bcd6f4');
+      hit(N.c); log('zaměření a vizualizace · <b>schváleno</b>');
+      await travel('c' + job.b, col);
+      hit(N[job.b]); log(job.b === 'a' ? '3D tisk · tiskne se' : 'LED · zapojení a test');
+      await travel(job.b + 'o', col);
+      hit(N.o); paintStrip(.9, true, job.c);
+      { const r = N.o.getBoundingClientRect(); field.pulseAt(r.left + r.width / 2, r.top + r.height / 2, .55); }
+      log(`montáž · <b>${job.n}</b> · svítí`);
+      await sleep(2600);
+    } else await sleep(600);
+  }
+}
+if (window.ResizeObserver) new ResizeObserver(() => layoutFlow()).observe(flow); else addEventListener('resize', layoutFlow);
+layoutFlow();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutFlow);
+if (!reduced) flowLoop();
+
+/* ================= materials marquee ================= */
+const MATS = [['Opálové plexisklo', 'světelné boxy'], ['LED moduly', 'podsvícení'], ['Adresovatelné LED', 'chytré efekty'], ['Hliníkové profily', 'lišty a rámy'], ['Ocelové konstrukce', 'střechy, fasády'], ['PETG a PLA', '3D tisk'], ['Dibond', 'cedule'], ['Řídicí jednotky', 'scény, časovače'], ['Vizitkový karton', 'vizitky'], ['Křídový papír', 'katalogy']];
+const LED = ['#ffc98a', '#eef4ff', '#84b2e3', '#ec008c'];
+$('#mq').innerHTML = [...MATS, ...MATS].map(([a, b], i) => `<span class="tile"${i >= MATS.length ? ' aria-hidden="true"' : ''}><i class="led" style="--c:${LED[i % 4]};animation-delay:${(i * .37 % 2.8).toFixed(2)}s"></i>${a}<small>${b}</small></span>`).join('');
+
+/* ================= services: night facade scenes ================= */
+const SERVICES = [
+  { name: 'Světelné boxy', note: 'prosvětlené reklamní boxy', c: '#ffc98a', scene: 'box', tag: 'ukázka · box nad vchodem hotelu',
+    text: 'Prosvětlené boxy s vaším logem na fasádu, nad vchod i do interiéru. Ve dne jsou čitelné, v noci je vidět z dálky.',
+    spec: [['typicky', 'boxy na fasádu, výstrčky, interiér'], ['světlo', 'LED moduly, teplá i studená bílá, RGB'], ['podklady', 'logo ve vektoru, fotka místa']] },
+  { name: 'Světelné lišty', note: 'LED linky a podsvícení', c: '#ffe2b8', scene: 'lista', tag: 'ukázka · výloha kavárny',
+    text: 'LED lišty a pásy, které obkreslí výlohu, nápis nebo celý prostor. Jemné světlo, které se rozlije po zdi.',
+    spec: [['typicky', 'výlohy, nápisy, podhledy'], ['světlo', 'stálá barva nebo stmívání'], ['podklady', 'rozměry a fotka místa']] },
+  { name: 'Chytré LED', note: 'digitální, adresovatelné', c: '#ec008c', scene: 'chytre', tag: 'ukázka · LED rámeček kolem nápisu',
+    text: 'Každý bod pásku řídíme zvlášť. Duha, běžící světlo, pulz nebo vlastní animace, které se mění podle času nebo události.',
+    spec: [['typicky', 'fasády, výlohy, eventy'], ['ovládání', 'aplikace, časovač, scény'], ['podklady', 'představa efektu, rozměry']] },
+  { name: '3D tisk', note: 'prostorová loga a písmena', c: '#84b2e3', scene: 'd3', tag: 'ukázka · 3D písmena s halo efektem',
+    text: 'Logo nebo písmena vytiskneme jako prostorový objekt. S podsvícením zezadu kolem sebe vytvoří světelné halo.',
+    spec: [['typicky', '3D loga, písmena, díly'], ['světlo', 'halo zezadu, čelní nebo bez světla'], ['podklady', 'logo ve vektoru nebo 3D model']] },
+  { name: 'Konstrukce a montáž', note: 'hotely, budovy, střechy', c: '#e6f1ff', scene: 'konst', tag: 'výkres → hotová reklama', def: .9,
+    text: 'Navrhneme a vyrobíme nosnou konstrukci pro světelnou reklamu na hotel nebo budovu. Postaráme se i o montáž a zapojení.',
+    spec: [['typicky', 'střešní a fasádní konstrukce'], ['zahrnuje', 'zaměření, výkres, výroba, montáž'], ['podklady', 'fotka a rozměry fasády']] },
+  { name: 'Vizitky a kancelář', note: 'vizitky, letáky, flash disky', c: '#bcd6f4', scene: 'print', kind: 'cards', tag: 'ukázka · posviťte si myší', def: .7,
+    text: 'Od vizitek přes letáky po potisk flash disku. Firemní tiskoviny ve stejném stylu jako vaše reklama.',
+    spec: [['typicky', 'vizitky, letáky, flash disky'], ['podklady', 'PDF se spadávkou 3 mm'], ['hodí se', 'kancelář, obchod, akce']] },
+  { name: 'Katalogy', note: 'produktové prezentace', c: '#84b2e3', scene: 'print', kind: 'catalog', tag: 'ukázka · posviťte si myší', def: .7,
+    text: 'Produktová prezentace se neobejde bez kvalitního podkladu. Tiskneme katalogy, brožury i prezentace.',
+    spec: [['typicky', 'katalogy, brožury, prezentace'], ['podklady', 'PDF po stranách'], ['hodí se', 'obchod, veletrhy, schůzky']] },
+  { name: 'Tašky', note: 'libovolný potisk', c: '#3358a2', scene: 'print', kind: 'bag', tag: 'ukázka · posviťte si myší', def: .7,
+    text: 'Tašky s libovolným potiskem na veletrh, do obchodu nebo jako dárek pro klienty.',
+    spec: [['typicky', 'látkové a papírové tašky'], ['podklady', 'logo ve vektoru'], ['hodí se', 'veletrhy, e-shopy, dárky']] }
+];
+const COLORS = [
+  { name: 'teplá bílá', short: '3000 K', css: '#ffc98a', rgb: [255, 186, 112] },
+  { name: 'studená bílá', short: '6000 K', css: '#e6f0ff', rgb: [214, 232, 255] },
+  { name: 'RGB', short: 'RGB', css: 'linear-gradient(90deg,#ff4d6d,#ffd23f,#4dff9a,#4dc3ff,#b04dff)', rgb: null }
+];
+const FX = [{ id: 'rainbow', name: 'duha' }, { id: 'chase', name: 'běžící' }, { id: 'pulse', name: 'pulz' }];
+let sel = 0, colI = 0, fxI = 0, night = .85;
+const cueList = $('#cueList'), scene = $('#scene'), sx = scene.getContext('2d'), nightS = $('#nightSlider');
+const ptr = { x: .5, y: .45, tx: .5, ty: .45, inside: false };
+const PI = Math.PI;
+const mixc = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
+const rgb = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+const rgba = (c, a) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${clamp(a).toFixed(3)})`;
+function hsl2rgb(h, s, l) { h /= 360; const f = n => { const k = (n + h * 12) % 12; const a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); }; return [f(0), f(8), f(4)]; }
+const lightRGB = (t, off = 0) => COLORS[colI].rgb || hsl2rgb(((t * 40 + off * 360) % 360 + 360) % 360, 1, .6);
+const fnt = (w, s) => `${w} ${Math.max(6, s).toFixed(1)}px "Bricolage Grotesque","Instrument Sans",system-ui,sans-serif`;
+const mono = s => `400 ${Math.max(6, s).toFixed(1)}px "Martian Mono",ui-monospace,monospace`;
+function rr(c, x, y, w, h, r) { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h); }
+function glow(c, x, y, r, L, a) {
+  if (a <= .002 || r <= 0) return;
+  const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, rgba(L, a)); g.addColorStop(1, rgba(L, 0));
+  c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = g; c.fillRect(x - r, y - r, 2 * r, 2 * r); c.restore();
+}
+const litOf = n => { const v = clamp((n - .3) / .5); return v * v * (3 - 2 * v); };
+function center(c) { c.textAlign = 'center'; c.textBaseline = 'middle'; }
+
+function wall(c, W, H, n) {
+  c.fillStyle = rgb(mixc([132, 138, 150], [11, 14, 21], n)); c.fillRect(0, 0, W, H);
+  c.strokeStyle = `rgba(255,255,255,${(.07 - .045 * n).toFixed(3)})`; c.lineWidth = 1; c.beginPath();
+  const rows = 6, gy = H * .86;
+  for (let r = 1; r < rows; r++) { const y = Math.round(gy * r / rows) + .5; c.moveTo(0, y); c.lineTo(W, y); }
+  for (let r = 0; r < rows; r++) for (let j = 0; j < 5; j++) { const x = Math.round(W / 4 * (j + (r % 2) * .5)) + .5; c.moveTo(x, gy * r / rows); c.lineTo(x, gy * (r + 1) / rows); }
+  c.stroke();
+  c.fillStyle = rgb(mixc([156, 158, 164], [17, 19, 26], n)); c.fillRect(0, gy, W, H - gy);
+  c.fillStyle = `rgba(255,255,255,${(.12 - .08 * n).toFixed(3)})`; c.fillRect(0, gy, W, 1.5);
+  return gy;
+}
+
+function sBox(c, W, H, n, L) {
+  const gy = wall(c, W, H, n), lit = litOf(n);
+  [[.08, .54], [.76, .54]].forEach(([x, y]) => {
+    c.fillStyle = rgb(mixc([66, 76, 92], [18, 22, 30], n)); c.fillRect(W * x, H * y, W * .16, H * .22);
+    c.fillStyle = `rgba(255,200,140,${(.13 * lit).toFixed(3)})`; c.fillRect(W * x, H * y, W * .16, H * .22);
+  });
+  c.fillStyle = rgb(mixc([52, 58, 70], [14, 17, 24], n)); c.fillRect(W * .42, H * .56, W * .16, gy - H * .56);
+  const bw = W * .48, bh = H * .25, bx = (W - bw) / 2, by = H * .2;
+  glow(c, W / 2, by + bh / 2, bw * .95, L, .34 * lit);
+  glow(c, W / 2, gy, bw * .7, L, .12 * lit);
+  c.fillStyle = rgb(mixc([70, 74, 82], [30, 33, 40], n)); c.fillRect(bx + bw * .15, by - 14, 6, 14); c.fillRect(bx + bw * .85 - 6, by - 14, 6, 14);
+  c.fillStyle = rgb(mixc([60, 64, 72], [26, 29, 36], n)); rr(c, bx - 6, by - 6, bw + 12, bh + 12, 6); c.fill();
+  const face = mixc([226, 229, 234], mixc(L, [255, 255, 255], .4), lit);
+  c.save(); c.shadowColor = rgba(L, .9 * lit); c.shadowBlur = 50 * lit; c.fillStyle = rgb(face); rr(c, bx, by, bw, bh, 3); c.fill(); c.restore();
+  c.fillStyle = '#1e3570'; c.font = fnt(700, bh * .5); center(c); c.fillText('HOTEL', W / 2, by + bh * .54);
+}
+
+function sLista(c, W, H, n, L) {
+  const gy = wall(c, W, H, n), lit = litOf(n);
+  const wx = W * .16, ww = W * .68, wy = H * .46, wh = gy - wy, sy = H * .2, sh = H * .17;
+  if (lit > 0) { c.save(); c.globalCompositeOperation = 'lighter'; const g = c.createLinearGradient(0, sy, 0, sy + sh * 1.5); g.addColorStop(0, rgba(L, .5 * lit)); g.addColorStop(1, rgba(L, 0)); c.fillStyle = g; c.fillRect(wx - W * .05, sy, ww + W * .1, sh * 1.5); c.restore(); }
+  c.fillStyle = rgb(mixc([40, 44, 54], mixc(L, [255, 255, 255], .25), lit * .85)); c.font = fnt(600, sh * .6); center(c); c.fillText('KAVÁRNA', W / 2, sy + sh * .6);
+  c.fillStyle = rgb(mixc([72, 88, 104], [12, 16, 24], n)); c.fillRect(wx, wy, ww, wh);
+  c.fillStyle = `rgba(255,196,130,${(.12 * lit).toFixed(3)})`; c.fillRect(wx, wy, ww, wh);
+  c.fillStyle = rgb(mixc([92, 100, 112], [22, 26, 34], n)); c.fillRect(wx + ww * .5 - 2, wy, 4, wh);
+  c.fillStyle = `rgba(255,255,255,${(.1 - .07 * n).toFixed(3)})`; c.beginPath(); c.moveTo(wx + ww * .08, wy); c.lineTo(wx + ww * .2, wy); c.lineTo(wx + ww * .08, gy); c.lineTo(wx, gy); c.lineTo(wx, wy + wh * .3); c.closePath(); c.fill();
+  const led = path => {
+    c.save(); c.lineCap = 'round';
+    c.strokeStyle = rgb(mixc([196, 200, 206], mixc(L, [255, 255, 255], .3), lit)); c.lineWidth = 2 + 1.5 * lit; c.shadowColor = rgba(L, lit); c.shadowBlur = 22 * lit; path(); c.stroke();
+    if (lit > .05) { c.globalCompositeOperation = 'lighter'; c.shadowBlur = 0; c.lineWidth = 10; c.strokeStyle = rgba(L, .16 * lit); path(); c.stroke(); }
+    c.restore();
+  };
+  led(() => { c.beginPath(); c.moveTo(wx - W * .04, sy); c.lineTo(wx + ww + W * .04, sy); });
+  led(() => { c.beginPath(); c.rect(wx, wy, ww, wh); });
+  glow(c, W / 2, gy, ww * .6, L, .14 * lit);
+}
+
+function fxCol(i, N, t, L) {
+  const id = FX[fxI].id;
+  if (id === 'rainbow') return [hsl2rgb((i / N * 360 + t * 70) % 360, 1, .58), 1];
+  if (id === 'chase') { const head = (t * N / 2.6) % N; const d = (head - i + N) % N; return [L, .06 + .94 * Math.exp(-d / 5)]; }
+  return [L, .15 + .85 * (.5 + .5 * Math.sin(t * 2.2 - i * .18))];
+}
+function sChytre(c, W, H, n, L, t) {
+  const gy = wall(c, W, H, n), lit = litOf(n);
+  const x0 = W * .14, y0 = H * .16, w = W * .72, h = H * .44, N = 72, per = 2 * (w + h), u = W / 800;
+  c.fillStyle = rgb(mixc([60, 64, 74], [34, 38, 48], n)); c.font = fnt(700, h * .52); center(c); c.fillText('BAR', W / 2, y0 + h * .55);
+  const avg = [0, 0, 0]; let sum = 0; const pts = [];
+  for (let i = 0; i < N; i++) {
+    let d = i / N * per, x, y;
+    if (d < w) { x = x0 + d; y = y0; } else if ((d -= w) < h) { x = x0 + w; y = y0 + d; } else if ((d -= h) < w) { x = x0 + w - d; y = y0 + h; } else { d -= w; x = x0; y = y0 + h - d; }
+    const [col, v] = fxCol(i, N, t, L); pts.push([x, y, col, v]);
+    avg[0] += col[0] * v; avg[1] += col[1] * v; avg[2] += col[2] * v; sum += v;
+  }
+  const A = sum ? avg.map(a => a / sum) : L;
+  glow(c, W / 2, y0 + h / 2, w * .8, A, .2 * lit * clamp(sum / N * 1.6));
+  c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = rgba(A, .45 * lit * clamp(sum / N * 1.6)); c.fillText('BAR', W / 2, y0 + h * .55); c.restore();
+  pts.forEach(([x, y, col, v]) => {
+    glow(c, x, y, 16 * u, col, .55 * v * lit);
+    c.fillStyle = lit > .05 ? rgba(mixc(col, [255, 255, 255], .45), .25 + .75 * v * lit) : rgb(mixc([170, 174, 182], [60, 64, 72], n));
+    c.beginPath(); c.arc(x, y, 2.6 * u + 1, 0, PI * 2); c.fill();
+  });
+  glow(c, W / 2, gy, w * .5, A, .08 * lit);
+}
+
+function s3d(c, W, H, n, L, t) {
+  wall(c, W, H, n); const lit = litOf(n), u = W / 800;
+  if (!ptr.inside) { ptr.tx = .5 + .3 * Math.sin(t * .6); ptr.ty = .45 + .15 * Math.sin(t * .43); }
+  const txt = 'LOGO', size = H * .38, cx = W / 2, cy = H * .44, tx = (ptr.x - .5) * 2, ty = (ptr.y - .45) * 2;
+  c.font = fnt(800, size); center(c);
+  if (lit > 0) {
+    glow(c, cx, cy, W * .45, L, .2 * lit);
+    c.save(); c.globalCompositeOperation = 'lighter'; c.shadowColor = rgba(L, lit); c.shadowBlur = 60 * lit * u; c.fillStyle = rgba(L, .9 * lit); c.fillText(txt, cx, cy); c.shadowBlur = 22 * lit * u; c.fillText(txt, cx, cy); c.restore();
+  }
+  const depth = 12, dx = -tx * 1.3 * u, dy = (.8 - ty * .7) * u;
+  const side = mixc([150, 156, 166], [22, 25, 32], n);
+  c.save(); c.shadowColor = `rgba(0,0,0,${(.35 * (1 - lit)).toFixed(3)})`; c.shadowBlur = 20 * u; c.shadowOffsetX = 10 * u; c.shadowOffsetY = 12 * u;
+  c.fillStyle = rgb(mixc(side, [0, 0, 0], .3)); c.fillText(txt, cx + dx * depth, cy + dy * depth); c.restore();
+  for (let k = depth - 1; k >= 1; k--) { c.fillStyle = rgb(mixc(side, [0, 0, 0], k / depth * .3)); c.fillText(txt, cx + dx * k, cy + dy * k); }
+  c.fillStyle = rgb(mixc([240, 242, 246], [30, 34, 44], n)); c.fillText(txt, cx, cy);
+  if (lit > 0) { c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = rgba(L, .08 * lit); c.fillText(txt, cx, cy); c.restore(); }
+}
+
+function sKonst(c, W, H, p, L) {
+  const u = W / 800, roofY = H * .64, bx = W * .2, bw = W * .6, by = H * .14, bh = H * .2, legTop = by + bh;
+  const v = clamp((p - .25) / .5), real = v * v * (3 - 2 * v), bp = 1 - real;
+  const truss = (col, lw) => {
+    c.strokeStyle = col; c.lineWidth = lw; c.beginPath();
+    const xs = [0, .33, .66, 1].map(k => bx + bw * k);
+    xs.forEach(x => { c.moveTo(x, legTop); c.lineTo(x, roofY); });
+    const mid = (legTop + roofY) / 2; c.moveTo(bx, mid); c.lineTo(bx + bw, mid);
+    for (let i = 0; i < 3; i++) { c.moveTo(xs[i], legTop); c.lineTo(xs[i + 1], mid); c.lineTo(xs[i], roofY); }
+    c.stroke();
+  };
+  if (real > 0) {
+    c.globalAlpha = real;
+    c.fillStyle = '#080b12'; c.fillRect(0, 0, W, H);
+    c.fillStyle = '#121620'; c.fillRect(0, roofY, W, H - roofY);
+    c.fillStyle = '#1b202b'; c.fillRect(0, roofY, W, 4 * u + 2);
+    for (let r = 0; r < 2; r++) for (let k = 0; k < 10; k++) {
+      const x = W * (.04 + k * .097), y = roofY + H * (.08 + r * .14);
+      c.fillStyle = ((r * 7 + k * 3) % 5) ? 'rgba(255,196,128,.55)' : '#1a1f2a'; c.fillRect(x, y, W * .05, H * .07);
+    }
+    truss('#4a5262', 2.5 * u + 1);
+    glow(c, W / 2, by + bh / 2, bw * .75, L, .28);
+    c.fillStyle = '#151a24'; c.fillRect(bx, by, bw, bh);
+    c.save(); c.font = fnt(700, bh * .72); center(c); c.shadowColor = rgba(L, 1); c.shadowBlur = 30 * u; c.fillStyle = rgb(mixc(L, [255, 255, 255], .45)); c.fillText('HOTEL', W / 2, by + bh * .54); c.restore();
+    c.globalAlpha = 1;
+  }
+  if (bp > 0) {
+    c.globalAlpha = bp;
+    c.fillStyle = '#123a7a'; c.fillRect(0, 0, W, H);
+    c.strokeStyle = 'rgba(255,255,255,.07)'; c.lineWidth = 1; c.beginPath();
+    const gs = 20 * u + 6; for (let x = 0; x < W; x += gs) { c.moveTo(x + .5, 0); c.lineTo(x + .5, H); } for (let y = 0; y < H; y += gs) { c.moveTo(0, y + .5); c.lineTo(W, y + .5); } c.stroke();
+    c.strokeStyle = 'rgba(235,244,255,.95)'; c.lineWidth = 1.4;
+    c.beginPath(); c.moveTo(0, roofY); c.lineTo(W, roofY); c.stroke();
+    c.strokeRect(bx, by, bw, bh);
+    truss('rgba(235,244,255,.9)', 1.2);
+    c.strokeStyle = 'rgba(235,244,255,.7)'; c.lineWidth = 1; c.fillStyle = 'rgba(235,244,255,.9)'; c.font = mono(9 * u + 3);
+    const dimH = (x1, x2, y, label) => { c.beginPath(); c.moveTo(x1, y); c.lineTo(x2, y); c.moveTo(x1, y - 5); c.lineTo(x1, y + 5); c.moveTo(x2, y - 5); c.lineTo(x2, y + 5); c.stroke(); center(c); c.fillText(label, (x1 + x2) / 2, y - 9); };
+    const dimV = (x, y1, y2, label) => { c.beginPath(); c.moveTo(x, y1); c.lineTo(x, y2); c.moveTo(x - 5, y1); c.lineTo(x + 5, y1); c.moveTo(x - 5, y2); c.lineTo(x + 5, y2); c.stroke(); c.save(); c.translate(x - 10, (y1 + y2) / 2); c.rotate(-PI / 2); center(c); c.fillText(label, 0, 0); c.restore(); };
+    dimH(bx, bx + bw, by - H * .05, '6 000');
+    dimV(bx - W * .05, by, legTop, '1 800');
+    dimV(bx + bw + W * .05, legTop, roofY, '2 400');
+    const tw = W * .3, th = H * .14, tx = W - tw - W * .03, ty = H - th - H * .04;
+    c.strokeRect(tx, ty, tw, th); c.beginPath(); c.moveTo(tx, ty + th / 2); c.lineTo(tx + tw, ty + th / 2); c.stroke();
+    c.textAlign = 'start'; c.textBaseline = 'middle'; c.fillText('KONSTRUKCE · M 1:50', tx + 8, ty + th * .27); c.fillText('skoreklam · rozměry v mm', tx + 8, ty + th * .75);
+    c.font = fnt(600, bh * .5); center(c); c.fillText('HOTEL', W / 2, by + bh * .54);
+    c.globalAlpha = 1;
+  }
+}
+
+function sPrint(c, W, H, n, L, t, s) {
+  const u = W / 800;
+  if (!ptr.inside) { ptr.tx = .5 + .25 * Math.sin(t * .5); ptr.ty = .48 + .14 * Math.sin(t * .37); }
+  c.fillStyle = '#3b3531'; c.fillRect(0, 0, W, H);
+  c.strokeStyle = 'rgba(255,255,255,.035)'; c.lineWidth = 1; c.beginPath();
+  for (let i = 0; i < 18; i++) { const y = H * i / 18 + Math.sin(i * 1.7) * 6; c.moveTo(0, y); c.bezierCurveTo(W * .3, y + 8, W * .6, y - 8, W, y + 4); } c.stroke();
+  const shadowed = fn => { c.save(); c.shadowColor = 'rgba(0,0,0,.45)'; c.shadowBlur = 24 * u; c.shadowOffsetY = 10 * u; fn(); c.restore(); };
+  const card = (x, y, r, back) => {
+    const w = W * .27, h = w * .556;
+    c.save(); c.translate(x, y); c.rotate(r);
+    shadowed(() => { c.fillStyle = back ? '#1e3570' : '#f4f4f1'; rr(c, -w / 2, -h / 2, w, h, 4 * u); c.fill(); });
+    if (back) { c.fillStyle = '#84b2e3'; c.font = fnt(700, h * .2); center(c); c.fillText('LOGO', 0, 0); }
+    else { c.fillStyle = '#1e3570'; c.fillRect(-w / 2 + w * .08, -h / 2 + h * .2, w * .4, h * .1); c.fillStyle = '#8b96a8'; c.fillRect(-w / 2 + w * .08, -h / 2 + h * .4, w * .3, h * .06); c.fillRect(-w / 2 + w * .08, -h / 2 + h * .52, w * .36, h * .06); c.fillStyle = '#84b2e3'; c.fillRect(-w / 2, h / 2 - h * .14, w, h * .14); }
+    c.restore();
+  };
+  if (s.kind === 'cards') { card(W * .38, H * .46, -.2, true); card(W * .58, H * .5, .07, false); card(W * .5, H * .62, -.05, false); }
+  else if (s.kind === 'catalog') {
+    const cx = W / 2, cy = H * .5, pw = W * .28, ph = H * .62;
+    shadowed(() => { c.fillStyle = '#f2f1ed'; c.beginPath(); c.moveTo(cx - pw, cy - ph / 2 + 10 * u); c.lineTo(cx, cy - ph / 2 + 18 * u); c.lineTo(cx + pw, cy - ph / 2 + 10 * u); c.lineTo(cx + pw, cy + ph / 2); c.lineTo(cx, cy + ph / 2 + 8 * u); c.lineTo(cx - pw, cy + ph / 2); c.closePath(); c.fill(); });
+    c.fillStyle = '#3358a2'; c.fillRect(cx + pw * .1, cy - ph * .34, pw * .8, ph * .36);
+    c.fillStyle = '#84b2e3'; c.fillRect(cx - pw * .9, cy + ph * .05, pw * .8, ph * .3);
+    c.fillStyle = '#1e3570'; c.fillRect(cx - pw * .9, cy - ph * .34, pw * .55, ph * .05); c.fillRect(cx + pw * .1, cy + ph * .1, pw * .5, ph * .045);
+    c.fillStyle = '#a3abb8'; for (let i = 0; i < 4; i++) { c.fillRect(cx - pw * .9, cy - ph * .22 + i * ph * .055, pw * (.75 - i * .08), ph * .022); c.fillRect(cx + pw * .1, cy + ph * .2 + i * ph * .05, pw * (.7 - i * .1), ph * .02); }
+    const g = c.createLinearGradient(cx - 18 * u, 0, cx + 18 * u, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, 'rgba(0,0,0,.22)'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fillRect(cx - 18 * u, cy - ph / 2, 36 * u, ph + 18 * u);
+  } else {
+    const cx = W / 2, top = H * .3, bw = W * .3, bh = H * .52;
+    c.strokeStyle = '#1a2440'; c.lineWidth = 8 * u; c.beginPath(); c.arc(cx, top + 6 * u, bw * .26, PI, 2 * PI); c.stroke();
+    shadowed(() => { c.fillStyle = '#233f7a'; c.beginPath(); c.moveTo(cx - bw / 2, top); c.lineTo(cx + bw / 2, top); c.lineTo(cx + bw / 2 + 10 * u, top + bh); c.lineTo(cx - bw / 2 - 10 * u, top + bh); c.closePath(); c.fill(); });
+    c.fillStyle = '#84b2e3'; c.beginPath(); c.arc(cx, top + bh * .48, bw * .2, 0, PI * 2); c.fill();
+    c.fillStyle = '#233f7a'; c.font = fnt(700, bw * .11); center(c); c.fillText('LOGO', cx, top + bh * .48);
+    c.fillStyle = 'rgba(255,255,255,.06)'; c.fillRect(cx - bw / 2, top, bw * .12, bh);
+  }
+  const px = ptr.x * W, py = ptr.y * H;
+  const g = c.createRadialGradient(px, py, W * .07, px, py, W * .55); g.addColorStop(0, 'rgba(4,6,10,0)'); g.addColorStop(1, `rgba(4,6,10,${(.94 * n).toFixed(3)})`);
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  glow(c, px, py, W * .22, L, .1 * n);
+}
+
+function drawScene(t) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), W = scene.clientWidth, H = scene.clientHeight; if (!W || !H) return;
+  if (scene.width !== Math.round(W * dpr) || scene.height !== Math.round(H * dpr)) { scene.width = Math.round(W * dpr); scene.height = Math.round(H * dpr); }
+  const c = sx; c.setTransform(dpr, 0, 0, dpr, 0, 0); c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1; c.shadowBlur = 0; c.shadowOffsetX = 0; c.shadowOffsetY = 0;
+  ptr.x += (ptr.tx - ptr.x) * .08; ptr.y += (ptr.ty - ptr.y) * .08;
+  const s = SERVICES[sel], L = lightRGB(t);
+  lightTone = { A: L.map(v => v / 255), B: [.3, .5, .95], g: .7 + .5 * litOf(night) };
+  ({ box: sBox, lista: sLista, chytre: sChytre, d3: s3d, konst: sKonst, print: sPrint })[s.scene](c, W, H, night, L, t, s);
+}
+
+function renderCues() {
+  cueList.innerHTML = SERVICES.map((s, i) => `${i === 5 ? '<div class="ph" style="border-top:1px solid var(--line)"><span>doplňkově · tiskoviny</span><span>3</span></div>' : ''}<button class="cue" type="button" aria-pressed="${i === sel}" data-i="${i}" style="--c:${s.c}"><span class="no">${String(i + 1).padStart(2, '0')}</span><span><b>${s.name}</b><small>${s.note}</small></span><i class="ring" aria-hidden="true"></i></button>`).join('');
+}
+function nightLabel() {
+  const s = SERVICES[sel];
+  if (s.scene === 'konst') { $('#nightLbl').textContent = 'Výkres ↔ Hotovo'; $('#oNight').textContent = night < .5 ? 'výkres' : 'hotovo'; }
+  else if (s.scene === 'print') { $('#nightLbl').textContent = 'Ztlumit místnost'; $('#oNight').textContent = Math.round(night * 100) + ' %'; }
+  else { const m = Math.round(12 * 60 + night * 9.5 * 60); $('#nightLbl').textContent = 'Den ↔ Noc'; $('#oNight').textContent = `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`; }
+  setTrack(nightS);
+}
+function renderInfo() {
+  const s = SERVICES[sel];
+  $('#svcName').textContent = s.name; $('#svcText').textContent = s.text; $('#sceneTag').textContent = s.tag;
+  $('#svcSpecs').innerHTML = s.spec.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+  $('#fxCtl').hidden = s.scene !== 'chytre';
+  night = s.def ?? .85; nightS.value = night; nightLabel();
+}
+function setTrack(el) { el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
+function renderToggles() {
+  $('#colors').innerHTML = COLORS.map((p, i) => `<button class="plate" type="button" aria-pressed="${i === colI}" data-i="${i}" style="--c:${p.css}"><i aria-hidden="true" style="background:${p.css}"></i>${p.short}</button>`).join('');
+  $('#fxs').innerHTML = FX.map((p, i) => `<button class="plate" type="button" aria-pressed="${i === fxI}" data-i="${i}" style="--c:#bcd6f4"><i aria-hidden="true"></i>${p.name}</button>`).join('');
+  $('#oColor').textContent = COLORS[colI].name; $('#oFx').textContent = FX[fxI].name;
+}
+const now = () => performance.now() / 1000;
+$('#colors').addEventListener('click', e => { const b = e.target.closest('.plate'); if (!b) return; colI = +b.dataset.i; renderToggles(); drawScene(now()); });
+$('#fxs').addEventListener('click', e => { const b = e.target.closest('.plate'); if (!b) return; fxI = +b.dataset.i; renderToggles(); drawScene(now()); });
+nightS.addEventListener('input', () => { night = +nightS.value; nightLabel(); drawScene(now()); });
+scene.addEventListener('pointermove', e => { const r = scene.getBoundingClientRect(); ptr.tx = clamp((e.clientX - r.left) / r.width); ptr.ty = clamp((e.clientY - r.top) / r.height); ptr.inside = true; if (reduced) { ptr.x = ptr.tx; ptr.y = ptr.ty; drawScene(now()); } });
+scene.addEventListener('pointerleave', () => { ptr.inside = false; });
+cueList.addEventListener('click', e => {
+  const b = e.target.closest('.cue'); if (!b) return;
+  sel = +b.dataset.i; renderCues(); renderInfo(); drawScene(now());
+  cueList.querySelector(`[data-i="${sel}"]`).focus({ preventScroll: true });
+  const rr2 = scene.getBoundingClientRect(); field.pulseAt(rr2.left + rr2.width / 2, rr2.top + rr2.height * .3, .8);
+});
+renderCues(); renderInfo(); renderToggles();
+let sceneVis = false, sceneRaf = 0;
+function sceneLoop(ts) { sceneRaf = 0; if (!sceneVis) return; drawScene(reduced ? 2 : ts / 1000); if (!reduced) sceneRaf = requestAnimationFrame(sceneLoop); }
+new IntersectionObserver(es => es.forEach(e => { sceneVis = e.isIntersecting; if (sceneVis && !sceneRaf) sceneRaf = requestAnimationFrame(sceneLoop); })).observe(scene);
+if (window.ResizeObserver) new ResizeObserver(() => drawScene(now())).observe(scene); else addEventListener('resize', () => drawScene(now()));
+drawScene(2);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => drawScene(now()));
+
+/* ================= proof approvals ================= */
+const ALERTS = [
+  { zone: 'světelný box · hotel', title: 'Vizualizace je připravená', body: 'Box 240 × 80 cm na fotce vaší fasády, ve dne i v noci. Podsvícení teplou bílou, aby ladilo s osvětlením vchodu.', spec: [['rozměr', '240 × 80 cm'], ['světlo', '3000 K'], ['montáž', 'nad vchod']], yes: 'Schvaluji', no: 'Chci změnu', ok: 'Schváleno. Pouštíme se do výroby a ozveme se s termínem montáže.', okNo: 'Napište, co upravit, a pošleme novou vizualizaci.' },
+  { zone: '3D písmena · recepce', title: 'Písmena odsadíme 3 cm od zdi', body: 'Kvůli halo efektu potřebuje světlo prostor za písmeny. Pokud chcete písmena na plocho, bude svítit jen čelo.', spec: [['výška', '25 cm'], ['materiál', 'PETG + LED'], ['světlo', 'halo']], yes: 'Odsadit, chci halo', no: 'Na plocho', ok: 'Domluveno. Písmena dostanou distanční trny a halo.', okNo: 'Dobře, upravíme návrh na čelní svícení.' },
+  { zone: 'chytré LED · výloha', title: 'Navrhujeme pomalejší efekt', body: 'Běžící světlo s periodou 2 s bylo na videu z ulice moc rychlé. Zpomalíme na 6 s, působí to klidněji.', spec: [['délka', '8 m'], ['efekt', 'běžící'], ['provoz', '17–23 h']], yes: 'Zpomalit', no: 'Nechat rychlé', ok: 'Zpomaleno. Nové video efektu pošleme ke kontrole.', okNo: 'Necháme původní rychlost.' }
+];
+let ai = 0;
+const alertEl = $('#alert');
+const check = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8.5"/><path d="m6.3 10.3 2.5 2.4 5-5.3"/></svg>';
+function renderAlert() {
+  const a = ALERTS[ai];
+  alertEl.innerHTML = `<div class="alert-in"><div class="a-top"><span class="z"><i></i>${a.zone}</span><span>ukázka korektury</span></div>
+    <div class="a-title">${a.title}</div><p class="a-body">${a.body}</p>
+    <div class="a-spec">${a.spec.map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>
+    <div class="a-actions"><button class="btn btn-primary btn-sm" type="button" data-a="yes">${a.yes}</button><button class="btn btn-ghost btn-sm" type="button" data-a="no">${a.no}</button></div></div>`;
+}
+alertEl.addEventListener('click', async e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const a = ALERTS[ai]; const box = alertEl.querySelector('.alert-in');
+  box.querySelector('.a-actions').outerHTML = `<div class="a-done">${check}<span>${b.dataset.a === 'yes' ? a.ok : a.okNo}</span></div>`;
+  await sleep(2600);
+  box.classList.add('out'); await sleep(420);
+  ai = (ai + 1) % ALERTS.length; renderAlert();
+});
+renderAlert();
+
+/* ================= morph: mark -> fullscreen -> falls into hub ================= */
+const morph = $('#morph'), seed = $('#seed'), msec = $('#morph-sec'), slot = $('#hubSlot'), hub = $('#hub');
+const seedHint = $('#seedHint');
+const mText = $('.m-text', morph), mGlyph = $('.m-glyph', morph), mTitle = $('#mTitle');
+(function splitWords(el) {
+  const walk = node => {
+    [...node.childNodes].forEach(ch => {
+      if (ch.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        ch.textContent.split(/(\s+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+          else { const s = document.createElement('span'); s.className = 'w'; s.textContent = part; frag.appendChild(s); }
+        });
+        ch.replaceWith(frag);
+      } else if (ch.nodeType === 1) walk(ch);
+    });
+  };
+  walk(el);
+})(mTitle);
+const words = $$('.w', mTitle);
+let landed = false;
+function setLanded(v) {
+  if (v === landed) return; landed = v;
+  hub.classList.toggle('landed', v);
+  if (v) { const r = slot.getBoundingClientRect(); field.pulseAt(r.left + r.width / 2, r.top + r.height / 2, 1.2); }
+}
+function setBox(R, rad, rot) {
+  morph.style.width = R.w + 'px'; morph.style.height = R.h + 'px';
+  morph.style.borderRadius = rad + 'px';
+  morph.style.transform = `translate3d(${R.x}px,${R.y}px,0) rotate(${rot}deg)`;
+}
+const rl = (a, b, t) => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), w: lerp(a.w, b.w, t), h: lerp(a.h, b.h, t) });
+function updateMorph() {
+  if (reduced) return;
+  const vw = innerWidth, vh = innerHeight;
+  const r = msec.getBoundingClientRect();
+  const total = Math.max(1, r.height - vh);
+  const p = -r.top / total;
+  const S = seed.getBoundingClientRect();
+  const seedR = { x: S.left, y: S.top, w: S.width, h: S.height };
+  const full = { x: 0, y: 0, w: vw, h: vh };
+  const is = Math.min(84, vw * .2);
+  const corner = { x: vw * .82 - is / 2, y: vh * .2 - is / 2, w: is, h: is };
+  let show = true, R = seedR, rad = 20, rot = 0, glyphO = 1, tp = 0;
+  if (p <= 0) { show = false; setLanded(false); }
+  else if (p < 1) {
+    setLanded(false);
+    if (p < .3) { const t = easeIO(p / .3); R = rl(seedR, full, t); rad = lerp(20, 0, t); glyphO = 1 - clamp(t * 2.4); }
+    else if (p < .68) { R = full; rad = 0; glyphO = 0; tp = (p - .3) / .38; }
+    else if (p < .9) { const t = easeIO((p - .68) / .22); R = rl(full, corner, t); rad = lerp(0, 22, t); glyphO = clamp((t - .6) / .4); rot = lerp(0, 12, clamp((t - .5) / .5)); }
+    else { R = corner; rad = 22; rot = 12; }
+  } else {
+    const sY = scrollY, sE = r.bottom + sY - vh;
+    const SL = slot.getBoundingClientRect();
+    const slotC = SL.top + SL.height / 2 + sY;
+    let sL = slotC - vh * .56; if (sL < sE + vh * .25) sL = sE + vh * .25;
+    const q = clamp((sY - sE) / (sL - sE));
+    if (q >= 1) { show = false; setLanded(true); }
+    else {
+      setLanded(false);
+      const T = { x: SL.left, y: SL.top, w: SL.width, h: SL.height };
+      const qx = 1 - Math.pow(1 - q, 2), qy = q * q;
+      R = { x: lerp(corner.x, T.x, qx), y: lerp(corner.y, T.y, qy), w: lerp(corner.w, T.w, q), h: lerp(corner.h, T.h, q) };
+      rad = 22; rot = 12 * (1 - q) - Math.sin(q * Math.PI) * 16;
+    }
+  }
+  seed.style.visibility = (p > 0) ? 'hidden' : 'visible';
+  seedHint.style.opacity = p > 0 ? 0 : 1;
+  morph.style.visibility = show ? 'visible' : 'hidden';
+  if (!show) return;
+  setBox(R, rad, rot);
+  mGlyph.style.opacity = glyphO;
+  const gs = Math.min(R.w, R.h);
+  const gsv = mGlyph.firstElementChild; gsv.style.width = gsv.style.height = Math.min(gs * .62, 56) + 'px';
+  if (tp > 0) {
+    mText.style.visibility = 'visible';
+    const out = clamp((tp - .84) / .16);
+    words.forEach((w, i) => {
+      const l = easeIO(clamp((tp - i * .022) / .26));
+      w.style.opacity = (l * (1 - out)).toFixed(3);
+      w.style.transform = `translateY(${((1 - l) * 46 - out * 24).toFixed(1)}px)`;
+    });
+    const sideO = clamp(tp / .2) * (1 - out);
+    $('.m-eyebrow', morph).style.opacity = (.7 * sideO).toFixed(3);
+    $('.m-foot', morph).style.opacity = (.65 * clamp((tp - .3) / .2) * (1 - out)).toFixed(3);
+    morph.style.backgroundPosition = `0 ${(-tp * 60).toFixed(1)}px`;
+  } else mText.style.visibility = 'hidden';
+}
+
+/* ================= hub spokes ================= */
+const spokes = $('#spokes'); let spokeData = [];
+function layoutSpokes() {
+  const hr = hub.getBoundingClientRect(); if (!hr.width) return;
+  spokes.setAttribute('viewBox', `0 0 ${hr.width} ${hr.height}`); spokes.innerHTML = ''; spokeData = [];
+  const sr = slot.getBoundingClientRect();
+  const cx = sr.left + sr.width / 2 - hr.left, cy = sr.top + sr.height / 2 - hr.top;
+  $$('.sat', hub).forEach((s, i) => {
+    const r = s.getBoundingClientRect();
+    const x = r.left + r.width / 2 - hr.left, y = r.top + r.height / 2 - hr.top;
+    const ln = document.createElementNS(SVGNS, 'line');
+    ln.setAttribute('x1', cx); ln.setAttribute('y1', cy); ln.setAttribute('x2', x); ln.setAttribute('y2', y);
+    const c = document.createElementNS(SVGNS, 'circle'); c.setAttribute('r', 2.6);
+    spokes.append(ln, c);
+    spokeData.push({ c, cx, cy, x, y, ph: i * .17, dir: i % 2 ? 1 : -1 });
+  });
+}
+function hubTick(now) {
+  if (!landed && !reduced) return;
+  const t = now / 1000;
+  spokeData.forEach(s => {
+    let f = (t * .45 + s.ph) % 1; if (s.dir < 0) f = 1 - f;
+    const ff = .12 + f * .76;
+    s.c.setAttribute('cx', lerp(s.cx, s.x, ff)); s.c.setAttribute('cy', lerp(s.cy, s.y, ff));
+  });
+}
+if (window.ResizeObserver) new ResizeObserver(layoutSpokes).observe(hub); else addEventListener('resize', layoutSpokes);
+layoutSpokes();
+if (reduced) hub.classList.add('landed');
+
+/* ================= order form ================= */
+const fWhat = $('#fWhat');
+fWhat.innerHTML = '<option value="">Vyberte službu</option>' + SERVICES.map(s => `<option>${s.name}</option>`).join('') + '<option>Něco jiného</option>';
+const form = $('#orderForm'), out = $('#orderOut'), hint = $('#formHint');
+async function copyText(text, btn) {
+  try { await navigator.clipboard.writeText(text); const o = btn.textContent; btn.textContent = 'zkopírováno'; setTimeout(() => btn.textContent = o, 1600); return true; }
+  catch (e) { return false; }
+}
+function selectText(el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const v = id => $(id).value.trim();
+  if (!v('#fWhat') || !v('#fContact')) { hint.textContent = 'Doplňte prosím službu a telefon nebo e-mail.'; hint.style.color = 'var(--acc-2)'; (!v('#fWhat') ? fWhat : $('#fContact')).focus(); return; }
+  hint.textContent = 'Vyplňte aspoň službu a kontakt.'; hint.style.color = '';
+  const d = v('#fDate') ? new Date(v('#fDate')).toLocaleDateString('cs-CZ') : 'neuvedeno';
+  const txt = [`Poptávka · ${v('#fWhat')}`, `Rozměr a počet: ${v('#fSize') || 'neuvedeno'}`, `Termín: ${d}`, `Místo: ${v('#fFiles')}`, `Jméno: ${v('#fName') || 'neuvedeno'}`, `Kontakt: ${v('#fContact')}`, v('#fNote') ? `Poznámka: ${v('#fNote')}` : ''].filter(Boolean).join('\n');
+  out.hidden = false;
+  out.innerHTML = `<p>Poptávka je připravená. Zkopírujte ji a pošlete na jakubskorepa@centrum.cz, ideálně s fotkou místa. Ozveme se s návrhem a cenou.</p><pre id="orderTxt"></pre><div class="row"><button class="btn btn-primary btn-sm" type="button" id="copyOrder">Kopírovat text</button><a class="btn btn-ghost btn-sm" id="mailOrder" href="#">Otevřít v e-mailu</a></div>`;
+  $('#orderTxt').textContent = txt;
+  $('#mailOrder').href = 'mailto:jakubskorepa@centrum.cz?subject=' + encodeURIComponent('Poptávka: ' + v('#fWhat')) + '&body=' + encodeURIComponent(txt);
+  $('#copyOrder').addEventListener('click', async ev => { if (!(await copyText(txt, ev.currentTarget))) selectText($('#orderTxt')); });
+  const r = out.getBoundingClientRect(); field.pulseAt(r.left + r.width / 2, r.top + 20, .8);
+});
+$$('.copy').forEach(b => b.addEventListener('click', async () => { if (!(await copyText(b.dataset.copy, b))) selectText(b.previousElementSibling.querySelector('a')); }));
+
+/* ================= final wordmark light ================= */
+const wm = $('#wordmark');
+$('#final').addEventListener('pointermove', e => { const r = wm.getBoundingClientRect(); wm.style.setProperty('--lx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%'); wm.style.setProperty('--ly', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%'); }, { passive: true });
+
+/* ================= smooth scroll + reveals ================= */
+let lenis = null;
+if (!reduced && window.Lenis) {
+  try { lenis = new window.Lenis({ lerp: .085, smoothWheel: true, wheelMultiplier: 1 }); } catch (e) { lenis = null; }
+}
+$$('[data-scroll]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href'); const t = id === '#top' ? 0 : $(id); if (t === null) return;
+  e.preventDefault();
+  if (lenis) lenis.scrollTo(t, { duration: 1.6 }); else (t === 0 ? scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }) : t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }));
+}));
+if (window.gsap && window.ScrollTrigger && !reduced) {
+  gsap.registerPlugin(ScrollTrigger);
+  if (lenis) lenis.on('scroll', ScrollTrigger.update);
+  gsap.from('.hero .rv', { y: 34, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: .09, delay: .1 });
+  gsap.from('#heroPanel', { y: 50, rotateX: 10, opacity: 0, duration: 1.4, ease: 'power3.out', delay: .3, transformPerspective: 1200, onComplete: layoutFlow });
+  $$('main .rv').filter(el => !el.closest('.hero')).forEach(el => {
+    gsap.from(el, { y: 40, opacity: .1, filter: 'blur(6px)', duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true }, clearProps: 'filter' });
+  });
+  gsap.to('#heroPanel', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.from('.wordmark', { yPercent: 40, ease: 'none', scrollTrigger: { trigger: '.final', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+}
+
+/* ================= main loop ================= */
+function loop(now) {
+  if (lenis) lenis.raf(now);
+  updateTone();
+  updateMorph();
+  field.tick(now);
+  hubTick(now);
+  cursorFx.tick(now);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+</body>
+</html>
