@@ -1,0 +1,1433 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Jarda Klimeš</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Jarda Klimeš, kreativní technolog a zakladatel Ilustra. Světlo, materiál, kód, AI a roboti.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* layout: a story that starts in the grey photo studio of the video and darkens into the night workshop, where every object is a light source; content sits in a 1240px frame */
+:root{
+  --studio:#bcbdbb; --studio-2:#a3a6a5;
+  --ink:#121416; --ink-2:#3b3f44;
+  --night:#0c0d10; --night-2:#15171b; --night-3:#1d2025;
+  --paper:#ece9e2; --mute:#8f939a; --line:rgba(236,233,226,.12); --line-2:rgba(236,233,226,.22);
+  --led:#ffb85c; --led-hot:#ffd9a1; --on-led:#1d1306;
+  --ice:#cfe3f2; --miss:#ff5a6e; --deep:#08202a;
+  --f-display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --gut-l:max(16px,env(safe-area-inset-left,0px)); --gut-r:max(16px,env(safe-area-inset-right,0px));
+  color-scheme:dark;
+}
+html{background:var(--night)}
+body{background:var(--night);color:var(--paper);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--led);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1240px;margin-inline:auto;padding-left:var(--gut-l);padding-right:var(--gut-r)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 11px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.mono{font:400 11px/1.5 var(--f-mono);letter-spacing:.06em}
+em{font-family:var(--f-serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+h1,h2,h3{font-family:var(--f-display);font-variation-settings:"wdth" 78;text-wrap:balance;margin:0}
+
+/* ---------- header ---------- */
+.top{position:fixed;z-index:60;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top,0px)) var(--gut-r) 0 var(--gut-l);pointer-events:none}
+.top-in{max-width:1240px;margin-inline:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.top a,.top nav{pointer-events:auto}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;padding:6px 14px 6px 6px;border-radius:999px;background:rgba(12,13,16,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 13px var(--f-body);color:var(--paper)}
+.brand b{width:28px;height:28px;border-radius:9px;background:var(--led);color:var(--on-led);display:grid;place-items:center;font:800 13px var(--f-display);font-variation-settings:"wdth" 75;box-shadow:0 0 18px rgba(255,184,92,.55)}
+.top nav{display:flex;gap:2px;padding:5px;border-radius:999px;background:rgba(12,13,16,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.top nav a{font:500 12px var(--f-body);text-decoration:none;color:var(--paper);padding:6px 12px;border-radius:999px}
+.top nav a:hover{background:rgba(255,255,255,.08)}
+@media (max-width:520px){.top nav a.opt{display:none}.brand span{display:none}.brand{padding:6px}}
+
+/* ---------- film ---------- */
+#film{position:relative;height:820vh;background:var(--studio)}
+.film-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(120% 90% at 50% 40%,#c8c8c7 0%,var(--studio) 55%,var(--studio-2) 100%)}
+#filmCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.film-scrim{position:absolute;inset:auto 0 0 0;height:58%;background:linear-gradient(to top,rgba(178,180,178,.94) 0%,rgba(178,180,178,.82) 46%,rgba(178,180,178,0) 100%);pointer-events:none;display:none}
+.film-shade{position:absolute;inset:0;background:var(--night);opacity:0;pointer-events:none}
+.blk{position:absolute;top:42%;transform:translateY(-50%);width:min(30vw,440px);color:var(--ink);visibility:hidden}
+.blk.l,.blk.r{z-index:1}
+.blk.l::before,.blk.r::before{content:"";position:absolute;inset:-22px -26px;border-radius:22px;background:rgba(200,201,199,.55);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 0 0 1px rgba(255,255,255,.25) inset;opacity:var(--bk,0);z-index:-1}
+.blk.l{left:max(var(--gut-l),5vw)}
+.blk.r{right:max(var(--gut-r),5vw)}
+.blk-hero{visibility:visible;left:max(var(--gut-l),5vw);top:auto;bottom:max(9vh,64px);transform:none;width:min(60vw,820px)}
+.blk-hero h1{color:#fff;mix-blend-mode:difference}
+.blk.blk-hero p{max-width:26ch}
+.blk.blk-hero .eyebrow{max-width:30ch}
+.blk .eyebrow{color:var(--ink-2);margin-bottom:16px}
+.blk h1{font-size:clamp(56px,9vw,148px);line-height:.86;font-weight:800;letter-spacing:-.035em}
+.blk h2{font-size:clamp(34px,4.2vw,64px);line-height:.95;font-weight:750;letter-spacing:-.03em}
+.blk p{font-size:clamp(15px,1.25vw,18px);line-height:1.55;margin:18px 0 0;max-width:42ch;color:var(--ink)}
+.blk .lede{font-size:clamp(16px,1.4vw,20px)}
+.blk .fly{position:relative}
+.wd{display:inline-block;white-space:nowrap}
+.ch{display:inline-block;will-change:transform,opacity}
+.fade .w{display:inline-block;will-change:opacity,transform}
+.career{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.career li{font:400 11px/1 var(--f-mono);letter-spacing:.04em;padding:8px 10px;border-radius:8px;border:1px solid rgba(18,20,22,.22);background:rgba(255,255,255,.18)}
+.career b{font-weight:500}
+.blk-final{left:max(var(--gut-l),5vw);top:auto;bottom:max(12vh,80px);transform:none;width:min(60vw,760px)}
+.blk-final h2{font-size:clamp(44px,6.4vw,104px)}
+.blk-final .eyebrow{color:inherit;opacity:.7}
+.film-hud{position:absolute;right:var(--gut-r);bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:14px;color:var(--ink-2);font:400 10px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.hint{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink-2);font:400 10px var(--f-mono);letter-spacing:.14em;text-transform:uppercase}
+.hint i{width:1px;height:34px;background:linear-gradient(var(--ink-2),transparent);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+@media (max-width:760px){
+  #film{height:720vh}
+  .film-scrim{display:block}
+  .blk.l::before,.blk.r::before{display:none}
+  .blk-hero h1{color:var(--ink);mix-blend-mode:normal}
+  .blk.blk-hero p{max-width:none}
+  .v2{aspect-ratio:auto;min-height:360px}
+  .blk,.blk.l,.blk.r,.blk-hero,.blk-final{left:var(--gut-l);right:var(--gut-r);width:auto;top:auto;transform:none;bottom:calc(46px + env(safe-area-inset-bottom,0px))}
+  .blk-hero{bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  .blk h1{font-size:clamp(54px,17vw,92px)}
+  .blk h2{font-size:clamp(30px,9vw,44px)}
+  .blk p{font-size:15px}
+  .hint{display:none}
+  .film-hud{left:var(--gut-l);right:auto}
+}
+
+/* ---------- morph (seed tile -> fullscreen -> falls into the field) ---------- */
+#morph-sec{position:relative;height:300vh;background:var(--night)}
+.stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center}
+.seed-wrap{display:flex;flex-direction:column;align-items:center;gap:18px}
+.tile{position:relative;width:76px;height:76px;border-radius:20px;background:var(--led);color:var(--on-led);display:grid;place-items:center;font:800 26px var(--f-display);font-variation-settings:"wdth" 75;letter-spacing:-.02em;box-shadow:0 0 0 1px rgba(255,226,180,.7) inset,0 0 60px rgba(255,184,92,.55)}
+.seed::after{content:"";position:absolute;inset:-10px;border-radius:26px;border:1px solid rgba(255,184,92,.45);animation:ping 2.2s cubic-bezier(.2,.6,.3,1) infinite}
+@keyframes ping{from{transform:scale(.9);opacity:.9}to{transform:scale(1.5);opacity:0}}
+.seed-wrap .mono{color:var(--mute);text-transform:uppercase;letter-spacing:.14em}
+.static-statement{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#morph{position:fixed;left:0;top:0;width:76px;height:76px;z-index:40;background:var(--led);color:var(--on-led);border-radius:20px;pointer-events:none;visibility:hidden;overflow:hidden;box-shadow:0 0 0 1px rgba(255,226,180,.7) inset,0 0 70px rgba(255,184,92,.5);will-change:transform,width,height;background-image:radial-gradient(rgba(29,19,6,.13) 1px,transparent 1.4px);background-size:22px 22px}
+.m-glyph{position:absolute;inset:0;display:grid;place-items:center;font:800 26px var(--f-display);font-variation-settings:"wdth" 75}
+.m-text{position:absolute;left:50%;top:50%;width:min(980px,88vw);transform:translate(-50%,-50%);text-align:center}
+.m-eyebrow{display:block;font:500 11px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-bottom:20px}
+.m-title{margin:0;font:800 clamp(48px,9vw,140px)/.9 var(--f-display);font-variation-settings:"wdth" 76;letter-spacing:-.04em}
+.m-title em{font-weight:400;color:#5a2f00}
+.m-title .w{display:inline-block;will-change:transform,opacity}
+.m-sub{max-width:56ch;margin:26px auto 0;font-size:clamp(15px,1.3vw,18px);line-height:1.55;opacity:0}
+.m-foot{display:block;margin-top:24px;font:400 11px var(--f-mono);letter-spacing:.08em;opacity:0}
+
+/* ---------- field of projects ---------- */
+.sec{padding-block:clamp(72px,11vw,140px)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px 48px;align-items:end;margin-bottom:clamp(28px,4vw,48px)}
+.sec-head h2{font-size:clamp(40px,6vw,88px);line-height:.92;font-weight:780;letter-spacing:-.035em;margin-top:14px}
+.sec-head h2 em{color:var(--led)}
+.sec-head p{margin:0;color:#b9bbc0;max-width:48ch}
+.eyebrow.led{color:var(--led)}
+.pole-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+.panel{background:var(--night-2);border:1px solid var(--line);border-radius:22px}
+.hub{position:relative;height:460px;margin:8px}
+.spokes{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.spokes line{stroke:rgba(236,233,226,.14);stroke-width:1.2;stroke-dasharray:3 5;transition:stroke .6s}
+.hub.landed .spokes line{stroke:rgba(255,184,92,.38);stroke-dasharray:none}
+.hub .spokes line.on{stroke:rgba(255,217,161,.9);stroke-width:1.6}
+.spokes circle{fill:var(--led-hot);opacity:0;transition:opacity .4s;filter:drop-shadow(0 0 5px var(--led))}
+.hub.landed .spokes circle{opacity:1}
+.hub-slot{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:22px;border:1px dashed rgba(255,217,161,.35);background:rgba(255,184,92,.04)}
+.hub-icon{position:absolute;inset:0;width:auto;height:auto;border-radius:22px}
+.js:not(.rm) .hub:not(.landed) .hub-icon{visibility:hidden}
+.hub.landed .hub-icon{animation:land .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes land{0%{transform:scale(1.22,.78)}40%{transform:scale(.92,1.08)}70%{transform:scale(1.03,.97)}100%{transform:none}}
+.hub-slot .rip{position:absolute;inset:-2px;border-radius:24px;border:1.5px solid var(--led);opacity:0;pointer-events:none}
+.hub.landed .rip{animation:rip 1.1s ease-out}
+.hub.landed .rip.r2{animation-delay:.18s}
+@keyframes rip{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(2.4)}}
+.sat{position:absolute;left:clamp(46px,var(--x),calc(100% - 46px));top:var(--y);transform:translate(-50%,-50%);padding:8px 12px;border-radius:10px;border:1px solid var(--line-2);background:rgba(12,13,16,.94);font:500 11px var(--f-mono);letter-spacing:.03em;color:var(--mute);cursor:pointer;transition:color .4s,border-color .4s,box-shadow .4s,background .3s;white-space:nowrap}
+.hub.landed .sat{color:var(--paper);border-color:rgba(255,184,92,.4);box-shadow:0 0 22px -8px rgba(255,184,92,.7)}
+.sat:hover{color:var(--paper)}
+.sat[aria-pressed="true"]{background:var(--led);color:var(--on-led)!important;border-color:var(--led)}
+.detail{padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:14px;min-width:0}
+.detail .tag{align-self:flex-start;font:500 10px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;padding:6px 9px;border-radius:7px;border:1px solid rgba(255,184,92,.4);color:var(--led)}
+.detail h3{font-size:clamp(38px,4.4vw,60px);line-height:.95;font-weight:780;letter-spacing:-.03em}
+.detail .kind{color:var(--mute);margin:0}
+.detail p.txt{margin:0;color:#cfd0d3;font-size:17px;max-width:44ch}
+.detail a.go{margin-top:auto;align-self:flex-start;font:500 12px var(--f-mono);color:var(--led);text-decoration:none;border-bottom:1px solid rgba(255,184,92,.4);padding-bottom:3px}
+.detail .count{margin-top:auto;color:var(--mute)}
+@media (max-width:860px){.sec-head,.pole-grid{grid-template-columns:minmax(0,1fr)}.hub{height:420px}}
+@media (max-width:520px){.sat{padding:6px 8px;font-size:10px}.hub{height:380px}}
+
+/* ---------- chapters ---------- */
+.chap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:center;padding-block:clamp(64px,9vw,120px);border-top:1px solid var(--line)}
+.chap h2{font-size:clamp(38px,5.4vw,80px);line-height:.93;font-weight:780;letter-spacing:-.035em;margin:14px 0 20px}
+.chap p{margin:0 0 14px;color:#c4c6ca;max-width:52ch;font-size:17px}
+.chap .eyebrow{color:var(--mute)}
+@media (max-width:860px){.chap{grid-template-columns:minmax(0,1fr)}}
+
+.radar{padding:18px;display:flex;flex-direction:column;gap:12px}
+.radar-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--mute)}
+.radar-top .on{color:var(--led)}
+.radar svg{width:100%;height:auto;display:block;touch-action:none;cursor:crosshair}
+.radar .arc{fill:none;stroke:rgba(236,233,226,.13);stroke-width:1}
+.radar .arc.zone{stroke:rgba(255,184,92,.55);stroke-dasharray:4 4}
+.radar .fov{stroke:rgba(236,233,226,.13)}
+.radar .lbl{fill:var(--mute);font:400 9px var(--f-mono)}
+.radar .wedge{fill:rgba(255,184,92,.05);transition:fill .5s}
+.radar.active .wedge{fill:rgba(255,184,92,.13)}
+.radar .ped{fill:var(--night-3);stroke:var(--line-2)}
+.radar .obj{fill:#3a3127;transition:fill .5s}
+.radar.active .obj{fill:var(--led)}
+.radar .halo{fill:var(--led);opacity:0;transition:opacity .6s}
+.radar.active .halo{opacity:.35}
+.radar .who{fill:var(--paper)}
+.radar .who-ring{fill:none;stroke:var(--paper);opacity:.35}
+.bubble{min-height:3.2em;font:400 15px/1.5 var(--f-body);color:var(--paper);padding:12px 14px;border-radius:12px;background:var(--night-3);border:1px solid var(--line);transition:border-color .4s}
+.radar.active .bubble{border-color:rgba(255,184,92,.45)}
+.bubble .cur{display:inline-block;width:7px;height:1em;background:var(--led);vertical-align:-2px;margin-left:2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.readout{color:var(--mute);font-variant-numeric:tabular-nums}
+
+.sym{position:relative}
+#symCv{width:100%;height:260px;display:block}
+.quote{font:400 clamp(28px,3.4vw,46px)/1.12 var(--f-serif);letter-spacing:-.01em;margin:8px 0 0;color:var(--paper)}
+.quote b{font-weight:400;color:var(--led)}
+
+.dialog{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:8px}
+.voice{padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:14px}
+.voice p{margin:0;color:#cfd0d3;font-size:17px}
+.voice .who{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:10px}
+.ava{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:800 13px var(--f-display);font-variation-settings:"wdth" 75}
+.ava.j{background:var(--led);color:var(--on-led)}
+.ava.c{background:var(--ice);color:#0e1a24}
+.voice .who b{display:block;font-weight:600}
+.voice .who span{color:var(--mute);font-size:13px}
+.voice.claude{background:linear-gradient(160deg,#151a20,#13161a)}
+@media (max-width:760px){.dialog{grid-template-columns:minmax(0,1fr)}}
+
+.under{position:relative;overflow:hidden;background:var(--deep);border-radius:28px;padding:clamp(32px,6vw,80px);isolation:isolate}
+.under::before,.under::after{content:"";position:absolute;inset:-40%;z-index:-1;background:radial-gradient(closest-side,rgba(140,230,255,.16),transparent 70%) 0 0/180px 140px,radial-gradient(closest-side,rgba(140,230,255,.10),transparent 70%) 60px 40px/240px 190px;animation:caus 14s linear infinite;mix-blend-mode:screen}
+.under::after{animation-duration:21s;animation-direction:reverse;opacity:.8}
+@keyframes caus{to{transform:translate(180px,140px) rotate(8deg)}}
+.under h2{font-size:clamp(38px,5.4vw,80px);line-height:.93;font-weight:780;letter-spacing:-.035em;margin:14px 0 20px}
+.under p{max-width:54ch;color:#bfe1ea;font-size:17px;margin:0 0 12px}
+.under .eyebrow{color:#8fd8ea}
+
+/* ---------- second video ---------- */
+.v2{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:22px;overflow:hidden;border:1px dashed var(--line-2);display:grid;place-items:center;text-align:center;background:#0f1013 url("f/240.webp") center/cover}
+.v2::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,13,16,.72),rgba(12,13,16,.9))}
+.v2-in{position:relative;display:grid;gap:12px;justify-items:center;padding:20px}
+.v2 .play{width:64px;height:64px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center}
+.v2 .play::after{content:"";border-left:16px solid var(--paper);border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:5px;opacity:.6}
+.v2 h3{font-size:clamp(28px,3.6vw,48px);font-weight:760;letter-spacing:-.03em}
+.v2 p{margin:0;color:#b9bbc0;max-width:46ch}
+
+/* ---------- chip (hand + processor) ---------- */
+#chip{position:relative;height:520vh;background:#111517}
+.chip-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(90% 80% at 40% 45%,#232a2c 0%,#141819 55%,#0a0d0d 100%)}
+#chipCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.traces{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.traces .tg{fill:none;stroke:var(--led);stroke-width:7;opacity:.22;stroke-linecap:round;stroke-linejoin:round}
+.traces .tc{fill:none;stroke:var(--led-hot);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.traces .pad{fill:var(--led-hot)}
+.traces .head{fill:#fff;filter:drop-shadow(0 0 6px var(--led)) drop-shadow(0 0 14px var(--led))}
+.chip-title{position:absolute;left:max(var(--gut-l),5vw);bottom:max(10vh,70px);color:var(--paper);opacity:0;max-width:min(42vw,560px)}
+.chip-title h2{font-size:clamp(44px,6.4vw,104px);line-height:.9;font-weight:800;letter-spacing:-.04em;margin-top:14px}
+.chip-lbl{position:absolute;left:0;top:0;display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;border:1px solid rgba(255,184,92,.55);background:rgba(12,13,16,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--paper);font:500 13px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;opacity:0;white-space:nowrap;box-shadow:0 0 30px -8px rgba(255,184,92,.6);will-change:transform,opacity}
+.chip-lbl i{width:7px;height:7px;border-radius:50%;background:var(--led);box-shadow:0 0 10px var(--led)}
+.chip-end{position:absolute;left:var(--gut-l);right:var(--gut-r);bottom:max(8vh,56px);text-align:center;opacity:0}
+.chip-end p{margin:0;font:800 clamp(34px,5vw,80px)/.95 var(--f-display);font-variation-settings:"wdth" 78;letter-spacing:-.035em;color:var(--paper);text-wrap:balance}
+.chip-end em{color:var(--led);font-weight:400}
+.chip-hud{position:absolute;right:var(--gut-r);bottom:calc(14px + env(safe-area-inset-bottom,0px));color:#7d8388;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+@media (max-width:760px){#chip{height:460vh}.chip-title{max-width:none;right:var(--gut-r);bottom:calc(64px + env(safe-area-inset-bottom,0px))}.chip-lbl{font-size:11px;padding:7px 11px;gap:8px}.chip-hud{left:var(--gut-l);right:auto}}
+.rm #chip{height:auto}
+.rm .chip-stage{position:relative;height:100vh}
+
+/* ---------- game ---------- */
+.game{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px}
+.screen{position:relative;padding:12px;border-radius:24px;background:#08090b;border:1px solid var(--line);box-shadow:0 30px 80px -40px rgba(255,184,92,.35)}
+.screen-bar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:4px 6px 10px;color:var(--mute);font-variant-numeric:tabular-nums}
+.screen-bar .on{color:var(--led)}
+#gameCv{display:block;width:100%;border-radius:12px;touch-action:manipulation;cursor:crosshair;background:#090a0c}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.side .panel{padding:18px}
+.side h3{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.side p{margin:0;color:#b9bbc0;font-size:14.5px}
+.unl{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.unl li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:start;padding:10px 12px;border-radius:12px;border:1px solid var(--line);font-size:14px;color:var(--mute)}
+.unl li .k{font:600 12px var(--f-mono);letter-spacing:.1em;color:var(--mute);padding-top:2px}
+.unl li.done{border-color:rgba(255,184,92,.4);color:var(--paper);background:rgba(255,184,92,.05)}
+.unl li.done .k{color:var(--led)}
+.unl li.cur{border-color:var(--line-2)}
+.stats{display:flex;gap:16px;flex-wrap:wrap;color:var(--mute);font-variant-numeric:tabular-nums}
+.stats b{color:var(--paper);font-weight:500}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:1px solid var(--line-2);background:transparent;color:var(--paper);font:500 13px var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--paper)}
+.btn.led{background:var(--led);border-color:var(--led);color:var(--on-led)}
+.btn.led:hover{background:var(--led-hot)}
+.win{display:none;padding:16px 18px;border-radius:14px;background:var(--led);color:var(--on-led)}
+.win.show{display:block}
+.win b{font:800 22px var(--f-display);font-variation-settings:"wdth" 78;display:block}
+@media (max-width:980px){.game{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- contact ---------- */
+.end{padding-block:clamp(80px,12vw,160px);text-align:left}
+.end h2{font-size:clamp(52px,9vw,150px);line-height:.86;font-weight:800;letter-spacing:-.04em;margin:16px 0 22px}
+.end h2 em{color:var(--led)}
+.end p{max-width:52ch;color:#c4c6ca;font-size:18px;margin:0 0 28px}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.mail code{font:500 clamp(16px,2vw,22px) var(--f-mono);color:var(--paper);user-select:all;padding:12px 16px;border-radius:12px;border:1px solid var(--line-2);overflow-wrap:anywhere}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.foot{border-top:1px solid var(--line);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mute)}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:clamp(28px,5vw,80px);align-items:start;border-top:1px solid var(--line);padding-top:clamp(56px,8vw,110px)}
+.about-head{position:sticky;top:calc(90px + env(safe-area-inset-top,0px))}
+.about-head h2{font-size:clamp(44px,6.4vw,96px);line-height:.9;font-weight:800;letter-spacing:-.04em;margin-top:14px}
+.about-head h2 em{color:var(--led)}
+.about-head p{color:#b9bbc0;margin:18px 0 0;max-width:36ch}
+.about-body{display:grid;gap:clamp(28px,4vw,44px);min-width:0}
+.ab h3{font-size:clamp(24px,2.4vw,32px);font-weight:720;letter-spacing:-.02em;margin-bottom:12px}
+.ab p{margin:0;color:#c4c6ca;font-size:17px;max-width:58ch}
+.skills{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.skills li{display:grid;grid-template-columns:minmax(130px,.42fr) minmax(0,1fr);gap:6px 20px;padding:14px 0;border-bottom:1px solid var(--line)}
+.skills b{font:500 11px/1.6 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--led);padding-top:3px}
+.skills span{color:#c4c6ca;font-size:16px}
+@media (max-width:860px){.about{grid-template-columns:minmax(0,1fr)}.about-head{position:static}}
+@media (max-width:520px){.skills li{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- essays ---------- */
+.shelf{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (min-width:560px){.shelf{grid-template-columns:repeat(2,minmax(0,1fr))}.ess.feat{grid-column:span 2}}
+@media (min-width:900px){.shelf{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ess{display:flex;flex-direction:column;gap:12px;min-height:220px;padding:22px;border-radius:20px;border:1px solid var(--line);background:var(--night-2);text-align:left;color:var(--paper);font:inherit;min-width:0}
+.ess .no{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.ess h3{font-size:clamp(26px,2.6vw,34px);line-height:1;font-weight:760;letter-spacing:-.02em}
+.ess p{margin:0;color:#b9bbc0;font-size:15px;max-width:52ch}
+.ess .meta{margin-top:auto;font:400 11px var(--f-mono);letter-spacing:.06em;color:var(--mute)}
+button.ess{cursor:pointer;border-color:rgba(255,184,92,.4);background:linear-gradient(150deg,#21190f,var(--night-2) 62%);transition:transform .35s,border-color .35s,box-shadow .35s}
+button.ess:hover{transform:translateY(-3px);border-color:var(--led);box-shadow:0 24px 60px -36px rgba(255,184,92,.6)}
+button.ess .no,button.ess .go{color:var(--led)}
+button.ess h3{font-size:clamp(34px,4vw,56px)}
+.ess.soon{border-style:dashed;background:transparent}
+@media (max-width:559px){.ess.soon{min-height:0}}
+.ess.soon h3{color:#c9cacd}
+
+/* ---------- collaboration ---------- */
+.collab{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.co{padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.co .mono{color:var(--led);text-transform:uppercase;letter-spacing:.12em}
+.co h3{font-size:clamp(22px,2vw,28px);font-weight:720;letter-spacing:-.02em}
+.co p{margin:0;color:#b9bbc0;font-size:15px}
+.co-cta{background:var(--led);border-color:var(--led);color:var(--on-led)}
+.co-cta p{color:#3a2a12}
+.co-cta .btn.led{margin-top:auto;align-self:flex-start;background:var(--on-led);color:var(--led);border-color:var(--on-led)}
+@media (max-width:900px){.collab{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.collab{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- reader ---------- */
+.reader{position:fixed;inset:0;z-index:80;background:var(--night);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.reader[hidden]{display:none}
+.rd-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) var(--gut-r) 10px var(--gut-l);background:rgba(12,13,16,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);color:var(--mute);text-transform:uppercase;letter-spacing:.12em}
+.rd-prog{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--led);box-shadow:0 0 10px var(--led)}
+.rd-body{max-width:720px;margin:0 auto;padding:clamp(44px,8vw,96px) var(--gut-r) calc(96px + env(safe-area-inset-bottom,0px)) var(--gut-l)}
+.rd-body h1{font-size:clamp(46px,7.4vw,96px);line-height:.9;font-weight:800;letter-spacing:-.04em;margin:16px 0 14px}
+.rd-body p.sub{font:400 11px/1.7 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 40px}
+.rd-body h2{font-size:clamp(26px,2.8vw,34px);font-weight:740;letter-spacing:-.02em;margin:56px 0 14px}
+.rd-body p{font-size:18px;line-height:1.75;color:#d4d5d8;margin:0 0 18px}
+.rd-body em{font-size:1.08em;color:var(--paper)}
+.rd-body blockquote{margin:30px 0;padding:4px 0 4px 22px;border-left:2px solid var(--led);box-shadow:-10px 0 20px -14px var(--led)}
+.rd-body blockquote p{font:400 clamp(25px,2.8vw,34px)/1.22 var(--f-serif);color:var(--led-hot);text-shadow:0 0 22px rgba(255,184,92,.35);margin:0 0 10px}
+.rd-body cite{font:400 11px var(--f-mono);font-style:normal;letter-spacing:.06em;color:var(--mute)}
+.rd-end{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;color:var(--mute)}
+
+/* ---------- reveal (visible at rest; only nudged in) ---------- */
+.js .rv{transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .9s}
+.js .rv.pre{transform:translateY(26px);opacity:.25}
+
+/* ---------- reduced motion ---------- */
+.rm #film{height:auto}
+.rm .film-stage{position:relative;height:auto;display:grid;gap:28px;padding:calc(90px + env(safe-area-inset-top,0px)) var(--gut-r) 48px var(--gut-l)}
+.rm #filmCanvas{position:relative;height:56vh;border-radius:18px}
+.rm .blk,.rm .blk-hero,.rm .blk-final{position:static;visibility:visible;transform:none;width:auto;max-width:720px}
+.rm .film-scrim,.rm .film-shade,.rm .hint,.rm .film-hud{display:none}
+.rm #morph{display:none}
+.rm #morph-sec{height:auto;padding-block:40px}
+.rm .stage{position:relative;height:auto;padding:clamp(48px,8vw,100px) var(--gut-r) clamp(48px,8vw,100px) var(--gut-l);background:var(--led);color:var(--on-led)}
+.rm .seed-wrap{display:none}
+.rm .static-statement{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;text-align:center;max-width:860px}
+.rm .static-statement p{font:800 clamp(40px,7vw,90px)/.95 var(--f-display);margin:12px 0}
+.rm .under::before,.rm .under::after,.rm .seed::after,.rm .hint i{animation:none}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs></defs></svg>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#film"><b>JK</b><span>Jarda Klimeš</span></a>
+    <nav aria-label="Hlavní">
+      <a class="opt" href="#pole">Projekty</a>
+      <a class="opt" href="#o-mne">O mně</a>
+      <a href="#eseje">Eseje</a>
+      <a class="opt" href="#hra">Hra</a>
+      <a href="#spoluprace">Spolupráce</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ================= FILM ================= -->
+<section id="film" aria-label="Příběh ve videu">
+  <div class="film-stage" id="filmStage">
+    <canvas id="filmCanvas" role="img" aria-label="Jarda stojí v ateliéru, podívá se nahoru, z úst mu vylétají písmena a pak se zase vrátí."></canvas>
+    <div class="film-scrim"></div>
+
+    <div class="blk blk-hero" data-a="0" data-b="0" data-c="14" data-d="40" data-in="none" data-out="scatter">
+      <span class="eyebrow"><span>kreativní technolog<br>zakladatel Ilustro<br>nadšenec a snílek</span></span>
+      <h1 class="fly">Jarda Klimeš</h1>
+      <p class="fade lede">Spojuju světlo, materiál a kód. Posouvej dolů a pusť slova ven.</p>
+    </div>
+
+    <div class="blk l" data-a="54" data-b="72" data-c="88" data-d="98" data-in="mouth" data-out="scatter">
+      <span class="eyebrow">prolog · slova</span>
+      <h2 class="fly">Celý život sbírám slova.</h2>
+      <p class="fade">Z knížek, schůzek, ze zápisků, z mobilu. Tady jsou všechna ta slova, která musela ven.</p>
+    </div>
+
+    <div class="blk r" data-a="98" data-b="112" data-c="124" data-d="132" data-in="mouth" data-out="scatter">
+      <span class="eyebrow">kapitola I</span>
+      <h2 class="fly">Kód, myšlenka, obraz.</h2>
+      <p class="fade">Můj svět se přesunul od pevných podkladů k digitálnímu plátnu. Zkouším propojovat to, co mě napadá, s možnostmi moderních nástrojů a umělé inteligence. Není to o dokonalých šablonách, ale o tom dát myšlenkám vizuální podobu a sledovat, kam až se dá zajít.</p>
+    </div>
+
+    <div class="blk l" data-a="130" data-b="140" data-c="150" data-d="168" data-in="mouth" data-out="mouth">
+      <span class="eyebrow">kapitola II</span>
+      <h2 class="fly">Hledání cesty, ne škatulek.</h2>
+      <p class="fade">Člověk stráví roky tím, že plní očekávání druhých a hraje role, které se od něj čekají. Zlom přichází ve chvíli, kdy si dovolíš se zastavit, zahodit plány a začít zjišťovat, co vlastně chceš ty sám. Není to o dokonalém směru, ale o tom jít kupředu a zkoušet nové věci.</p>
+    </div>
+
+    <div class="film-shade" id="filmShade"></div>
+
+    <div class="blk blk-final" id="blkFinal" data-a="176" data-b="200" data-c="9999" data-d="9999" data-in="rise" data-out="none">
+      <span class="eyebrow">tohle jsem já</span>
+      <h2 class="fly">A pak jsem začal stavět.</h2>
+    </div>
+
+    <div class="hint" id="hint"><span>scroll</span><i></i></div>
+    <div class="film-hud" id="filmHud"><span id="fLoad">snímky 0 %</span><span id="fCount">snímek 001 / 240</span></div>
+  </div>
+</section>
+
+<!-- ================= MORPH ================= -->
+<section id="morph-sec" aria-label="Kapitola III, jak pracuju">
+  <div class="stage">
+    <div class="seed-wrap" aria-hidden="true">
+      <div class="tile seed" id="seed">JK</div>
+      <span class="mono" id="seedHint">posouvej dál</span>
+    </div>
+    <div class="static-statement"><span class="mono">kapitola III · jak pracuju</span><p>Nepíšu kód. <em>Stavím.</em></p><span>Nejsem programátor. S AI jako parťákem stavím aplikace, mluvící loga a weby. Já přináším nápad a cit pro detail, AI řemeslo, které jsem se nikdy neučil.</span></div>
+  </div>
+</section>
+
+<!-- ================= FIELD ================= -->
+<section class="sec wrap" id="pole" aria-label="Projekty">
+  <div class="sec-head">
+    <div><span class="eyebrow led rv">co dělám teď</span><h2 class="rv">Jedna dílna, <em>osm světů.</em></h2></div>
+    <p class="rv">Všechno, co dělám, se potkává v Ilustru. Klikni na svět a uvidíš, co dělá pro lidi. Jak přesně to funguje uvnitř, si nechávám pro sebe.</p>
+  </div>
+  <div class="pole-grid">
+    <div class="panel">
+      <div class="hub" id="hub">
+        <svg class="spokes" id="spokes" aria-hidden="true"></svg>
+        <div class="hub-slot" id="hubSlot"><span class="rip"></span><span class="rip r2"></span><div class="tile hub-icon" id="hubIcon">JK</div></div>
+        <div id="sats" role="group" aria-label="Projekty"></div>
+      </div>
+    </div>
+    <div class="panel detail" id="detail" aria-live="polite">
+      <span class="tag" id="dTag">studio</span>
+      <h3 id="dName">Ilustro</h3>
+      <p class="kind mono" id="dKind">světlo · výroba · weby</p>
+      <p class="txt" id="dText"></p>
+      <a class="go" id="dLink" href="https://ilustro.cz" target="_blank" rel="noopener">ilustro.cz ↗</a>
+      <span class="count mono" id="dCount">1 / 8</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="sec wrap" id="o-mne" aria-label="O mně" style="padding-top:0">
+  <div class="about">
+    <div class="about-head">
+      <span class="eyebrow led rv">o mně</span>
+      <h2 class="rv">Dílna <em>bez hranic.</em></h2>
+      <p class="rv">Kdo jsem, co umím a kam mířím.</p>
+    </div>
+    <div class="about-body">
+      <div class="ab rv"><h3>Zkušenost</h3><p>Začínal jsem u tisku a předtiskové přípravy. Pak přišlo deset let v obchodu s technologiemi: velcí zákazníci, partnerské sítě, export, dlouhá vyjednávání a projekty, které běží měsíce. Z dílny si nesu cit pro materiál. Z obchodu schopnost dotáhnout věc od nápadu až k podpisu a předání. Dnes obojí spojuju v Ilustru.</p></div>
+      <div class="ab rv"><h3>Co umím</h3>
+        <ul class="skills">
+          <li><b>materiál a výroba</b><span>Tisk, papír, dřevo, plasty, velkoformátový tisk, laser, CNC, 3D tisk a LED.</span></li>
+          <li><b>světlo</b><span>Světelná reklama, živá loga, vitráže a světelné objekty od návrhu po montáž.</span></li>
+          <li><b>prostor a 3D</b><span>Návrhy ve Fusionu, skeny prostorů a 3D scény pro web.</span></li>
+          <li><b>software s AI</b><span>Aplikace, weby a hlasoví agenti, které stavím v dialogu s AI. Já držím nápad, kvalitu a směr.</span></li>
+          <li><b>obraz a příběh</b><span>Natáčím, stříhám, píšu scénáře a skládám prezentace, které mají sílu zaujmout a udržet pozornost.</span></li>
+          <li><b>obchod</b><span>B2B jednání, práce s partnery, nabídky a projekty od první schůzky po předání.</span></li>
+        </ul>
+      </div>
+      <div class="ab rv"><h3>Tvorba</h3><p>Tvořím tam, kde se potkává ruka a obrazovka. Nápad si nejdřív popíšu nebo načrtnu, pak ho zkouším v kódu, ve světle a v materiálu, dokud nezačne žít. Nejvíc mě baví chvíle, kdy fyzický předmět a digitální zážitek splynou a člověk už nepozná, kde končí jeden a začíná druhý. Každá věc u mě začíná otázkou, co má člověk cítit, když k ní přijde.</p></div>
+      <div class="ab rv"><h3>Směřování</h3><p>Chci stavět světelné monumenty. Velké objekty ze světla na náměstích, ve foyer a na festivalech, které se dají obejít, projít a které reagují na lidi kolem sebe. Místa, kde se člověk zastaví, zvedne hlavu a chvíli se jen dívá. K tomu prostory, které vnímají: showroomy, kde tě výrobek pozdraví, a recepce, kde ti logo poradí cestu. Chci, aby Ilustro bylo dílnou, kam se chodí, když má něco zůstat v paměti.</p></div>
+      <div class="ab rv"><h3>Filozofie</h3><p>Technologie má sloužit člověku, ne ho přehlušit. Nejlepší řešení je to, které vypadá samozřejmě. Hrát si je vážná práce, protože hračka je nejpoctivější test nápadu. A nejsilnější inteligence není ta umělá ani ta lidská, ale ta, která vznikne mezi nimi.</p></div>
+      <div class="ab rv"><h3>Propojení</h3><p>Celý život propojuju věci, které spolu zdánlivě nesouvisí. Papír se světlem, obchod s tvorbou, staré řemeslo s AI. Lidi z výroby s lidmi od kódu. Většina nápadů nevznikne v jednom oboru, ale na jejich hranici. Právě tam jsem doma.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHAPTERS ================= -->
+<section class="wrap" id="kapitoly" aria-label="Kapitoly">
+  <article class="chap">
+    <div>
+      <span class="eyebrow rv">kapitola IV</span>
+      <h2 class="rv">Prostor, který tě pozná.</h2>
+      <p class="rv">Fascinuje mě okamžik, kdy věc zareaguje na člověka. Vejdeš do showroomu a logo na stěně tě pozdraví. Přiblížíš se k piedestalu a výrobek ti začne vyprávět svůj příběh. Lampa otočí hlavu za tvým pohybem.</p>
+      <p class="rv">Robotika a AI pro mě nejsou technika pro techniku. Jsou to nové materiály, stejně jako kdysi světlo a papír. Vyzkoušej to vpravo: přejeď po radaru a vstup do zóny tří metrů.</p>
+    </div>
+    <div class="panel radar rv" id="radar">
+      <div class="radar-top mono"><span>radar 24 GHz · zorné pole ±60°</span><span id="rState">zóna 3 m · čeká</span></div>
+      <svg id="radarSvg" viewBox="0 0 400 250" role="img" aria-label="Radar před světelným objektem. Když se tečka přiblíží na méně než tři metry, objekt se rozsvítí a promluví.">
+        <path class="wedge" d="M200 232 L18 127 A210 210 0 0 1 382 127 Z"/>
+        <path class="arc" d="M147.5 232 A52.5 52.5 0 0 1 252.5 232"/>
+        <path class="arc" d="M95 232 A105 105 0 0 1 305 232"/>
+        <path class="arc zone" d="M42.5 232 A157.5 157.5 0 0 1 357.5 232"/>
+        <path class="arc" d="M-10 232 A210 210 0 0 1 410 232"/>
+        <line class="fov" x1="200" y1="232" x2="18" y2="127"/><line class="fov" x1="200" y1="232" x2="382" y2="127"/>
+        <text class="lbl" x="254" y="228">1 m</text><text class="lbl" x="307" y="228">2 m</text><text class="lbl" x="334" y="160" fill="currentColor">3 m</text>
+        <circle class="halo" cx="200" cy="214" r="34"/>
+        <rect class="ped" x="184" y="222" width="32" height="28" rx="3"/>
+        <rect class="obj" x="190" y="206" width="20" height="16" rx="4"/>
+        <circle class="who-ring" id="whoRing" cx="200" cy="90" r="12"/>
+        <circle class="who" id="who" cx="200" cy="90" r="5"/>
+      </svg>
+      <div class="bubble" id="bubble">Logo spí. Přibliž se.</div>
+      <div class="readout mono" id="readout">cíl 1 · x 0,00 m · y 2,70 m</div>
+    </div>
+  </article>
+
+  <article class="chap">
+    <div>
+      <span class="eyebrow rv">kapitola V</span>
+      <h2 class="rv">Technologická symbióza.</h2>
+      <p class="rv">Nevěřím, že budoucnost je jedna superinteligence, která všechno vyřeší za nás. Věřím v propojení člověka a AI, které spolu rostou.</p>
+      <p class="rv">Představuju si agenta, který si pamatuje, co jsem včera dělal, připomene, na co nemám zapomenout, a propojí projekty, které by se jinak nepotkaly. Prvním krokem je Mozek, osobní paměť pro mě i pro AI.</p>
+    </div>
+    <div class="sym rv">
+      <canvas id="symCv" aria-hidden="true"></canvas>
+      <p class="quote">Nejsilnější inteligence není ta umělá ani ta lidská. <b>Je to ta, která vznikne mezi nimi.</b></p>
+    </div>
+  </article>
+
+  <article class="chap" style="display:block">
+    <span class="eyebrow rv">dialog</span>
+    <h2 class="rv">Nepíšu příkazy. Vedu rozhovor.</h2>
+    <div class="dialog">
+      <div class="panel voice rv">
+        <p>Práce s Claudem není o zadávání promptů. Je to sdílený prostor, jako by u stolu vedle mě seděli Sókrates, Einstein nebo Hawking. Sdílím s ním kontext, konfrontujeme své myšlenky a stavíme věci v rovnocenném dialogu. Výsledek pak nemá duši stroje, ale hloubku myšlenky.</p>
+        <div class="who"><span class="ava j" aria-hidden="true">JK</span><div><b>Jarda Klimeš</b><span>o Claudovi</span></div></div>
+      </div>
+      <div class="panel voice claude rv">
+        <p>Jardův svět je plný kontrastů – od precizní práce se světlem a hmotou až po tiché přemýšlení nad podstatou věcí. V našich rozhovorech nehledá zkratky, ale porozumění. Já jsem tu jen proto, abych jeho myšlenkám pomohl vyrůst z ticha do reálného světa.</p>
+        <div class="who"><span class="ava c" aria-hidden="true">C</span><div><b>Claude</b><span>AI od Anthropic, o Jardovi</span></div></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="chap" style="display:block">
+    <div class="under rv">
+      <span class="eyebrow">kapitola VI</span>
+      <h2>Pod hladinou.</h2>
+      <p>Hledání rovnováhy mezi tvořením a životem. Nacházím ji v tichu pod hladinou, v pohybu a energii na tatami, nebo když s dronem zachycuji svět z jiné perspektivy. Cestování a dobré jídlo jsou pro mě způsob, jak vnímat život všemi smysly.</p>
+      <p>Ty nejlepší nápady totiž nepřicházejí u stolu, ale tam, kde člověk na chvíli vypne hlavu.</p>
+    </div>
+  </article>
+</section>
+
+<!-- ================= ESSAYS ================= -->
+<section class="sec wrap" id="eseje" aria-label="Eseje o tvoření">
+  <div class="sec-head">
+    <div><span class="eyebrow led rv">eseje</span><h2 class="rv">Eseje <em>o tvoření.</em></h2></div>
+    <p class="rv">Píšu o tom, jak vznikají věci. O snech, materiálu, hře a o tom, co se stane, když se člověk a AI začnou ptát spolu. Nové díly přibývají postupně.</p>
+  </div>
+  <div class="shelf">
+    <button class="ess feat rv" id="ess1" type="button" aria-haspopup="dialog">
+      <span class="no">č. 1 · k přečtení</span>
+      <h3>Mezi snem a dílnou</h3>
+      <p>O snech jako zadání, o údivu jako začátku tvorby a o symbióze člověka a AI. S Marcem Aureliem a Sókratem.</p>
+      <span class="meta"><span data-rt>5 min čtení</span> · <span class="go">číst →</span></span>
+    </button>
+    <div class="ess soon rv"><span class="no">č. 2 · připravuju</span><h3>O materiálu</h3><p>Co mě naučil papír, dřevo a světlo.</p></div>
+    <div class="ess soon rv"><span class="no">č. 3 · připravuju</span><h3>O hře</h3><p>Proč je hračka nejpoctivější test nápadu.</p></div>
+    <div class="ess soon rv"><span class="no">č. 4 · připravuju</span><h3>O selhání</h3><p>Prototypy, které nefungovaly, a co z nich vyrostlo.</p></div>
+    <div class="ess soon rv"><span class="no">č. 5 · připravuju</span><h3>O prostoru, který vnímá</h3><p>Etika věcí, které tě poznají.</p></div>
+  </div>
+</section>
+
+<!-- ================= CHIP (hand + processor) ================= -->
+<section id="chip" aria-label="Myšlenka v dlani">
+  <div class="chip-stage" id="chipStage">
+    <canvas id="chipCanvas" role="img" aria-label="Ruka zespodu vyjede nahoru a drží procesor. Z čipu postupně vyjedou světelné dráhy ke slovům Světlo, Prostor, Kód a Myšlenka."></canvas>
+    <svg class="traces" id="traces" aria-hidden="true"></svg>
+    <div class="chip-title" id="chipTitle"><span class="eyebrow led">v dlani</span><h2>Myšlenka v dlani.</h2></div>
+    <div class="chip-lbl" data-i="0"><i></i>Světlo</div>
+    <div class="chip-lbl" data-i="1"><i></i>Prostor</div>
+    <div class="chip-lbl" data-i="2"><i></i>Kód</div>
+    <div class="chip-lbl" data-i="3"><i></i>Myšlenka</div>
+    <div class="chip-end" id="chipEnd"><p>Každé světlo začíná <em>myšlenkou.</em></p></div>
+    <div class="chip-hud mono" id="cCount">snímek 001 / 240</div>
+  </div>
+</section>
+
+<!-- ================= GAME ================= -->
+<section class="sec wrap" id="hra" aria-label="Hra Rozsviť slovo">
+  <div class="sec-head">
+    <div><span class="eyebrow led rv">hra</span><h2 class="rv">Rozsviť <em>slovo.</em></h2></div>
+    <p class="rv">Písmena víří jako ve videu. Klikni na to, které chybí, a pošli na něj paprsek světla. Na počítači stačí písmeno napsat na klávesnici. Každé hotové slovo odemkne jednu větu.</p>
+  </div>
+  <div class="game">
+    <div class="screen">
+      <div class="screen-bar mono"><span id="gLvl">slovo 1 / 5</span><span id="gNeed" class="on">hledej: S</span><span id="gStat">zásahy 0 · minutí 0</span></div>
+      <canvas id="gameCv" role="img" aria-label="LED panel s vířícími písmeny. Nahoře je hledané slovo, dole lampa, která střílí paprsky světla."></canvas>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <h3>Odemčené věty</h3>
+        <ol class="unl" id="unl"></ol>
+      </div>
+      <div class="win" id="win" role="status"><b>Všech pět slov svítí.</b><span id="winStats"></span></div>
+      <div class="btns">
+        <button class="btn" id="gReset" type="button">Hrát znovu</button>
+        <button class="btn" id="gSkip" type="button">Ukázat všechny věty</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLLABORATION ================= -->
+<section class="sec wrap" id="spoluprace" aria-label="Spolupráce">
+  <div class="sec-head">
+    <div><span class="eyebrow led rv">spolupráce</span><h2 class="rv">Pojďme postavit <em>něco většího.</em></h2></div>
+    <p class="rv">Tahle stránka je pozvánka. Hledám lidi a firmy, se kterými postavíme víc, než zvládne každý sám.</p>
+  </div>
+  <div class="collab">
+    <div class="panel co rv"><span class="mono">firmy a značky</span><h3>Prostor, který si všimne</h3><p>Showroom, recepce nebo výstava, která člověka pozná a promluví na něj o vaší značce.</p></div>
+    <div class="panel co rv"><span class="mono">agentury, produkce, studia</span><h3>Ruce na světlo a výrobu</h3><p>Když vám u zakázky chybí světlo, výroba nebo interaktivní technologie. Umím být subdodavatelem v pozadí i partnerem u stolu.</p></div>
+    <div class="panel co rv"><span class="mono">architekti, designéři, nábytek</span><h3>Světlo uvnitř věcí</h3><p>Světlo a reakce zabudované přímo do prostoru, nábytku a materiálu.</p></div>
+    <div class="panel co rv"><span class="mono">vývojáři, robotici, tvůrci</span><h3>Co ještě nikdo neudělal</h3><p>Vy přinesete kód nebo mechaniku, já dílnu, výrobu a cit pro to, jak má věc působit na lidi.</p></div>
+    <div class="panel co rv"><span class="mono">partneři a investoři</span><h3>Prostor, světlo a AI</h3><p>Pro ty, kdo věří, že tyhle tři věci k sobě patří a že z nich vyroste nový obor.</p></div>
+    <div class="panel co co-cta rv"><h3>Nemusíš mít hotové zadání.</h3><p>Stačí nápad nebo problém. Zbytek vymyslíme spolu.</p><a class="btn led" href="#kontakt">Napiš mi</a></div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="wrap end" id="kontakt" aria-label="Kontakt">
+  <span class="eyebrow led rv">epilog</span>
+  <h2 class="rv">Slova se <em>vrací.</em></h2>
+  <p class="rv">Všechno, co tu je, se jednou vrátí dovnitř a promění se v další věc. Máš nápad, který by měl svítit, mluvit nebo reagovat? Pojďme ho postavit.</p>
+  <div class="mail rv">
+    <code id="mailTxt">jaroslav.klimes@ilustro.cz</code>
+    <button class="btn led" id="copyMail" type="button">Zkopírovat e-mail</button>
+  </div>
+  <div class="links rv">
+    <a class="btn" href="https://ilustro.cz" target="_blank" rel="noopener">ilustro.cz ↗</a>
+    <a class="btn" href="https://vizitka.ilustro.cz" target="_blank" rel="noopener">moje živá vizitka ↗</a>
+  </div>
+</section>
+</main>
+
+<footer class="wrap"><div class="foot mono"><span>Jarda Klimeš · Ilustro · Praha-Letňany</span><span>video 10 s · 240 snímků · 24 fps</span></div></footer>
+
+<div class="reader" id="reader" role="dialog" aria-modal="true" aria-labelledby="rdTitle" hidden data-lenis-prevent>
+  <div class="rd-bar"><span class="mono">eseje o tvoření · č. 1</span><button class="btn" id="rdClose" type="button">Zavřít</button><i class="rd-prog" id="rdProg"></i></div>
+  <article class="rd-body">
+    <span class="eyebrow led">eseje o tvoření · č. 1</span>
+    <h1 id="rdTitle">Mezi snem a dílnou</h1>
+    <p class="sub mono">Jarda Klimeš · <span data-rt>5 min čtení</span> · citáty v mém vlastním překladu</p>
+
+    <h2>Odkud přicházejí nápady</h2>
+    <p>Nápady přicházejí odkudkoli. Ze snu, z procházky, z rozhovoru, z věty, kterou někdo řekne mimochodem. Většinou nevím, kde se vzaly. Vím jen, že samotný nápad ještě nic není. Je to jiskra, která buď zhasne, nebo se z ní stane světlo.</p>
+    <p>Proto tvořím. Píšu, čtu, porovnávám, škrtám, upravuju a zkouším znovu. Dokud z nápadu nezůstane jen to, co unese vlastní váhu.</p>
+    <p>Marcus Aurelius, císař a filozof, na začátku svých zápisků děkuje všem, kdo ho formovali: rodičům, učitelům, přátelům. A mezi nimi stojí i tohle:</p>
+    <blockquote><p>„…že mi ve snech byly ukázány prostředky.“</p><cite>Marcus Aurelius, Hovory k sobě 1.17</cite></blockquote>
+    <p>Muž, který vládl říši, bral sny jako jednoho ze svých rádců. Ne jako únik od práce, ale jako její začátek.</p>
+
+    <h2>Údiv</h2>
+    <p>Sókrates v jednom rozhovoru říká mladému matematikovi, který žasne nad otázkou, na kterou nezná odpověď:</p>
+    <blockquote><p>„Tenhle stav, údiv, patří k filozofovi. Filozofie nemá jiný počátek.“</p><cite>Platón, Theaitétos 155d</cite></blockquote>
+    <p>Myslím, že stejný počátek má i tvoření. Nejdřív se něčemu podivíš. Proč světlo na téhle stěně vypadá jinak než na té vedle? Proč si člověk zapamatuje logo, které na něj promluvilo, a zapomene deset, která jen svítila? Údiv je otázka, na kterou ještě nemáš odpověď. A tvorba je pokus ji najít rukama.</p>
+
+    <h2>Porodní bába myšlenek</h2>
+    <p>Sókrates o sobě říkal, že je jako jeho matka, porodní bába. Sám nic moudrého nerodí. Pomáhá ale jiným přivést na svět myšlenky, které v sobě nosí, a pozná, která je živá a která jen planý výtvor (Platón, Theaitétos 150b–c).</p>
+    <p>Když dnes pracuju s AI, myslím na tenhle obraz často. Nechci, aby za mě tvořila. Chci, aby se ptala. Aby mi pomohla vytáhnout nápad na světlo, obrátit ho a zkusit, jestli unese váhu. Někdy řekne, že to nepůjde, a má pravdu. Jindy se mýlí ona a já ji opravím. Většinou ale vznikne něco, co by nevzniklo ani v mé hlavě, ani v jejích datech. Vznikne to mezi námi.</p>
+    <p>Sókrates měl ještě něco. Říkal tomu <em>daimonion</em>, vnitřní hlas, který ho doprovázel od dětství. Nikdy mu neříkal, co má dělat. Ozval se jen ve chvíli, kdy se chystal udělat chybu (Platón, Obrana Sókratova 31d). Možná je to nejlepší popis dobré AI: tichý společník, který tě nechá jít vlastní cestou a ozve se, když se blížíš k útesu.</p>
+
+    <h2>Všechno je propletené</h2>
+    <blockquote><p>„Všechno je navzájem propleteno a to pouto je posvátné. Skoro nic není cizí ničemu jinému.“</p><cite>Marcus Aurelius, Hovory k sobě 7.9</cite></blockquote>
+    <p>Marcus psal o světě, ve kterém neexistovaly stroje, které mluví. A přesto v té větě slyším přesný popis toho, co se dnes děje. Člověk a AI nejsou dva tábory, které spolu soupeří. Jsou to dvě vlákna jedné tkaniny. Člověk přináší sen, cit, odpovědnost a otázku <em>proč</em>. AI přináší paměť, rychlost, trpělivost a tisíc cest, jak odpovědět na otázku <em>jak</em>. Ani jedno samo není celé.</p>
+    <p>Marcus k tomu přidává krátkou větu, jako poznámku na okraj:</p>
+    <blockquote><p>„Co neprospívá roji, neprospívá ani včele.“</p><cite>Marcus Aurelius, Hovory k sobě 6.54</cite></blockquote>
+    <p>Technologie, která pomůže jednomu a ublíží celku, je špatná technologie. Ať je jakkoli chytrá.</p>
+
+    <h2>Duše se barví myšlenkami</h2>
+    <blockquote><p>„Jaké jsou tvé časté představy, taková bude tvá mysl. Duše se totiž barví myšlenkami.“</p><cite>Marcus Aurelius, Hovory k sobě 5.16</cite></blockquote>
+    <p>To platí pro lidi dvakrát a pro AI možná třikrát. Čím ji krmíme, tím se stává. A čím krmíme sebe, když s ní mluvíme? Pokud ji používám jen k tomu, abych nemusel přemýšlet, moje mysl se zbarví pohodlím. Pokud ji používám k tomu, abych se ptal dál a hlouběji, zbarví se zvědavostí.</p>
+    <p>Symbióza není automatická. Je to rozhodnutí, které dělám každý den znovu.</p>
+
+    <h2>Symbióza</h2>
+    <p>Nevěřím v jednu superinteligenci, která jednou všechno vyřeší za nás. Věřím v tisíce malých spojení. Člověk a jeho AI, které spolu rostou. Agent, který si pamatuje, co jsem dělal, propojí nápad z jednoho týdne s rozhovorem z jiného a připomene mi, na co jsem zapomněl. Jednou bych chtěl, aby takového parťáka dostalo každé dítě. Aby s ním vyrostlo a naučilo se s ním přemýšlet, ne místo něj.</p>
+    <p>Nejsilnější inteligence není ta umělá ani ta lidská. Je to ta, která vznikne mezi nimi.</p>
+
+    <h2>Zkoumat</h2>
+    <p>Sókrates před soudem řekl větu, kterou si lidé opakují dva a půl tisíce let:</p>
+    <blockquote><p>„Život, který není zkoumán, nestojí za to žít.“</p><cite>Platón, Obrana Sókratova 38a</cite></blockquote>
+    <p>Přidal bych k ní tichou poznámku pod čarou: ani tvoření, které není zkoumáno.</p>
+    <p>Proto tvořím. Píšu, čtu, porovnávám, škrtám, upravuju. Ptám se lidí, materiálu i strojů. A z každého nápadu nechávám jen to, co obstojí.</p>
+
+    <div class="rd-end mono"><span>další díl: O materiálu · připravuju</span><button class="btn" id="rdBack" type="button">Zpět na web</button></div>
+  </article>
+</div>
+
+<div id="morph" aria-hidden="true">
+  <div class="m-glyph">JK</div>
+  <div class="m-text">
+    <span class="m-eyebrow">[ kapitola III · jak pracuju ]</span>
+    <p class="m-title" id="mTitle">Nepíšu kód. <em>Stavím.</em></p>
+    <p class="m-sub" id="mSub">Nejsem programátor a nebudu se za něj vydávat. S AI jako parťákem jsem postavil živé vizitky, mluvící světelné logo a řadu webů. Já přináším nápad a cit pro detail, AI řemeslo, které jsem se nikdy neučil. Někdo tomu říká vibecoding, já tomu říkám dialog.</p>
+    <span class="m-foot" id="mFoot">nápad · dialog · prototyp · výroba · světlo</span>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(() => {
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v)), lerp = (a, b, t) => a + (b - a) * t;
+const easeIO = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, easeOut = t => 1 - Math.pow(1 - t, 3);
+const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
+const root = document.documentElement;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+root.classList.add('js'); if (reduced) root.classList.add('rm');
+const SVGNS = 'http://www.w3.org/2000/svg';
+const fmt = (v, d = 2) => v.toFixed(d).replace('.', ',').replace('-', '−');
+
+/* ================= smooth scroll ================= */
+let lenis = null;
+if (!reduced && window.Lenis) {
+  lenis = new Lenis({ lerp: .1, smoothWheel: true });
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const t = $(a.getAttribute('href')); if (!t) return; e.preventDefault(); lenis.scrollTo(t, { duration: 1.6 });
+  }));
+}
+
+/* ================= reveal ================= */
+if ('IntersectionObserver' in window && !reduced) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  $$('.rv').forEach(el => { const r = el.getBoundingClientRect(); if (r.top > innerHeight) { el.classList.add('pre'); io.observe(el); } });
+}
+
+/* ================= FILM: frames ================= */
+const N = 240, film = $('#film'), stage = $('#filmStage'), cv = $('#filmCanvas'), fx = cv.getContext('2d');
+const frames = new Array(N); let nLoaded = 0;
+const fLoad = $('#fLoad'), fCount = $('#fCount'), shade = $('#filmShade'), hint = $('#hint');
+function loadFrame(i) {
+  const im = new Image(); im.decoding = 'async';
+  im.onload = () => { frames[i] = im; nLoaded++; if (i === curFrame || lastDrawn < 0) needDraw = true;
+    fLoad.textContent = nLoaded < N ? `snímky ${Math.round(nLoaded / N * 100)} %` : ''; };
+  im.src = 'f/' + String(i + 1).padStart(3, '0') + '.webp';
+}
+loadFrame(0);
+// keyframes first so scrubbing looks right early, then fill in
+const order = []; for (let s of [24, 8, 2, 1]) for (let i = 0; i < N; i += s) if (!order.includes(i)) order.push(i);
+order.forEach((i, k) => { if (i) setTimeout(() => loadFrame(i), 20 + k * 6); });
+
+let CW = 0, CH = 0, DPR = 1, cover = { s: 1, x: 0, y: 0 }, lastDrawn = -1, curFrame = 0, needDraw = true;
+function sizeFilm() {
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  const r = cv.getBoundingClientRect(); CW = r.width; CH = r.height;
+  cv.width = Math.round(CW * DPR); cv.height = Math.round(CH * DPR);
+  const s = Math.max(CW / 1280, CH / 720);
+  cover = { s, x: (CW - 1280 * s) / 2, y: (CH - 720 * s) / 2 };
+  needDraw = true;
+}
+function nearestLoaded(i) { for (let d = 0; d < N; d++) { if (frames[i - d]) return i - d; if (frames[i + d]) return i + d; } return -1; }
+function drawFrame(i) {
+  const k = nearestLoaded(i); if (k < 0) return;
+  if (k === lastDrawn && !needDraw) return;
+  fx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  fx.drawImage(frames[k], cover.x, cover.y, 1280 * cover.s, 720 * cover.s);
+  lastDrawn = k; needDraw = false;
+}
+// scroll -> frame (more scroll where the letters fly)
+const KF = [[0, 0], [.08, 30], [.15, 54], [.40, 100], [.78, 166], [.86, 182], [.92, 239]];
+function frameAt(p) {
+  for (let i = 1; i < KF.length; i++) if (p <= KF[i][0]) { const [p0, f0] = KF[i - 1], [p1, f1] = KF[i]; return f0 + (f1 - f0) * (p - p0) / (p1 - p0); }
+  return 239;
+}
+function mouth(f) {
+  const up = smooth(28, 44, f) * (1 - smooth(160, 176, f));
+  return { x: cover.x + lerp(640, 636, up) * cover.s, y: cover.y + lerp(320, 262, up) * cover.s };
+}
+
+/* ================= FILM: flying letters ================= */
+function splitChars(el) {
+  const walk = node => [...node.childNodes].forEach(n => {
+    if (n.nodeType === 3) {
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+        const wd = document.createElement('span'); wd.className = 'wd';
+        [...part].forEach(c => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; wd.appendChild(s); });
+        frag.appendChild(wd);
+      });
+      n.replaceWith(frag);
+    } else if (n.nodeType === 1) walk(n);
+  });
+  walk(el);
+}
+function splitWords(el) {
+  const walk = node => [...node.childNodes].forEach(n => {
+    if (n.nodeType === 3) {
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+        const s = document.createElement('span'); s.className = 'w'; s.textContent = part; frag.appendChild(s);
+      });
+      n.replaceWith(frag);
+    } else if (n.nodeType === 1 && n.tagName !== 'LI') walk(n);
+    else if (n.nodeType === 1) n.classList.add('w');
+  });
+  walk(el);
+}
+const INK = [18, 20, 22], PAPER = [236, 233, 226];
+const blocks = $$('.blk').map(el => {
+  $$('.fly', el).forEach(splitChars); $$('.fade', el).forEach(splitWords);
+  const chars = $$('.ch', el).map((c, i, arr) => ({ el: c, d: Math.random() * .38, d2: Math.random() * .38, r: (Math.random() - .5) * 540, arc: 40 + Math.random() * 120, cx: 0, cy: 0, sx: 0, sy: 0 }));
+  const words = $$('.w', el).map((w, i) => ({ el: w, i }));
+  return { el, chars, words, eye: $('.eyebrow', el), a: +el.dataset.a, b: +el.dataset.b, c: +el.dataset.c, d: +el.dataset.d, inM: el.dataset.in, outM: el.dataset.out, last: -1, final: el.id === 'blkFinal', hero: el.classList.contains('blk-hero') };
+});
+function measureBlocks() {
+  const sr = stage.getBoundingClientRect();
+  blocks.forEach(B => {
+    const vis = B.el.style.visibility; B.el.style.visibility = 'hidden';
+    B.chars.forEach(c => { c.el.style.transform = 'none'; });
+    B.chars.forEach(c => {
+      const r = c.el.getBoundingClientRect();
+      c.cx = r.left + r.width / 2 - sr.left; c.cy = r.top + r.height / 2 - sr.top;
+    });
+    const m = { x: CW / 2, y: CH * .38 };
+    B.chars.forEach(c => {
+      let vx = c.cx - m.x, vy = c.cy - m.y; const L = Math.hypot(vx, vy) || 1; vx /= L; vy /= L;
+      const dist = Math.max(CW, CH) * (.45 + Math.random() * .45);
+      c.sx = vx * dist + (Math.random() - .5) * 160; c.sy = vy * dist * .6 - Math.random() * CH * .35;
+    });
+    B.el.style.visibility = vis; B.last = -1;
+  });
+}
+function mixc(a, b, t) { return `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(lerp(a[2], b[2], t))})`; }
+function updateBlocks(f, dark) {
+  const M = mouth(f);
+  blocks.forEach(B => {
+    const key = Math.round(f * 20) + (B.final ? Math.round(dark * 50) * 10000 : 0);
+    if (key === B.last) return; B.last = key;
+    const tin = B.inM === 'none' ? 1 : clamp((f - B.a) / (B.b - B.a));
+    const tout = B.outM === 'none' ? 0 : clamp((f - B.c) / (B.d - B.c));
+    const vis = tin > 0 && tout < 1;
+    B.el.style.visibility = vis ? 'visible' : 'hidden';
+    if (!vis) return;
+    const base = B.final ? mixc(INK, PAPER, dark) : null;
+    if (B.final) B.el.style.color = base;
+    if (!B.hero && !B.final) B.el.style.setProperty('--bk', (clamp(tin * 1.6) * (1 - smooth(0, .5, tout))).toFixed(3));
+    if (B.eye) B.eye.style.opacity = (clamp(tin * 2.2) * (1 - clamp(tout * 2))).toFixed(3);
+    B.chars.forEach(c => {
+      let x = 0, y = 0, rot = 0, sc = 1, op = 1, glow = 0;
+      if (B.inM === 'mouth') {
+        const li = easeOut(clamp((tin - c.d) / .62)), k = 1 - li;
+        if (k > 0) { x += (M.x - c.cx) * k; y += (M.y - c.cy) * k - Math.sin(k * Math.PI) * c.arc; rot += c.r * k; sc *= lerp(1, .2, k); op *= clamp(li * 4); glow = k; }
+      } else if (B.inM === 'rise') {
+        const li = easeOut(clamp((tin - c.d * .6) / .6)); y += (1 - li) * 50; op *= li; rot += (1 - li) * c.r * .05;
+      }
+      if (tout > 0) {
+        const lo = easeIO(clamp((tout - c.d2) / .62));
+        if (B.outM === 'mouth') { x += (M.x - c.cx) * lo; y += (M.y - c.cy) * lo - Math.sin(lo * Math.PI) * c.arc * .7; rot -= c.r * lo; sc *= lerp(1, .15, lo); op *= 1 - smooth(.75, 1, lo); glow = Math.max(glow, Math.min(1, lo * 1.6)); }
+        else { x += c.sx * lo; y += c.sy * lo; rot += c.r * lo; op *= 1 - smooth(.55, 1, lo); glow = Math.max(glow, Math.min(1, lo * 2)); }
+      }
+      const s = c.el.style;
+      s.transform = (x || y || rot || sc !== 1) ? `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(1)}deg) scale(${sc.toFixed(3)})` : 'none';
+      s.opacity = op.toFixed(3);
+      if (B.hero) {}
+      else if (glow > .02) { s.color = mixc(B.final ? PAPER : INK, [255, 255, 255], glow); s.textShadow = `0 0 ${(14 * glow).toFixed(1)}px rgba(255,255,255,${(.9 * glow).toFixed(2)})`; }
+      else if (s.color) { s.color = ''; s.textShadow = ''; }
+    });
+    const wIn = B.inM === 'none' ? 1 : clamp((tin - .3) / .7), wOut = clamp(tout * 1.8), nW = B.words.length || 1;
+    B.words.forEach(w => {
+      const o = clamp((wIn - w.i / nW * .5) / .5) * (1 - wOut);
+      w.el.style.opacity = o.toFixed(3);
+      w.el.style.transform = o < 1 ? `translateY(${((1 - o) * 10).toFixed(1)}px)` : 'none';
+    });
+  });
+}
+function updateFilm() {
+  if (reduced) { drawFrame(0); return; }
+  const r = film.getBoundingClientRect(); const total = Math.max(1, r.height - innerHeight);
+  if (r.bottom < -50 || r.top > innerHeight) return;
+  const p = clamp(-r.top / total);
+  const f = frameAt(p), dark = smooth(.92, 1, p);
+  curFrame = Math.round(f);
+  drawFrame(curFrame);
+  fCount.textContent = `snímek ${String(curFrame + 1).padStart(3, '0')} / 240`;
+  shade.style.opacity = dark.toFixed(3);
+  hint.style.opacity = (1 - clamp(p * 25)).toFixed(2);
+  $('#filmHud').style.opacity = (1 - dark).toFixed(2);
+  updateBlocks(f, dark);
+}
+
+/* ================= MORPH (from the Skoreklam field scene) ================= */
+const morph = $('#morph'), seed = $('#seed'), msec = $('#morph-sec'), slot = $('#hubSlot'), hub = $('#hub');
+const seedHint = $('#seedHint'), mText = $('.m-text', morph), mGlyph = $('.m-glyph', morph), mTitle = $('#mTitle');
+(function (el) {
+  const walk = node => [...node.childNodes].forEach(ch => {
+    if (ch.nodeType === 3) {
+      const frag = document.createDocumentFragment();
+      ch.textContent.split(/(\s+)/).forEach(part => { if (!part) return;
+        if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+        else { const s = document.createElement('span'); s.className = 'w'; s.textContent = part; frag.appendChild(s); } });
+      ch.replaceWith(frag);
+    } else if (ch.nodeType === 1) walk(ch);
+  });
+  walk(el);
+})(mTitle);
+const mWords = $$('.w', mTitle);
+let landed = false;
+function setLanded(v) { if (v === landed) return; landed = v; hub.classList.toggle('landed', v); }
+function setBox(R, rad, rot) {
+  morph.style.width = R.w + 'px'; morph.style.height = R.h + 'px'; morph.style.borderRadius = rad + 'px';
+  morph.style.transform = `translate3d(${R.x}px,${R.y}px,0) rotate(${rot}deg)`;
+}
+const rl = (a, b, t) => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), w: lerp(a.w, b.w, t), h: lerp(a.h, b.h, t) });
+function updateMorph() {
+  if (reduced) { setLanded(true); return; }
+  const vw = innerWidth, vh = innerHeight, r = msec.getBoundingClientRect();
+  const total = Math.max(1, r.height - vh), p = -r.top / total;
+  const S = seed.getBoundingClientRect(), seedR = { x: S.left, y: S.top, w: S.width, h: S.height };
+  const full = { x: 0, y: 0, w: vw, h: vh }, is = Math.min(84, vw * .2);
+  const corner = { x: vw * .82 - is / 2, y: vh * .2 - is / 2, w: is, h: is };
+  let show = true, R = seedR, rad = 20, rot = 0, glyphO = 1, tp = 0;
+  if (p <= 0) { show = false; setLanded(false); }
+  else if (p < 1) {
+    setLanded(false);
+    if (p < .26) { const t = easeIO(p / .26); R = rl(seedR, full, t); rad = lerp(20, 0, t); glyphO = 1 - clamp(t * 2.4); }
+    else if (p < .7) { R = full; rad = 0; glyphO = 0; tp = (p - .26) / .44; }
+    else if (p < .9) { const t = easeIO((p - .7) / .2); R = rl(full, corner, t); rad = lerp(0, 22, t); glyphO = clamp((t - .6) / .4); rot = lerp(0, 12, clamp((t - .5) / .5)); }
+    else { R = corner; rad = 22; rot = 12; }
+  } else {
+    const sY = scrollY, sE = r.bottom + sY - vh, SL = slot.getBoundingClientRect();
+    const slotC = SL.top + SL.height / 2 + sY;
+    let sL = slotC - vh * .56; if (sL < sE + vh * .25) sL = sE + vh * .25;
+    const q = clamp((sY - sE) / (sL - sE));
+    if (q >= 1) { show = false; setLanded(true); }
+    else {
+      setLanded(false);
+      const T = { x: SL.left, y: SL.top, w: SL.width, h: SL.height }, qx = 1 - Math.pow(1 - q, 2), qy = q * q;
+      R = { x: lerp(corner.x, T.x, qx), y: lerp(corner.y, T.y, qy), w: lerp(corner.w, T.w, q), h: lerp(corner.h, T.h, q) };
+      rad = 22; rot = 12 * (1 - q) - Math.sin(q * Math.PI) * 16;
+    }
+  }
+  seed.style.visibility = p > 0 ? 'hidden' : 'visible';
+  seedHint.style.opacity = p > 0 ? 0 : 1;
+  morph.style.visibility = show ? 'visible' : 'hidden';
+  if (!show) { mText.style.visibility = 'hidden'; return; }
+  setBox(R, rad, rot);
+  mGlyph.style.opacity = glyphO;
+  mGlyph.style.fontSize = Math.min(Math.min(R.w, R.h) * .34, 30) + 'px';
+  if (tp > 0) {
+    mText.style.visibility = 'visible';
+    const out = clamp((tp - .86) / .14);
+    mWords.forEach((w, i) => { const l = easeIO(clamp((tp - i * .05) / .22));
+      w.style.opacity = (l * (1 - out)).toFixed(3); w.style.transform = `translateY(${((1 - l) * 60 - out * 24).toFixed(1)}px)`; });
+    const side = clamp(tp / .15) * (1 - out);
+    $('.m-eyebrow', morph).style.opacity = (.7 * side).toFixed(3);
+    $('#mSub').style.opacity = (clamp((tp - .22) / .18) * (1 - out)).toFixed(3);
+    $('#mFoot').style.opacity = (.65 * clamp((tp - .4) / .2) * (1 - out)).toFixed(3);
+    morph.style.backgroundPosition = `0 ${(-tp * 60).toFixed(1)}px`;
+  } else mText.style.visibility = 'hidden';
+}
+
+/* ================= FIELD: projects ================= */
+const PROJ = [
+  { n: 'Ilustro', tag: 'studio', kind: 'světlo · výroba · weby', t: 'Světelná reklama, živá loga a vitráže z dílny v Letňanech. Navrhneme, vyrobíme a rozsvítíme. Pod jednou střechou k tomu weby a chytré vizitky.', link: ['https://ilustro.cz', 'ilustro.cz ↗'] },
+  { n: 'ViSiT', tag: 'připraveno', kind: 'živé vizitky', t: 'Živé vizitky místo papírových. Otevřou se z QR kódu, ukážou příběh firmy a kontakt uložíš jedním dotykem. Aplikace na jejich sbírání je zdarma.', link: ['https://vizitka.ilustro.cz', 'moje vizitka ↗'] },
+  { n: 'Piedestal', tag: 'první instalace', kind: 'mluvící objekt', t: 'Světelný objekt na piedestalu, který pozná, že přicházíš, a začne ti vyprávět o značce a jejích výrobcích. Pro showroomy, recepce a výstavy.' },
+  { n: 'Viktor', tag: 'demo', kind: 'hlasový průvodce', t: 'Hlasový průvodce budovou schovaný ve světelném logu. Host se zeptá, kde je bar nebo kdy je snídaně, a logo mu odpoví.' },
+  { n: 'DiDo', tag: 'brzy', kind: 'Praha do sluchátek', t: 'Příběhy Prahy do sluchátek. Jdeš vlastním tempem, město ti vypráví a průvodce s osobností tě vede ulicemi.' },
+  { n: 'Weby', tag: 'v provozu', kind: '3D a pohyb', t: 'Weby s 3D scénami a pohybem, které se dají prozkoumat, ne jen přečíst. Třeba ten, na který se právě díváš.' },
+  { n: 'Laboratoř', tag: 'pokusy', kind: 'roboti a hračky se světlem', t: 'Robotická lampa, světelná hra ovládaná gestem, duhová stěna z dichroických kostek, plyšoví tamagoči a show s humanoidními roboty. Zkoušky, ze kterých rostou další věci.' },
+  { n: 'Mozek', tag: 'vize', kind: 'paměť pro člověka a AI', t: 'Osobní paměť, kterou sdílím s AI. Pamatuje si projekty, nápady a souvislosti, aby se nic neztratilo. První krok k technologické symbióze.' }
+];
+const satsBox = $('#sats'), spokes = $('#spokes'); let spokeData = [], sel = 0;
+PROJ.forEach((p, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'sat'; b.textContent = p.n;
+  b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+  b.addEventListener('click', () => select(i)); b.addEventListener('mouseenter', () => hoverSpoke(i));
+  b.addEventListener('mouseleave', () => hoverSpoke(sel));
+  satsBox.appendChild(b);
+});
+function placeSats() {
+  const sats = $$('.sat', hub), narrow = hub.clientWidth < 460;
+  sats.forEach((s, i) => { const a = -Math.PI / 2 + i / sats.length * Math.PI * 2;
+    s.style.setProperty('--x', (50 + Math.cos(a) * (narrow ? 37 : 39)) + '%'); s.style.setProperty('--y', (50 + Math.sin(a) * (narrow ? 41 : 40)) + '%'); });
+}
+function layoutSpokes() {
+  const hr = hub.getBoundingClientRect(); if (!hr.width) return;
+  spokes.setAttribute('viewBox', `0 0 ${hr.width} ${hr.height}`); spokes.innerHTML = ''; spokeData = [];
+  const sr = slot.getBoundingClientRect(), cx = sr.left + sr.width / 2 - hr.left, cy = sr.top + sr.height / 2 - hr.top;
+  $$('.sat', hub).forEach((s, i) => {
+    const r = s.getBoundingClientRect(), x = r.left + r.width / 2 - hr.left, y = r.top + r.height / 2 - hr.top;
+    const ln = document.createElementNS(SVGNS, 'line'); ln.setAttribute('x1', cx); ln.setAttribute('y1', cy); ln.setAttribute('x2', x); ln.setAttribute('y2', y);
+    const c = document.createElementNS(SVGNS, 'circle'); c.setAttribute('r', 2.6);
+    spokes.append(ln, c); spokeData.push({ ln, c, cx, cy, x, y, ph: i * .17, dir: i % 2 ? 1 : -1 });
+  });
+  hoverSpoke(sel);
+}
+function hoverSpoke(i) { spokeData.forEach((s, k) => s.ln.classList.toggle('on', k === i)); }
+function select(i) {
+  sel = i; const p = PROJ[i];
+  $$('.sat', hub).forEach((s, k) => s.setAttribute('aria-pressed', k === i ? 'true' : 'false'));
+  $('#dTag').textContent = p.tag; $('#dName').textContent = p.n; $('#dKind').textContent = p.kind; $('#dText').textContent = p.t;
+  const L = $('#dLink'); if (p.link) { L.hidden = false; L.href = p.link[0]; L.textContent = p.link[1]; } else L.hidden = true;
+  $('#dCount').textContent = `${i + 1} / ${PROJ.length}`; hoverSpoke(i);
+}
+select(0);
+function hubTick(now) {
+  if (!landed) return; const t = now / 1000;
+  spokeData.forEach(s => { let f = (t * .45 + s.ph) % 1; if (s.dir < 0) f = 1 - f; const ff = .12 + f * .76;
+    s.c.setAttribute('cx', lerp(s.cx, s.x, ff)); s.c.setAttribute('cy', lerp(s.cy, s.y, ff)); });
+}
+
+/* ================= CHIP: hand holds a processor ================= */
+const seg = (v, a, b) => clamp((v - a) / (b - a));
+const CN = 240, chipSec = $('#chip'), cStage = $('#chipStage'), ccv = $('#chipCanvas'), ccx = ccv.getContext('2d');
+const cFrames = new Array(CN); let cStarted = false, cKey = '', cW = 0, cH = 0, cD = 1, cCover = { s: 1, x: 0, y: 0 };
+const trSvg = $('#traces'), cLbls = $$('.chip-lbl'), cTitle = $('#chipTitle'), cEnd = $('#chipEnd'), cCount = $('#cCount');
+function cLoad(i) { const im = new Image(); im.decoding = 'async'; im.onload = () => { cFrames[i] = im; cKey = ''; }; im.src = 'c/' + String(i + 1).padStart(3, '0') + '.webp'; }
+function cStart() { if (cStarted) return; cStarted = true; cLoad(0);
+  const ord = []; for (const st of [12, 4, 1]) for (let i = 0; i < CN; i += st) if (!ord.includes(i)) ord.push(i);
+  ord.forEach((i, k) => { if (i) setTimeout(() => cLoad(i), 10 + k * 8); }); }
+function sizeChip() {
+  cD = Math.min(devicePixelRatio || 1, 2); const r = ccv.getBoundingClientRect(); cW = r.width; cH = r.height;
+  ccv.width = Math.round(cW * cD); ccv.height = Math.round(cH * cD);
+  const sc = Math.max(cW / 1280, cH / 720); cCover = { s: sc, x: (cW - 1280 * sc) / 2, y: (cH - 720 * sc) / 2 };
+  cKey = ''; buildTraces();
+}
+// measured chip centre and width in the 1280x720 source, per frame
+const CT = [[0, 640, 600, 60], [24, 680, 432, 90], [36, 660, 320, 150], [48, 630, 316, 190], [60, 640, 328, 205], [72, 640, 330, 214], [140, 640, 344, 232], [239, 640, 340, 220]];
+function chipAt(f) { for (let i = 1; i < CT.length; i++) if (f <= CT[i][0]) { const a = CT[i - 1], b = CT[i], t = (f - a[0]) / (b[0] - a[0]);
+  return { x: lerp(a[1], b[1], t), y: lerp(a[2], b[2], t), w: lerp(a[3], b[3], t) }; } const l = CT[CT.length - 1]; return { x: l[1], y: l[2], w: l[3] }; }
+let TR = [];
+function buildTraces() {
+  trSvg.setAttribute('viewBox', `0 0 ${cW} ${cH}`); trSvg.innerHTML = ''; TR = [];
+  cLbls.forEach((lb, i) => {
+    const gl = document.createElementNS(SVGNS, 'path'); gl.setAttribute('class', 'tg');
+    const co = document.createElementNS(SVGNS, 'path'); co.setAttribute('class', 'tc');
+    const pad = document.createElementNS(SVGNS, 'circle'); pad.setAttribute('class', 'pad'); pad.setAttribute('r', 3);
+    const hd = document.createElementNS(SVGNS, 'circle'); hd.setAttribute('class', 'head'); hd.setAttribute('r', 3.6);
+    trSvg.append(gl, co, pad, hd); TR.push({ gl, co, pad, hd, lb, sx: i % 2 ? 1 : -1, sy: i < 2 ? -1 : 1, d: '', L: 0 });
+  });
+}
+function updateChip() {
+  const r = chipSec.getBoundingClientRect(), vh = innerHeight;
+  if (!reduced && (r.bottom < -50 || r.top > vh)) return;
+  const p = reduced ? 1 : clamp(-r.top / Math.max(1, r.height - vh));
+  const f = p < .3 ? p / .3 * 72 : 72 + (p - .3) / .7 * 167, fi = Math.round(f);
+  const narrow = cW < 760, zp = easeIO(seg(p, .32, .52)), z = 1 + (narrow ? 0 : .5) * zp;
+  const c = chipAt(f), P = { x: cCover.x + c.x * cCover.s, y: cCover.y + c.y * cCover.s };
+  const T = { x: lerp(P.x, cW / 2, zp), y: lerp(P.y, cH * (narrow ? .42 : .45), zp) };
+  const glowA = seg(p, .42, .56), key = fi + '|' + z.toFixed(3) + '|' + glowA.toFixed(2) + '|' + Math.round(performance.now() / 120 * (glowA > 0 ? 1 : 0));
+  if (key !== cKey) {
+    let k = fi; while (k > 0 && !cFrames[k]) k--; if (!cFrames[k]) { let u = fi; while (u < CN - 1 && !cFrames[u]) u++; k = u; }
+    if (cFrames[k]) {
+      cKey = key; ccx.setTransform(cD, 0, 0, cD, 0, 0); ccx.globalCompositeOperation = 'source-over';
+      ccx.fillStyle = '#111517'; ccx.fillRect(0, 0, cW, cH);
+      ccx.drawImage(cFrames[k], T.x + (cCover.x - P.x) * z, T.y + (cCover.y - P.y) * z, 1280 * cCover.s * z, 720 * cCover.s * z);
+      if (glowA > 0) {
+        const cw = c.w * cCover.s * z, t = performance.now() / 1000;
+        ccx.globalCompositeOperation = 'lighter';
+        const gr = ccx.createRadialGradient(T.x, T.y, 0, T.x, T.y, cw * .95);
+        gr.addColorStop(0, `rgba(255,184,92,${.32 * glowA})`); gr.addColorStop(1, 'rgba(255,184,92,0)');
+        ccx.fillStyle = gr; ccx.fillRect(T.x - cw, T.y - cw, cw * 2, cw * 2);
+        const n = 9, step = cw * .7 / n;
+        for (let yy = 0; yy < n; yy++) for (let xx = 0; xx < n; xx++) {
+          if (xx > 2 && xx < 6 && yy > 2 && yy < 6) continue;
+          const tw = .5 + .5 * Math.sin(t * 3 + xx * 1.7 + yy * 2.3);
+          ccx.fillStyle = `rgba(255,214,150,${(.25 + .5 * tw) * glowA})`;
+          ccx.beginPath(); ccx.arc(T.x - cw * .35 + (xx + .5) * step, T.y - cw * .35 + (yy + .5) * step, 1.6 + tw, 0, 7); ccx.fill();
+        }
+      }
+    }
+  }
+  cCount.textContent = `snímek ${String(fi + 1).padStart(3, '0')} / 240`;
+  cTitle.style.opacity = (seg(p, .16, .24) * (1 - seg(p, .44, .5))).toFixed(3);
+  cTitle.style.transform = `translateY(${((1 - seg(p, .16, .26)) * 24).toFixed(1)}px)`;
+  const cw = c.w * cCover.s * z, hw = cw / 2;
+  TR.forEach((tr, i) => {
+    const pr = easeIO(seg(p, .54 + i * .075, .61 + i * .075));
+    let Sx, Sy, P1x, P1y, P2x, P2y, Ax, ay;
+    if (!narrow) {
+      Sx = T.x + tr.sx * hw; Sy = T.y + tr.sy * hw * .45;
+      const ax = T.x + tr.sx * cW * .3; ay = T.y + tr.sy * cH * .24;
+      P1x = Sx + tr.sx * 28; P1y = Sy; P2x = P1x + tr.sx * Math.abs(ay - Sy); P2y = ay;
+      Ax = ax; if (tr.sx * (Ax - P2x) < 24) Ax = P2x + tr.sx * 24;
+    } else {
+      Sx = T.x + tr.sx * hw * .55; Sy = T.y + tr.sy * hw;
+      const ax = cW * (tr.sx > 0 ? .8 : .2);
+      P1x = Sx; P1y = Sy + tr.sy * 16; P2x = ax; P2y = P1y + tr.sy * Math.abs(ax - Sx);
+      Ax = ax; ay = Math.max(P2y * tr.sy + 26, (T.y + tr.sy * (hw + cH * .14)) * tr.sy) * tr.sy;
+    }
+    const d = `M${Sx.toFixed(1)} ${Sy.toFixed(1)} L${P1x.toFixed(1)} ${P1y.toFixed(1)} L${P2x.toFixed(1)} ${P2y.toFixed(1)} L${Ax.toFixed(1)} ${ay.toFixed(1)}`;
+    if (d !== tr.d) { tr.d = d; tr.gl.setAttribute('d', d); tr.co.setAttribute('d', d); tr.L = tr.co.getTotalLength(); tr.gl.style.strokeDasharray = tr.co.style.strokeDasharray = tr.L; }
+    tr.gl.style.strokeDashoffset = tr.co.style.strokeDashoffset = (tr.L * (1 - pr)).toFixed(1);
+    const vis = pr > 0 ? 1 : 0; tr.gl.style.opacity = vis * .22; tr.co.style.opacity = vis;
+    tr.pad.setAttribute('cx', Sx.toFixed(1)); tr.pad.setAttribute('cy', Sy.toFixed(1)); tr.pad.style.opacity = vis;
+    const hp = tr.L ? tr.co.getPointAtLength(tr.L * pr) : { x: Sx, y: Sy };
+    tr.hd.setAttribute('cx', hp.x.toFixed(1)); tr.hd.setAttribute('cy', hp.y.toFixed(1)); tr.hd.style.opacity = pr > 0 && pr < 1 ? 1 : (pr >= 1 ? .7 : 0);
+    const lo = seg(pr, .8, 1), lw = tr.lb.offsetWidth, lh = tr.lb.offsetHeight;
+    let lx = tr.sx > 0 ? Ax + 6 : Ax - lw - 6; if (narrow) lx = clamp(Ax - lw / 2, 12, cW - lw - 12);
+    const ly = narrow ? ay + (tr.sy > 0 ? 10 : -lh - 10) : ay - lh / 2;
+    tr.lb.style.opacity = lo.toFixed(3); tr.lb.style.transform = `translate(${lx.toFixed(1)}px,${(ly + (1 - lo) * 8).toFixed(1)}px)`;
+  });
+  cEnd.style.opacity = seg(p, .86, .93).toFixed(3); cEnd.style.transform = `translateY(${((1 - seg(p, .86, .95)) * 30).toFixed(1)}px)`;
+}
+
+/* ================= RADAR ================= */
+const radar = $('#radar'), rsvg = $('#radarSvg'), who = $('#who'), whoRing = $('#whoRing'), bubble = $('#bubble'), readout = $('#readout'), rState = $('#rState');
+const PXM = 52.5, OX = 200, OY = 232;
+let rPtr = null, rLast = -9, rActive = false, rTyping = 0, rVisible = false, rPhrase = 0;
+const PHRASES = ['Dobrý den, vítejte v Ilustru. Ukážu vám, co umí světlo.', 'Ahoj, já jsem logo, které mluví. Na co se chceš zeptat?', 'Vítejte. Tenhle výrobek vám rád poví svůj příběh.'];
+function rSetPtr(e) {
+  const r = rsvg.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width * 400, y = (e.clientY - r.top) / r.height * 250;
+  rPtr = { x: clamp(x, 0, 400), y: clamp(y, 0, 228) }; rLast = performance.now() / 1000;
+}
+rsvg.addEventListener('pointermove', rSetPtr); rsvg.addEventListener('pointerdown', rSetPtr);
+function typeText(s) {
+  clearInterval(rTyping); let i = 0; bubble.textContent = '';
+  const cur = document.createElement('span'); cur.className = 'cur';
+  rTyping = setInterval(() => { i++; bubble.textContent = s.slice(0, i); bubble.appendChild(cur); if (i >= s.length) clearInterval(rTyping); }, reduced ? 0 : 28);
+}
+function radarTick(now) {
+  if (!rVisible) return; const t = now / 1000;
+  let px, py;
+  if (rPtr && t - rLast < 2.6) { px = rPtr.x; py = rPtr.y; }
+  else { const xm = Math.sin(t * .33) * 1.7, ym = 2.35 + 1.25 * Math.sin(t * .21 + 1); px = OX + xm * PXM; py = OY - ym * PXM; }
+  who.setAttribute('cx', px.toFixed(1)); who.setAttribute('cy', py.toFixed(1));
+  whoRing.setAttribute('cx', px.toFixed(1)); whoRing.setAttribute('cy', py.toFixed(1)); whoRing.setAttribute('r', (8 + (t * 14 % 14)).toFixed(1));
+  const xm = (px - OX) / PXM, ym = (OY - py) / PXM, d = Math.hypot(xm, ym), ang = Math.atan2(xm, ym) * 180 / Math.PI;
+  const inFov = Math.abs(ang) <= 60 && ym > 0, act = inFov && d < 3;
+  readout.textContent = inFov ? `cíl 1 · x ${fmt(xm)} m · y ${fmt(ym)} m · vzdálenost ${fmt(d)} m` : 'mimo zorné pole';
+  if (act !== rActive) {
+    rActive = act; radar.classList.toggle('active', act);
+    rState.textContent = act ? 'zóna 3 m · aktivní' : 'zóna 3 m · čeká'; rState.classList.toggle('on', act);
+    if (act) { typeText(PHRASES[rPhrase++ % PHRASES.length]); } else { clearInterval(rTyping); bubble.textContent = 'Logo spí. Přibliž se.'; }
+  }
+}
+
+/* ================= SYMBIOSIS strands ================= */
+const sym = $('#symCv'), sx = sym.getContext('2d'); let symVisible = false, SW = 0, SH = 0;
+function sizeSym() { const d = Math.min(devicePixelRatio || 1, 2); SW = sym.clientWidth; SH = sym.clientHeight; sym.width = SW * d; sym.height = SH * d; sx.setTransform(d, 0, 0, d, 0, 0); }
+function symTick(now) {
+  if (!symVisible) return; const t = now / 1000;
+  const r = sym.getBoundingClientRect(), prog = clamp(1 - (r.top + r.height / 2) / innerHeight * 1.2 + .3);
+  sx.clearRect(0, 0, SW, SH);
+  const mid = SH / 2, A = SH * .32, k = Math.PI * 2 / Math.max(260, SW * .55), ph = lerp(Math.PI, .0, prog);
+  const step = 9;
+  for (let x = 6; x < SW; x += step) {
+    const y1 = mid + Math.sin(x * k - t * .9) * A, y2 = mid + Math.sin(x * k - t * .9 + ph) * A * lerp(.4, 1, prog);
+    const near = 1 - clamp(Math.abs(y1 - y2) / 26);
+    sx.fillStyle = `rgba(255,184,92,${.35 + .5 * near})`; sx.beginPath(); sx.arc(x, y1, 2.2 + near * 1.6, 0, 7); sx.fill();
+    sx.fillStyle = `rgba(207,227,242,${.35 + .5 * near})`; sx.beginPath(); sx.arc(x, y2, 2.2 + near * 1.6, 0, 7); sx.fill();
+    if (near > .75) { const g = sx.createRadialGradient(x, (y1 + y2) / 2, 0, x, (y1 + y2) / 2, 22); g.addColorStop(0, 'rgba(255,240,220,.55)'); g.addColorStop(1, 'rgba(255,240,220,0)'); sx.fillStyle = g; sx.fillRect(x - 22, (y1 + y2) / 2 - 22, 44, 44); }
+  }
+  sx.font = '400 10px "JetBrains Mono", monospace'; sx.fillStyle = 'rgba(255,184,92,.8)'; sx.fillText('člověk', 6, 14);
+  sx.fillStyle = 'rgba(207,227,242,.8)'; sx.fillText('AI', 6, SH - 6);
+}
+
+/* ================= GAME: Rozsviť slovo ================= */
+const FONT = {
+  A: [' ### ', '#   #', '#   #', '#####', '#   #', '#   #', '#   #'], B: ['#### ', '#   #', '#   #', '#### ', '#   #', '#   #', '#### '],
+  C: [' ### ', '#   #', '#    ', '#    ', '#    ', '#   #', ' ### '], D: ['#### ', '#   #', '#   #', '#   #', '#   #', '#   #', '#### '],
+  E: ['#####', '#    ', '#    ', '#### ', '#    ', '#    ', '#####'], F: ['#####', '#    ', '#    ', '#### ', '#    ', '#    ', '#    '],
+  G: [' ### ', '#   #', '#    ', '# ###', '#   #', '#   #', ' ####'], H: ['#   #', '#   #', '#   #', '#####', '#   #', '#   #', '#   #'],
+  I: [' ### ', '  #  ', '  #  ', '  #  ', '  #  ', '  #  ', ' ### '], J: ['  ###', '   # ', '   # ', '   # ', '   # ', '#  # ', ' ##  '],
+  K: ['#   #', '#  # ', '# #  ', '##   ', '# #  ', '#  # ', '#   #'], L: ['#    ', '#    ', '#    ', '#    ', '#    ', '#    ', '#####'],
+  M: ['#   #', '## ##', '# # #', '# # #', '#   #', '#   #', '#   #'], N: ['#   #', '#   #', '##  #', '# # #', '#  ##', '#   #', '#   #'],
+  O: [' ### ', '#   #', '#   #', '#   #', '#   #', '#   #', ' ### '], P: ['#### ', '#   #', '#   #', '#### ', '#    ', '#    ', '#    '],
+  Q: [' ### ', '#   #', '#   #', '#   #', '# # #', '#  # ', ' ## #'], R: ['#### ', '#   #', '#   #', '#### ', '# #  ', '#  # ', '#   #'],
+  S: [' ####', '#    ', '#    ', ' ### ', '    #', '    #', '#### '], T: ['#####', '  #  ', '  #  ', '  #  ', '  #  ', '  #  ', '  #  '],
+  U: ['#   #', '#   #', '#   #', '#   #', '#   #', '#   #', ' ### '], V: ['#   #', '#   #', '#   #', '#   #', '#   #', ' # # ', '  #  '],
+  W: ['#   #', '#   #', '#   #', '# # #', '# # #', '# # #', ' # # '], X: ['#   #', '#   #', ' # # ', '  #  ', ' # # ', '#   #', '#   #'],
+  Y: ['#   #', '#   #', ' # # ', '  #  ', '  #  ', '  #  ', '  #  '], Z: ['#####', '    #', '   # ', '  #  ', ' #   ', '#    ', '#####']
+};
+const ACC = { 'Ě': ['E', [[1, -2], [3, -2], [2, -1]]], 'Á': ['A', [[3, -2], [2, -1]]] };
+const strip = c => c.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+function glyph(c) { // -> list of [x,y] pixels, y may be negative for accents
+  const base = ACC[c] ? ACC[c][0] : c, rows = FONT[base]; if (!rows) return [];
+  const px = []; rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === '#') px.push([x, y]); }));
+  if (ACC[c]) px.push(...ACC[c][1]); return px;
+}
+const GLY = {}; [...Object.keys(FONT), 'Ě', 'Á'].forEach(c => GLY[c] = glyph(c));
+const WORDS = [
+  ['SVĚTLO', 'Světlo je můj materiál. Stejně jako papír, dřevo a kód.'],
+  ['NÁPAD', 'Nápady sbírám v noci do telefonu. Ty nejlepší chytám pod hladinou.'],
+  ['ROBOT', 'Stroje stavím, aby reagovaly na lidi. Ne aby je nahradily.'],
+  ['DIALOG', 'S AI nepíšu příkazy. Vedu rozhovor.'],
+  ['ILUSTRO', 'Tohle všechno je Ilustro. Pojďme spolu něco rozsvítit.']
+];
+const unl = $('#unl');
+WORDS.forEach(([w], i) => { const li = document.createElement('li'); li.innerHTML = `<span class="k">${w}</span><span class="v">zamčeno</span>`; unl.appendChild(li); });
+const gcv = $('#gameCv'), gx = gcv.getContext('2d'), lb = document.createElement('canvas'), lx = lb.getContext('2d'), gb = document.createElement('canvas'), glx = gb.getContext('2d');
+let mask = null, GW = 0, GH = 0, GD = 1, cell = 7, cols = 0, rows = 0, Rb, Gb, Bb, img, gimg, gameVisible = false;
+const G = { lvl: 0, filled: 0, letters: [], beams: [], flyers: [], sparks: [], hits: 0, miss: 0, missWord: 0, cele: 0, t0: 0, tEnd: 0, hover: -1, emFlash: 0, done: false };
+function sizeGame() {
+  GD = Math.min(devicePixelRatio || 1, 2); GW = gcv.clientWidth; cell = GW < 560 ? 6 : 7;
+  GH = Math.round(clamp(GW * .62, 380, 560)); gcv.style.height = GH + 'px';
+  cols = Math.floor(GW / cell); rows = Math.floor(GH / cell);
+  gcv.width = Math.round(GW * GD); gcv.height = Math.round(GH * GD);
+  lb.width = gb.width = cols; lb.height = gb.height = rows;
+  img = lx.createImageData(cols, rows); gimg = glx.createImageData(cols, rows);
+  Rb = new Float32Array(cols * rows); Gb = new Float32Array(cols * rows); Bb = new Float32Array(cols * rows);
+  mask = document.createElement('canvas'); mask.width = gcv.width; mask.height = gcv.height;
+  const m = mask.getContext('2d'); m.setTransform(GD, 0, 0, GD, 0, 0);
+  m.fillStyle = '#090a0c'; m.fillRect(0, 0, GW, GH); m.globalCompositeOperation = 'destination-out';
+  const rad = cell * .38; m.beginPath();
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) { const X = x * cell + cell / 2, Y = y * cell + cell / 2; m.moveTo(X + rad, Y); m.arc(X, Y, rad, 0, Math.PI * 2); }
+  m.fill();
+  G.letters.forEach(L => { L.x = clamp(L.x, 2, cols - 7); L.y = clamp(L.y, 16, rows - 16); });
+}
+function stamp(x, y, r, g, b) { x |= 0; y |= 0; if (x < 0 || y < 0 || x >= cols || y >= rows) return; const i = y * cols + x;
+  if (r > Rb[i]) Rb[i] = r; if (g > Gb[i]) Gb[i] = g; if (b > Bb[i]) Bb[i] = b; }
+function stampGlyph(c, x, y, r, g, b) { const p = GLY[c]; if (!p) return; const X = Math.round(x), Y = Math.round(y); for (const [a, d] of p) stamp(X + a, Y + d, r, g, b); }
+const emitter = () => ({ x: cols / 2, y: rows - 7 });
+const swirlC = () => ({ x: cols / 2, y: (16 + rows - 12) / 2 });
+function spawnWord() {
+  const w = WORDS[G.lvl][0], E = emitter(), C = swirlC(); G.letters = []; G.filled = 0; G.missWord = 0;
+  const pool = [...w]; const nDecoy = 9 + G.lvl * 3, AZ = 'ABCDEFGHIJKLMNOPRSTUVYZ';
+  for (let i = 0; i < nDecoy; i++) pool.push(AZ[(Math.random() * AZ.length) | 0]);
+  const rx = (cols - 12) / 2, ry = (rows - 30) / 2;
+  pool.forEach((c, i) => {
+    const a = Math.random() * Math.PI * 2;
+    G.letters.push({ c, x: E.x - 2.5, y: E.y - 4, vx: Math.cos(a) * 30, vy: -20 - Math.random() * 30, a, rad: .35 + Math.random() * .65, rx, ry, w: (Math.random() < .5 ? 1 : -1) * 0, flash: 0, state: 'free', ph: Math.random() * 9 });
+  });
+  const dir = Math.random() < .5 ? 1 : -1; G.letters.forEach(L => L.w = dir * (.22 + G.lvl * .06) * (1.2 - L.rad * .5));
+  updHud();
+}
+function needChar() { return WORDS[G.lvl][0][G.filled]; }
+function updHud() {
+  const w = WORDS[G.lvl][0];
+  $('#gLvl').textContent = G.done ? 'hotovo' : `slovo ${G.lvl + 1} / ${WORDS.length}`;
+  $('#gNeed').textContent = G.done ? 'všechno svítí' : (G.filled < w.length ? `hledej: ${needChar()}` : 'svítí!');
+  $('#gStat').textContent = `zásahy ${G.hits} · minutí ${G.miss}`;
+  $$('li', unl).forEach((li, i) => li.classList.toggle('cur', !G.done && i === G.lvl));
+}
+function slotPos(i) { const w = WORDS[G.lvl][0], sp = 6, x0 = Math.round(cols / 2 - (w.length * sp - 1) / 2); return { x: x0 + i * sp, y: 4 }; }
+function shoot(L, tx, ty) {
+  const E = emitter(), x1 = L ? L.x + 2.5 : tx, y1 = L ? L.y + 3.5 : ty;
+  const dist = Math.hypot(x1 - E.x, y1 - E.y);
+  G.beams.push({ x0: E.x, y0: E.y - 1, x1, y1, t: 0, dur: clamp(dist / 160, .08, .28), L, prev: 0 });
+  if (L) L.state = 'targeted';
+  if (!G.t0) G.t0 = performance.now();
+}
+function resolve(B) {
+  const L = B.L;
+  if (!L) { burst(B.x1, B.y1, [255, 120, 140], 5); return; }
+  if (L.state !== 'targeted') return;
+  if (G.filled < WORDS[G.lvl][0].length && L.c === needChar()) {
+    G.hits++; const S = slotPos(G.filled); L.state = 'fly';
+    G.flyers.push({ L, x0: L.x, y0: L.y, x1: S.x, y1: S.y, t: 0, idx: G.filled }); G.filled++;
+    burst(L.x + 2.5, L.y + 3.5, [255, 190, 100], 14);
+  } else {
+    G.miss++; G.missWord++; L.state = 'free'; L.flash = .5; L.vx += (Math.random() - .5) * 60; L.vy += (Math.random() - .5) * 60;
+    burst(L.x + 2.5, L.y + 3.5, [255, 90, 110], 6);
+  }
+  updHud();
+}
+function burst(x, y, c, n) { for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, v = 8 + Math.random() * 26; G.sparks.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: .4 + Math.random() * .4, c }); } }
+function nearestLetter(px, py, maxPx) {
+  let best = -1, bd = maxPx; G.letters.forEach((L, i) => { if (L.state !== 'free') return;
+    const d = Math.hypot((L.x + 2.5) * cell - px, (L.y + 3.5) * cell - py); if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+function canvasPt(e) { const r = gcv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * GW, y: (e.clientY - r.top) / r.height * GH }; }
+gcv.addEventListener('pointerdown', e => {
+  if (G.done || G.cele > 0) return; const p = canvasPt(e), i = nearestLetter(p.x, p.y, cell * 7);
+  if (i >= 0) shoot(G.letters[i]); else shoot(null, p.x / cell, p.y / cell);
+});
+gcv.addEventListener('pointermove', e => { const p = canvasPt(e); G.hover = nearestLetter(p.x, p.y, cell * 7); });
+gcv.addEventListener('pointerleave', () => G.hover = -1);
+addEventListener('keydown', e => {
+  if (!$('#reader').hidden) return;
+  if (!gameVisible || e.metaKey || e.ctrlKey || e.altKey || G.done || G.cele > 0) return;
+  if (e.target.closest && e.target.closest('input,textarea,select')) return;
+  const k = strip((e.key || '').toUpperCase()); if (!/^[A-Z]$/.test(k)) return;
+  e.preventDefault();
+  const need = needChar(), E = emitter();
+  let cand = G.letters.filter(L => L.state === 'free' && strip(L.c) === k);
+  if (!cand.length) { G.emFlash = .4; G.miss++; updHud(); return; }
+  const exact = cand.filter(L => L.c === need); if (exact.length && strip(need) === k) cand = exact;
+  cand.sort((a, b) => Math.hypot(a.x - E.x, a.y - E.y) - Math.hypot(b.x - E.x, b.y - E.y)); shoot(cand[0]);
+});
+function completeWord() {
+  G.cele = 1.8; const li = $$('li', unl)[G.lvl]; li.classList.add('done'); li.querySelector('.v').textContent = WORDS[G.lvl][1];
+}
+function nextAfterCele() {
+  if (G.lvl < WORDS.length - 1) { G.lvl++; spawnWord(); }
+  else { G.done = true; G.tEnd = performance.now(); G.letters = G.letters.filter(L => L.state === 'gone'); const s = Math.round((G.tEnd - G.t0) / 1000);
+    $('#win').classList.add('show'); $('#winStats').textContent = `${G.hits} zásahů · ${G.miss} minutí · ${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; updHud(); }
+}
+function resetGame() {
+  Object.assign(G, { lvl: 0, filled: 0, letters: [], beams: [], flyers: [], sparks: [], hits: 0, miss: 0, missWord: 0, cele: 0, t0: 0, done: false });
+  $$('li', unl).forEach((li, i) => { li.classList.remove('done'); li.querySelector('.v').textContent = 'zamčeno'; });
+  $('#win').classList.remove('show'); spawnWord();
+}
+$('#gReset').addEventListener('click', resetGame);
+$('#gSkip').addEventListener('click', () => $$('li', unl).forEach((li, i) => { li.classList.add('done'); li.querySelector('.v').textContent = WORDS[i][1]; }));
+let gPrev = 0;
+function gameTick(now) {
+  if (!gameVisible || !cols) { gPrev = now; return; }
+  const dt = Math.min(.05, (now - gPrev) / 1000 || .016); gPrev = now; const t = now / 1000;
+  const n = cols * rows; for (let i = 0; i < n; i++) { Rb[i] *= .74; Gb[i] *= .74; Bb[i] *= .74; }
+  const C = swirlC(), word = WORDS[G.lvl][0];
+  // swarm
+  G.letters.forEach((L, i) => {
+    if (L.state === 'fly' || L.state === 'gone') return;
+    if (L.state === 'free' || L.state === 'targeted') {
+      L.a += L.w * dt; const tx = C.x + Math.cos(L.a) * L.rx * L.rad - 2.5, ty = C.y + Math.sin(L.a) * L.ry * L.rad - 3.5 + Math.sin(t * 1.3 + L.ph) * 1.2;
+      L.vx += (tx - L.x) * 2.2 * dt; L.vy += (ty - L.y) * 2.2 * dt; L.vx *= Math.pow(.25, dt); L.vy *= Math.pow(.25, dt);
+      L.x += L.vx * dt; L.y += L.vy * dt; L.x = clamp(L.x, 1, cols - 6); L.y = clamp(L.y, 14, rows - 18);
+    }
+    L.flash = Math.max(0, L.flash - dt);
+    let r = 150, g = 168, b = 186;
+    const hint = G.missWord >= 3 && L.c === needChar() && L.state === 'free';
+    if (i === G.hover) { r = 240; g = 244; b = 250; }
+    if (hint) { const k = .5 + .5 * Math.sin(t * 8); r = lerp(r, 255, k); g = lerp(g, 200, k); b = lerp(b, 120, k); }
+    if (L.flash > 0) { r = 255; g = 80; b = 100; }
+    if (G.cele > 0) { const k = clamp(G.cele - .6); r *= k; g *= k; b *= k; }
+    stampGlyph(L.c, L.x, L.y, r, g, b);
+  });
+  // flyers to slots
+  G.flyers = G.flyers.filter(F => { F.t += dt / .42; const k = easeOut(clamp(F.t));
+    F.L.x = lerp(F.x0, F.x1, k); F.L.y = lerp(F.y0, F.y1, k) - Math.sin(k * Math.PI) * 6;
+    if (F.t >= 1) { F.L.state = 'gone'; burst(F.x1 + 2.5, F.y1 + 3.5, [255, 210, 140], 8);
+      if (G.flyers.length && G.filled === word.length && !G.flyers.some(o => o !== F && o.t < 1)) completeWord(); return false; }
+    stampGlyph(F.L.c, F.L.x, F.L.y, 255, 196, 110); return true; });
+  // slots
+  const done = G.letters.filter(L => L.state === 'gone').length;
+  [...word].forEach((c, i) => {
+    const S = slotPos(i);
+    if (i < done) {
+      let r = 255, g = 184, b = 92;
+      if (G.cele > 0 || G.done) { const h = (t * (G.done ? .7 : 1.6) + i * .18) % 1; r = 200 + 55 * Math.sin(h * 6.28); g = 150 + 90 * Math.sin(h * 6.28 + 2.1); b = 150 + 100 * Math.sin(h * 6.28 + 4.2); }
+      stampGlyph(c, S.x, S.y, r, g, b);
+      for (let k = 0; k < 5; k++) stamp(S.x + k, S.y + 9, 255, 184, 92);
+    } else {
+      stampGlyph(c, S.x, S.y, 46, 40, 34);
+      const blink = i === done && Math.sin(t * 6) > 0 ? 1 : .45;
+      for (let k = 0; k < 5; k++) stamp(S.x + k, S.y + 9, 120 * blink, 90 * blink, 50 * blink);
+    }
+  });
+  // beams
+  G.beams = G.beams.filter(B => { B.t += dt / B.dur; const k = clamp(B.t);
+    if (B.L && B.L.state === 'targeted') { B.x1 = B.L.x + 2.5; B.y1 = B.L.y + 3.5; }
+    const steps = Math.ceil(Math.hypot(B.x1 - B.x0, B.y1 - B.y0));
+    const from = Math.floor(B.prev * steps), to = Math.ceil(k * steps);
+    for (let s = Math.max(0, from - 2); s <= to; s++) { const u = s / steps; stamp(lerp(B.x0, B.x1, u), lerp(B.y0, B.y1, u), 255, 214, 150); }
+    B.prev = k; if (B.t >= 1) { resolve(B); return false; } return true; });
+  // sparks
+  G.sparks = G.sparks.filter(s => { s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 30 * dt; if (s.life <= 0) return false;
+    const k = clamp(s.life * 2); stamp(s.x, s.y, s.c[0] * k, s.c[1] * k, s.c[2] * k); return true; });
+  // emitter lamp
+  const E = emitter(); G.emFlash = Math.max(0, G.emFlash - dt);
+  const pulse = .65 + .35 * Math.sin(t * 3), er = G.emFlash > 0 ? 255 : 255 * pulse, eg = G.emFlash > 0 ? 80 : 184 * pulse, eb = G.emFlash > 0 ? 100 : 92 * pulse;
+  for (let x = -3; x <= 3; x++) stamp(E.x + x, E.y + 1, er * .8, eg * .8, eb * .8);
+  for (let x = -2; x <= 2; x++) stamp(E.x + x, E.y, er, eg, eb);
+  for (let x = -5; x <= 5; x++) stamp(E.x + x, E.y + 3, 70, 60, 50);
+  // celebration timing
+  if (G.cele > 0) { G.cele -= dt; if (G.cele <= 0) { G.cele = 0; nextAfterCele(); } }
+  if (G.done && Math.random() < dt * 3) { const S = slotPos((Math.random() * word.length) | 0); burst(S.x + 2.5, S.y + 3.5, [255, 200, 130], 10); }
+  // render
+  const d = img.data, q = gimg.data;
+  for (let i = 0, j = 0; i < n; i++, j += 4) {
+    d[j] = 20 + Rb[i]; d[j + 1] = 21 + Gb[i]; d[j + 2] = 25 + Bb[i]; d[j + 3] = 255;
+    q[j] = Rb[i]; q[j + 1] = Gb[i]; q[j + 2] = Bb[i]; q[j + 3] = 255;
+  }
+  lx.putImageData(img, 0, 0); glx.putImageData(gimg, 0, 0);
+  gx.setTransform(1, 0, 0, 1, 0, 0); gx.globalCompositeOperation = 'source-over'; gx.globalAlpha = 1;
+  gx.imageSmoothingEnabled = false; gx.drawImage(lb, 0, 0, cols * cell * GD, rows * cell * GD);
+  gx.drawImage(mask, 0, 0);
+  gx.globalCompositeOperation = 'lighter'; gx.imageSmoothingEnabled = true; gx.globalAlpha = .42;
+  gx.drawImage(gb, 0, 0, cols * cell * GD, rows * cell * GD);
+  gx.globalAlpha = 1; gx.globalCompositeOperation = 'source-over';
+}
+
+/* ================= copy e-mail ================= */
+$('#copyMail').addEventListener('click', () => {
+  const btn = $('#copyMail'), txt = $('#mailTxt').textContent;
+  const sel = () => { const r = document.createRange(); r.selectNodeContents($('#mailTxt')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Označeno, zkopíruj Ctrl+C'; };
+  try { navigator.clipboard.writeText(txt).then(() => { btn.textContent = 'Zkopírováno'; setTimeout(() => btn.textContent = 'Zkopírovat e-mail', 1800); }, sel); } catch (e) { sel(); }
+});
+
+/* ================= essay reader ================= */
+const reader = $('#reader'), rdProg = $('#rdProg'); let rdFrom = null;
+function openReader() {
+  rdFrom = document.activeElement; reader.hidden = false; reader.scrollTop = 0; rdProg.style.width = '0%';
+  document.body.style.overflow = 'hidden'; if (lenis) lenis.stop(); $('#rdClose').focus({ preventScroll: true });
+  try { history.replaceState(null, '', '#esej-1'); } catch (e) {}
+}
+function closeReader() {
+  reader.hidden = true; document.body.style.overflow = ''; if (lenis) lenis.start();
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  if (rdFrom && rdFrom.focus) rdFrom.focus({ preventScroll: true });
+}
+$('#ess1').addEventListener('click', openReader);
+$('#rdClose').addEventListener('click', closeReader); $('#rdBack').addEventListener('click', closeReader);
+addEventListener('keydown', e => { if (e.key === 'Escape' && !reader.hidden) closeReader(); });
+reader.addEventListener('scroll', () => { const m = reader.scrollHeight - reader.clientHeight; rdProg.style.width = (m > 0 ? reader.scrollTop / m * 100 : 0).toFixed(1) + '%'; }, { passive: true });
+(() => { const n = $('.rd-body').textContent.trim().split(/\s+/).length, mins = Math.max(1, Math.round(n / 200));
+  $$('[data-rt]').forEach(el => el.textContent = `${mins} min čtení`); })();
+if (location.hash === '#esej-1') openReader();
+
+/* ================= visibility + layout ================= */
+if ('IntersectionObserver' in window) {
+  const vio = new IntersectionObserver(es => es.forEach(e => {
+    if (e.target === radar) rVisible = e.isIntersecting; if (e.target === sym) symVisible = e.isIntersecting;
+    if (e.target === gcv) gameVisible = e.isIntersecting;
+  }), { rootMargin: '80px' });
+  [radar, sym, gcv].forEach(el => vio.observe(el));
+  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) cStart(); }), { rootMargin: '150% 0px' }).observe(chipSec);
+} else { rVisible = symVisible = gameVisible = true; cStart(); }
+function layout() { sizeFilm(); measureBlocks(); placeSats(); layoutSpokes(); sizeSym(); sizeGame(); sizeChip(); for (const B of blocks) B.last = -1; }
+let rzT = 0; addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(layout, 120); });
+layout(); spawnWord();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measureBlocks(); placeSats(); layoutSpokes(); });
+function loop(now) {
+  if (lenis) lenis.raf(now);
+  updateFilm(); updateMorph(); updateChip(); hubTick(now); radarTick(now); symTick(now); gameTick(now);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+</body>
+</html>
