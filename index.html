@@ -223,7 +223,7 @@ h1,h2,h3{font-family:var(--f-display);font-variation-settings:"wdth" 78;text-wra
 .v2 p{margin:0;color:#b9bbc0;max-width:46ch}
 
 /* ---------- chip (hand + processor) ---------- */
-#chip{position:relative;height:520vh;background:#111517}
+#chip{position:relative;height:340vh;background:#111517}
 .chip-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(90% 80% at 40% 45%,#232a2c 0%,#141819 55%,#0a0d0d 100%)}
 #chipCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .traces{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
@@ -239,7 +239,7 @@ h1,h2,h3{font-family:var(--f-display);font-variation-settings:"wdth" 78;text-wra
 .chip-end p{margin:0;font:800 clamp(34px,5vw,80px)/.95 var(--f-display);font-variation-settings:"wdth" 78;letter-spacing:-.035em;color:var(--paper);text-wrap:balance}
 .chip-end em{color:var(--led);font-weight:400}
 .chip-hud{position:absolute;right:var(--gut-r);bottom:calc(14px + env(safe-area-inset-bottom,0px));color:#7d8388;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
-@media (max-width:760px){#chip{height:460vh}.chip-title{max-width:none;right:var(--gut-r);bottom:calc(64px + env(safe-area-inset-bottom,0px))}.chip-lbl{font-size:11px;padding:7px 11px;gap:8px}.chip-hud{left:var(--gut-l);right:auto}}
+@media (max-width:760px){#chip{height:320vh}.chip-title{max-width:none;right:var(--gut-r);bottom:calc(64px + env(safe-area-inset-bottom,0px))}.chip-lbl{font-size:11px;padding:7px 11px;gap:8px}.chip-hud{left:var(--gut-l);right:auto}}
 .rm #chip{height:auto}
 .rm .chip-stage{position:relative;height:100vh}
 
@@ -315,7 +315,9 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
 .ess.soon h3{color:#c9cacd}
 
 /* ---------- collaboration ---------- */
-.collab{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.collab{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.collab .co{grid-column:span 2}
+.collab .co:nth-child(n+4){grid-column:span 3}
 .co{padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .co .mono{color:var(--led);text-transform:uppercase;letter-spacing:.12em}
 .co h3{font-size:clamp(22px,2vw,28px);font-weight:720;letter-spacing:-.02em}
@@ -323,8 +325,8 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
 .co-cta{background:var(--led);border-color:var(--led);color:var(--on-led)}
 .co-cta p{color:#3a2a12}
 .co-cta .btn.led{margin-top:auto;align-self:flex-start;background:var(--on-led);color:var(--led);border-color:var(--on-led)}
-@media (max-width:900px){.collab{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:560px){.collab{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:900px){.collab{grid-template-columns:repeat(2,minmax(0,1fr))}.collab .co,.collab .co:nth-child(n+4){grid-column:span 1}.collab .co:last-child{grid-column:span 2}}
+@media (max-width:560px){.collab{grid-template-columns:minmax(0,1fr)}.collab .co:last-child{grid-column:span 1}}
 
 /* ---------- reader ---------- */
 .reader{position:fixed;inset:0;z-index:80;background:var(--night);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
@@ -576,15 +578,11 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
 </section>
 
 <!-- ================= CHIP (hand + processor) ================= -->
-<section id="chip" aria-label="Myšlenka v dlani">
+<section id="chip" aria-label="Myšlenka na dlani">
   <div class="chip-stage" id="chipStage">
-    <canvas id="chipCanvas" role="img" aria-label="Ruka zespodu vyjede nahoru a drží procesor. Z čipu postupně vyjedou světelné dráhy ke slovům Světlo, Prostor, Kód a Myšlenka."></canvas>
+    <canvas id="chipCanvas" role="img" aria-label="Ruka zespodu vyjede nahoru a drží na dlani procesor."></canvas>
     <svg class="traces" id="traces" aria-hidden="true"></svg>
-    <div class="chip-title" id="chipTitle"><span class="eyebrow led">v dlani</span><h2>Myšlenka v dlani.</h2></div>
-    <div class="chip-lbl" data-i="0"><i></i>Světlo</div>
-    <div class="chip-lbl" data-i="1"><i></i>Prostor</div>
-    <div class="chip-lbl" data-i="2"><i></i>Kód</div>
-    <div class="chip-lbl" data-i="3"><i></i>Myšlenka</div>
+    <div class="chip-title" id="chipTitle"><span class="eyebrow led">na dlani</span><h2>Myšlenka na dlani.</h2></div>
     <div class="chip-end" id="chipEnd"><p>Každé světlo začíná <em>myšlenkou.</em></p></div>
     <div class="chip-hud mono" id="cCount">snímek 001 / 240</div>
   </div>
@@ -627,7 +625,6 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
     <div class="panel co rv"><span class="mono">architekti, designéři, nábytek</span><h3>Světlo uvnitř věcí</h3><p>Světlo a reakce zabudované přímo do prostoru, nábytku a materiálu.</p></div>
     <div class="panel co rv"><span class="mono">vývojáři, robotici, tvůrci</span><h3>Co ještě nikdo neudělal</h3><p>Vy přinesete kód nebo mechaniku, já dílnu, výrobu a cit pro to, jak má věc působit na lidi.</p></div>
     <div class="panel co rv"><span class="mono">partneři a investoři</span><h3>Prostor, světlo a AI</h3><p>Pro ty, kdo věří, že tyhle tři věci k sobě patří a že z nich vyroste nový obor.</p></div>
-    <div class="panel co co-cta rv"><h3>Nemusíš mít hotové zadání.</h3><p>Stačí nápad nebo problém. Zbytek vymyslíme spolu.</p><a class="btn led" href="#kontakt">Napiš mi</a></div>
   </div>
 </section>
 
@@ -1055,7 +1052,7 @@ function updateChip() {
   const narrow = cW < 760, zp = easeIO(seg(p, .32, .52)), z = 1 + (narrow ? 0 : .5) * zp;
   const c = chipAt(f), P = { x: cCover.x + c.x * cCover.s, y: cCover.y + c.y * cCover.s };
   const T = { x: lerp(P.x, cW / 2, zp), y: lerp(P.y, cH * (narrow ? .42 : .45), zp) };
-  const glowA = seg(p, .42, .56), key = fi + '|' + z.toFixed(3) + '|' + glowA.toFixed(2) + '|' + Math.round(performance.now() / 120 * (glowA > 0 ? 1 : 0));
+  const glowA = 0, key = fi + '|' + z.toFixed(3) + '|' + glowA.toFixed(2) + '|' + Math.round(performance.now() / 120 * (glowA > 0 ? 1 : 0));
   if (key !== cKey) {
     let k = fi; while (k > 0 && !cFrames[k]) k--; if (!cFrames[k]) { let u = fi; while (u < CN - 1 && !cFrames[u]) u++; k = u; }
     if (cFrames[k]) {
@@ -1079,7 +1076,7 @@ function updateChip() {
     }
   }
   cCount.textContent = `snímek ${String(fi + 1).padStart(3, '0')} / 240`;
-  cTitle.style.opacity = (seg(p, .16, .24) * (1 - seg(p, .44, .5))).toFixed(3);
+  cTitle.style.opacity = (seg(p, .16, .24) * (1 - seg(p, .6, .66))).toFixed(3);
   cTitle.style.transform = `translateY(${((1 - seg(p, .16, .26)) * 24).toFixed(1)}px)`;
   const cw = c.w * cCover.s * z, hw = cw / 2;
   TR.forEach((tr, i) => {
@@ -1108,7 +1105,7 @@ function updateChip() {
     const ly = narrow ? ay + (tr.sy > 0 ? 10 : -lh - 10) : ay - lh / 2;
     tr.lb.style.opacity = lo.toFixed(3); tr.lb.style.transform = `translate(${lx.toFixed(1)}px,${(ly + (1 - lo) * 8).toFixed(1)}px)`;
   });
-  cEnd.style.opacity = seg(p, .86, .93).toFixed(3); cEnd.style.transform = `translateY(${((1 - seg(p, .86, .95)) * 30).toFixed(1)}px)`;
+  cEnd.style.opacity = seg(p, .7, .78).toFixed(3); cEnd.style.transform = `translateY(${((1 - seg(p, .7, .8)) * 30).toFixed(1)}px)`;
 }
 
 /* ================= RADAR ================= */
