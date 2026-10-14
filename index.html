@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Skoreklam – světelná reklama, 3D písmena a loga, světelné boxy, LED lišty, rámy, textilie a konstrukce. Navrhneme, vytiskneme, rozsvítíme.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2746%27 fill=%27%233358a2%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2752%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27 font-weight=%27700%27%3ES%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<title>Skoreklam Světelná reklama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Onest:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Yellowtail&display=swap">
+<style>
+/* layout: classic light company site in a 1200px frame (structure of the original skoreklam.cz), one dark hero card where light signs switch on, service tiles that light up on hover, gallery where the top bar collapses into a left rail */
+:root{
+  --bg:#f6f7f9; --paper:#ffffff; --ink:#0f1726; --ink-2:#2b3546; --mute:#5f6b7e; --dim:#8a94a6;
+  --line:rgba(15,23,38,.09); --line-2:rgba(15,23,38,.16);
+  --navy:#3358a2; --navy-2:#1e3570; --blue:#84b2e3; --sodium:#ffb35c; --night:#0b0f1a;
+  --lg-sko:#3358a2; --lg-rek:#84b2e3; --lg-sub:#231f20; --lg-arc:#231f20;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-sign:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --f-script:"Yellowtail","Brush Script MT",cursive;
+  --rail:252px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);overflow-x:clip;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--navy);outline-offset:3px;border-radius:6px}
+::selection{background:var(--blue);color:var(--navy-2)}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:clamp(16px,4vw,32px)}
+.mono{font:500 11px/1.4 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--mute)}
+.logo{display:block;height:34px;width:calc(34px * 146 / 49)}
+h1,h2,h3{margin:0;color:var(--ink);text-wrap:balance}
+h2{font:700 clamp(32px,4vw,48px)/1.08 var(--f-body);letter-spacing:-.025em}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.eyebrow::before{content:"";width:18px;height:2px;border-radius:2px;background:var(--sodium)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:48px;padding:0 22px;border-radius:12px;border:1px solid transparent;font:600 15px var(--f-body);text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s,box-shadow .2s,transform .2s}
+.btn-navy{background:var(--navy);color:#fff;box-shadow:0 10px 26px -12px rgba(51,88,162,.8)}
+.btn-navy:hover{background:var(--navy-2);transform:translateY(-1px)}
+.btn-line{background:var(--paper);border-color:var(--line-2);color:var(--ink)}
+.btn-line:hover{border-color:var(--navy)}
+.btn-sm{height:38px;padding:0 14px;font-size:14px;border-radius:10px}
+
+/* ---------- header / rail ---------- */
+.nav{position:fixed;z-index:60;top:calc(env(safe-area-inset-top,0px) + 12px);left:12px;width:calc(100% - 24px);height:66px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);box-shadow:0 12px 30px -20px rgba(15,23,38,.35);overflow:hidden;
+  transition:width .6s cubic-bezier(.7,0,.2,1) .4s,height .5s cubic-bezier(.7,0,.2,1) 0s}
+.nav.side{width:var(--rail);height:calc(100svh - 24px - env(safe-area-inset-top,0px));
+  transition:width .6s cubic-bezier(.7,0,.2,1) 0s,height .7s cubic-bezier(.7,0,.2,1) .45s}
+.nav-top{display:flex;align-items:center;gap:28px;height:64px;padding:0 10px 0 18px;width:calc(100vw - 26px);max-width:none}
+.nav-links{display:flex;gap:26px;transition:opacity .3s}
+.nav-links a{text-decoration:none;font-size:15px;font-weight:500;color:var(--ink-2);transition:color .2s}
+.nav-links a:hover{color:var(--navy)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:16px;transition:opacity .3s}
+.nav-phone{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;text-decoration:none}
+.nav-phone b{font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.nav-phone span{font:400 11px var(--f-body);color:var(--mute)}
+.nav.side .nav-links,.nav.side .nav-right{opacity:0;pointer-events:none}
+.side-body{position:absolute;top:76px;left:0;bottom:0;width:var(--rail);padding:6px 18px 18px;display:flex;flex-direction:column;gap:18px;opacity:0;pointer-events:none;transition:opacity .25s}
+.nav.side .side-body{opacity:1;pointer-events:auto;transition:opacity .5s 1s}
+.side-body h2{font-size:30px}
+.filters{display:flex;flex-direction:column;gap:2px}
+.filt{all:unset;box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;cursor:pointer;font-size:14.5px;color:var(--ink-2);transition:background .2s,color .2s}
+.filt small{font:500 11px var(--f-mono);color:var(--dim);font-variant-numeric:tabular-nums}
+.filt:hover{background:rgba(51,88,162,.06)}
+.filt[aria-pressed="true"]{background:var(--navy);color:#fff}
+.filt[aria-pressed="true"] small{color:var(--blue)}
+.filt:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+.side-foot{margin-top:auto;display:grid;gap:12px;font-size:13.5px;color:var(--mute)}
+.side-foot b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+@media (max-width:980px){.nav-links{display:none}}
+@media (max-width:900px){
+  .nav.side{width:calc(100% - 24px);height:122px}
+  .side-body{top:64px;width:100%;flex-direction:row;align-items:center;padding:0 12px 10px}
+  .side-body>div:first-child,.side-foot{display:none}
+  .filters{flex-direction:row;overflow-x:auto;gap:6px;scrollbar-width:none}
+  .filt{white-space:nowrap;border:1px solid var(--line-2);padding:7px 11px}
+}
+@media (max-width:560px){.nav-phone{display:none}}
+
+/* ---------- hero: interactive isometric mall ---------- */
+.hero{position:relative;height:100vh;height:100svh;min-height:660px;background:#070a14;overflow:hidden;color:#eef1f6}
+#city{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
+.hero.hov #city{cursor:pointer}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(6,9,18,.82) 0%,rgba(6,9,18,.55) 30%,rgba(6,9,18,0) 52%)}
+.hero-copy{position:absolute;z-index:2;left:max(16px,calc((100vw - 1200px) / 2 + 32px));top:calc(env(safe-area-inset-top,0px) + 132px);max-width:min(500px,40vw);pointer-events:none}
+.hero-copy>*{pointer-events:auto}
+.hero .eyebrow{color:#ffcf96}
+.hero h1{font:800 clamp(44px,5.4vw,80px)/.98 var(--f-body);letter-spacing:-.04em;margin:18px 0 20px;color:#fff;text-wrap:balance}
+.hero h1 .glow{color:#ffcf96;white-space:nowrap;text-shadow:0 0 8px rgba(255,190,120,.7),0 0 34px rgba(255,170,90,.55)}
+.hero .lede{margin:0;max-width:40ch;font-size:clamp(15px,1.25vw,18px);color:#c9d0dc}
+.hero .lede b{color:#fff;font-weight:600}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn-sodium{background:var(--sodium);color:#1b1206;box-shadow:0 0 0 1px rgba(255,220,170,.5) inset,0 10px 34px -10px rgba(255,179,92,.9)}
+.btn-sodium:hover{background:#ffc47d;transform:translateY(-1px)}
+.btn-glass{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.btn-glass:hover{border-color:rgba(255,200,140,.6)}
+.btn-glass[aria-pressed="true"]{border-color:rgba(255,200,140,.7);color:#ffcf96}
+.hero-ui{position:absolute;z-index:2;left:max(16px,calc((100vw - 1200px) / 2 + 32px));bottom:calc(env(safe-area-inset-bottom,0px) + 26px);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:10px;height:38px;padding:0 14px;border-radius:99px;background:rgba(8,11,20,.7);border:1px solid rgba(255,255,255,.14);font:500 12px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:#c9d0dc;font-variant-numeric:tabular-nums;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.pill i{display:flex;gap:3px}
+.pill i b{width:6px;height:6px;border-radius:50%;background:#2c3446;transition:background .3s,box-shadow .3s}
+.pill i b.on{background:var(--sodium);box-shadow:0 0 8px var(--sodium)}
+.hcard{position:absolute;z-index:3;width:min(300px,calc(100% - 32px));padding:16px 16px 14px;border-radius:16px;background:rgba(10,13,22,.9);border:1px solid rgba(255,200,140,.28);box-shadow:0 30px 60px -20px #000;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:pop .35s cubic-bezier(.2,1.2,.4,1)}
+@keyframes pop{from{transform:translateY(8px) scale(.96);opacity:0}}
+.hcard small{display:block;font:500 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--sodium)}
+.hcard h3{margin:6px 0 6px;color:#fff;font:700 20px/1.2 var(--f-body)}
+.hcard p{margin:0;font-size:14px;line-height:1.5;color:#b9c1ce}
+.hcard .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hcard .cx{all:unset;position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;cursor:pointer;color:#c9d0dc}
+.hcard .cx:hover{background:rgba(255,255,255,.08)}
+.hcard .cx:focus-visible{outline:2px solid #ffcf96}
+.htip{position:absolute;z-index:3;left:0;top:0;padding:6px 10px;border-radius:8px;background:rgba(8,11,20,.88);border:1px solid rgba(255,255,255,.14);font-size:12.5px;color:#fff;white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,-150%);transition:opacity .15s}
+.htip.on{opacity:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sr:focus-within{width:auto;height:auto;clip:auto;left:16px;top:96px;z-index:5;display:flex;gap:6px;flex-wrap:wrap;background:rgba(8,11,20,.9);padding:8px;border-radius:12px}
+.sr button{font:500 13px var(--f-body);color:#fff;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 10px}
+@media (max-width:760px){
+  .hero{min-height:720px}
+  .hero::after{background:linear-gradient(180deg,rgba(6,9,18,.85) 0%,rgba(6,9,18,.6) 38%,rgba(6,9,18,0) 58%)}
+  .hero-copy{top:calc(env(safe-area-inset-top,0px) + 100px);max-width:none;right:16px}
+  .hero h1{font-size:clamp(38px,11vw,52px)}
+  .hero-cta{margin-top:20px}
+  .hero-cta .btn{height:44px;padding:0 16px}
+  .hero-ui{left:16px;right:16px;bottom:14px;gap:8px}
+}
+
+/* ---------- services ---------- */
+.sec{padding-block:clamp(70px,9vw,120px)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px 48px;align-items:end;margin-bottom:40px}
+.sec-head h2{margin-top:14px}
+.sec-head p{margin:0;color:var(--mute);max-width:46ch}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr}}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1060px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.tiles{grid-template-columns:1fr}}
+.tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:12px 12px 18px;cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s;min-width:0}
+.tile:hover,.tile:focus-visible{transform:translateY(-4px);box-shadow:0 26px 50px -30px rgba(15,23,38,.55);border-color:rgba(51,88,162,.25)}
+.tile:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+.ill{position:relative;aspect-ratio:16/9;border-radius:12px;background:#0b0f1a;overflow:hidden}
+.ill img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.6) saturate(.75);transform:scale(1.02);transition:filter .55s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.ill::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 80% at 50% 60%,var(--g),transparent 70%);mix-blend-mode:screen;opacity:0;transition:opacity .55s;pointer-events:none}
+.tile:hover .ill img,.tile:focus-visible .ill img{filter:brightness(1.05) saturate(1.1);transform:scale(1.07)}
+.tile:hover .ill::after,.tile:focus-visible .ill::after{opacity:.18}
+@media (hover:none){.ill img{filter:none}}
+.tile .k{margin:16px 6px 0;font:500 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.tile h3{margin:6px 6px 0;font:700 19px/1.2 var(--f-body);letter-spacing:-.01em}
+.tile p{margin:8px 6px 0;font-size:14.5px;line-height:1.5;color:var(--mute)}
+.tile .more{margin:14px 6px 0;font-size:14px;font-weight:600;color:var(--navy);display:inline-flex;gap:6px;align-items:center}
+.tile .more i{transition:transform .3s}
+.tile:hover .more i{transform:translateX(4px)}
+
+/* ---------- process ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;counter-reset:s}
+.step{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px 22px 24px}
+.step .n{font:800 46px/1 var(--f-sign);color:var(--navy);letter-spacing:.01em}
+.step h3{margin:14px 0 8px;font:700 19px/1.2 var(--f-body)}
+.step p{margin:0;font-size:14.5px;color:var(--mute)}
+.step:not(:last-child)::after{content:"";position:absolute;top:44px;right:-13px;width:10px;height:10px;border-top:2px solid var(--line-2);border-right:2px solid var(--line-2);transform:rotate(45deg);z-index:1}
+@media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.step::after{display:none}}
+@media (max-width:460px){.steps{grid-template-columns:1fr}}
+
+/* ---------- statement ---------- */
+.band{background:var(--night);color:#eef1f6;border-radius:28px;margin-inline:12px;padding:clamp(56px,8vw,100px) 0;position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;inset:-20%;background:radial-gradient(40% 50% at 20% 30%,rgba(255,179,92,.18),transparent 70%),radial-gradient(40% 50% at 85% 70%,rgba(132,178,227,.2),transparent 70%)}
+.band .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr);gap:32px;align-items:end}
+.band blockquote{margin:0;font:600 clamp(28px,3.6vw,46px)/1.18 var(--f-body);letter-spacing:-.02em;text-wrap:balance}
+.band blockquote em{font-style:normal;color:var(--sodium)}
+.band .who{display:flex;gap:14px;align-items:center}
+.band .ava{width:52px;height:52px;border-radius:14px;background:var(--navy);display:grid;place-items:center;font-weight:700}
+.band .who b{display:block;font-weight:600}
+.band .who span{font-size:14px;color:#a9b2c1}
+@media (max-width:860px){.band .wrap{grid-template-columns:1fr}}
+
+/* ---------- gallery ---------- */
+.gal{padding:110px clamp(16px,3vw,32px) 100px calc(var(--rail) + 36px);min-height:100vh}
+.gal-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px 32px;margin-bottom:26px}
+.gal-head p{margin:0;max-width:42ch;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,44vw),1fr));grid-auto-rows:10px;gap:12px;grid-auto-flow:dense;perspective:1100px}
+.ph{all:unset;box-sizing:border-box;position:relative;display:block;border-radius:14px;overflow:hidden;cursor:zoom-in;background:var(--night);transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .35s,filter .35s,box-shadow .35s;will-change:transform}
+.ph.out{opacity:0;transform:scale(.9)}
+.grid:hover .ph:not(:hover){opacity:.7;filter:grayscale(.7) brightness(.7)}
+.ph:hover{box-shadow:0 30px 60px -26px rgba(15,23,38,.7);z-index:2}
+.ph:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+.ph img,.ph .art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0b0f1a;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.ph:hover img,.ph:hover .art{transform:scale(1.06)}
+.art{display:grid;place-items:center;background:radial-gradient(70% 60% at var(--px) var(--py),hsla(var(--h),95%,62%,.55),transparent 62%),linear-gradient(160deg,#141b2b,#06080e)}
+.art b{font:800 clamp(22px,2.4vw,36px)/1 var(--f-sign);text-transform:uppercase;letter-spacing:.02em;color:hsl(var(--h),100%,92%);text-shadow:0 0 6px hsl(var(--h),100%,70%),0 0 24px hsla(var(--h),100%,60%,.8);padding:0 10px;text-align:center}
+.art b.script{font:400 clamp(26px,3vw,40px)/1 var(--f-script);text-transform:none}
+.glare{position:absolute;inset:0;background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),rgba(255,240,220,.3),transparent 60%);opacity:0;transition:opacity .3s;mix-blend-mode:screen;pointer-events:none}
+.ph:hover .glare{opacity:1}
+.ph::before{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(transparent,rgba(5,7,12,.72));z-index:1;pointer-events:none}
+.cap{position:absolute;z-index:2;left:10px;right:10px;bottom:9px;display:flex;justify-content:space-between;gap:8px;font:500 10px var(--f-mono);letter-spacing:.05em;color:rgba(255,255,255,.85);text-transform:uppercase;pointer-events:none}
+.cap span:last-child{color:rgba(255,255,255,.45)}
+@media (max-width:900px){.gal{padding:156px 16px 80px}}
+.lb{position:fixed;inset:0;z-index:90;background:rgba(6,8,14,.94);display:grid;grid-template-rows:1fr auto;padding:calc(env(safe-area-inset-top,0px) + 64px) 16px calc(env(safe-area-inset-bottom,0px) + 18px);opacity:0;pointer-events:none;transition:opacity .3s;color:#fff}
+.lb.open{opacity:1;pointer-events:auto}
+.lb-stage{position:relative;display:grid;place-items:center;min-height:0}
+.lb-frame{position:relative;width:min(1100px,100%);height:100%;max-height:78vh;border-radius:16px;overflow:hidden}
+.lb-frame img,.lb-frame .art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.lb-frame .art b{font-size:clamp(40px,8vw,110px)}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:1100px;width:100%;margin:14px auto 0;flex-wrap:wrap}
+.lb-bar small{display:block;font:500 10.5px var(--f-mono);color:var(--sodium);letter-spacing:.07em;text-transform:uppercase}
+.lb .btn-line{background:transparent;color:#fff;border-color:rgba(255,255,255,.25)}
+.x{all:unset;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;cursor:pointer;border:1px solid rgba(255,255,255,.25);position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:16px}
+.x:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* ---------- contact ---------- */
+.ask-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px}
+.form{padding:24px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.field input,.field select,.field textarea{font:400 15px var(--f-body);color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;width:100%;min-width:0}
+.field textarea{min-height:110px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(51,88,162,.12);background:#fff}
+.form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.form-foot .note{font-size:13.5px;color:var(--mute)}
+.out{grid-column:1/-1;border:1px solid rgba(40,150,95,.3);background:rgba(40,150,95,.06);border-radius:12px;padding:16px;display:grid;gap:12px}
+.out p{margin:0;font-size:14.5px}
+.out pre{margin:0;font:400 12.5px/1.6 var(--f-mono);white-space:pre-wrap;word-break:break-word;color:var(--ink-2)}
+.contact{padding:24px;display:grid;gap:4px}
+.contact .logo{height:46px;width:calc(46px * 146 / 49);margin-bottom:14px}
+.cline{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.cline span{display:block;font-size:13px;color:var(--mute)}
+.cline a{display:block;font-weight:600;font-size:19px;text-decoration:none;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.copy{all:unset;height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);font-size:12.5px;color:var(--mute);cursor:pointer}
+.copy:hover{color:var(--ink);border-color:var(--navy)}
+.copy:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+@media (max-width:900px){.ask-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.form{grid-template-columns:1fr}}
+.foot{border-top:1px solid var(--line);margin-top:40px}
+.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;padding-block:28px 40px}
+.foot nav{display:flex;gap:20px;flex-wrap:wrap}
+.foot nav a{color:var(--mute);text-decoration:none;font-size:14px}
+.foot nav a:hover{color:var(--navy)}
+
+.rv{animation:rise .8s cubic-bezier(.2,.8,.2,1) both;animation-play-state:paused}
+.rv.in{animation-play-state:running}
+@keyframes rise{from{transform:translateY(18px)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{animation:none}.nav,.nav.side,.tile,.ph{transition-duration:.01s!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<symbol id="skologo" viewBox="60 34 146 49"><g id="lgMark"><path style="fill:var(--lg-sko)" d="M 61.69 63.92 C 61.85 64.06 62.02 64.20 62.21 64.32 C 63.15 65.00 64.61 65.31 65.67 65.31 C 67.79 65.31 68.00 64.15 68.00 63.75 C 68.00 62.83 67.03 62.43 66.33 62.13 L 65.15 61.66 C 63.53 60.93 61.32 59.92 61.32 56.69 C 61.32 55.40 61.62 54.03 62.82 52.90 C 63.95 51.87 65.41 51.44 67.53 51.44 C 69.93 51.44 71.32 52.05 72.02 52.36 L 72.12 52.50 L 71.91 56.17 L 71.69 56.27 C 71.36 56.01 71.03 55.75 70.66 55.54 C 69.86 55.07 68.89 54.83 68.14 54.83 C 67.27 54.83 66.94 55.07 66.78 55.18 C 66.49 55.42 66.26 55.84 66.26 56.27 C 66.26 57.16 67.32 57.58 67.83 57.80 L 69.13 58.34 C 69.53 58.50 70.64 58.91 71.62 59.82 C 72.82 60.93 72.99 62.34 72.99 63.21 C 72.99 64.79 72.26 65.96 72.05 66.30 C 70.66 68.34 68.26 68.79 65.88 68.79 C 63.53 68.79 62.18 68.27 61.50 68.01 L 61.32 67.78 C 61.43 65.99 61.46 65.71 61.48 63.99ZM 61.69 63.92"/><path style="fill:var(--lg-sko)" d="M 80.40 59.87 C 80.42 61.05 80.47 62.25 80.47 63.42 C 80.52 66.01 80.52 66.20 80.66 68.32 L 80.52 68.44 C 78.5 68.41 77.86 68.41 75.69 68.51 L 75.53 68.37 C 75.60 65.78 75.65 64.17 75.65 61.64 C 75.65 56.19 75.53 54.36 75.37 51.96 L 75.51 51.82 C 77.53 51.84 78.14 51.84 80.45 51.75 L 80.59 51.87 L 80.42 59.14 L 83.35 53.96 L 84.48 51.91 L 84.64 51.82 L 89.82 51.75 L 89.96 51.91 C 87.16 55.58 86.62 56.43 85.09 58.81 L 88.15 64.44 C 89.51 66.79 89.66 67.05 90.38 68.11 L 90.31 68.32 L 84.90 68.53 L 84.69 68.44 C 83.93 66.79 83.82 66.53 82.87 64.60ZM 80.40 59.87"/><path style="fill:var(--lg-sko)" d="M 98.65 55 C 96.46 55 95.92 57.28 95.92 60.25 C 95.92 61.75 96.06 65.16 98.55 65.16 C 101.03 65.16 101.24 61.94 101.22 60.06 C 101.19 57.35 100.67 55 98.65 55 M 105.26 65.42 C 103.57 68.30 100.51 68.76 98.48 68.76 C 93.47 68.76 90.74 65.75 90.74 60.36 C 90.74 58.43 90.98 56.46 91.96 54.81 C 92.98 53.11 94.83 51.44 98.55 51.44 C 100.06 51.44 102.39 51.75 104 53.25 C 105.26 54.48 106.30 56.34 106.39 59.92 C 106.42 61.21 106.30 63.66 105.26 65.42"/><path style="fill:var(--lg-arc)" d="M 83.00 35.25 C 89.86 35.44 96.73 37.53 102.23 41.70 C 104.97 43.77 107.36 46.37 109.02 49.42 C 110.69 52.46 111.60 55.94 111.50 59.39 C 111.41 62.85 110.33 66.23 108.55 69.09 C 106.77 71.97 104.33 74.35 101.60 76.20 C 96.10 79.92 89.46 81.52 83.00 81.35 C 82.91 81.35 82.83 81.27 82.83 81.18 C 82.83 81.08 82.91 81.01 83.00 81.01 C 86.20 80.91 89.38 80.37 92.40 79.38 C 95.42 78.39 98.26 76.93 100.76 75.03 C 103.25 73.14 105.38 70.79 106.84 68.09 C 108.30 65.41 109.07 62.39 108.98 59.39 C 108.89 56.40 107.94 53.49 106.37 50.97 C 104.80 48.44 102.61 46.31 100.12 44.64 C 97.63 42.96 94.84 41.74 91.93 40.97 C 89.02 40.20 86.00 39.88 83.00 39.96 L 83.00 39.96 C 81.70 39.99 80.62 38.96 80.58 37.67 C 80.55 36.37 81.57 35.28 82.87 35.25 C 82.91 35.25 82.96 35.25 83.00 35.25"/></g><path style="fill:var(--lg-rek)" d="M 113.83 59.07 C 114.70 59.09 116.96 59.12 116.96 56.97 C 116.96 55.94 116.44 55.14 115.05 55.14 C 114.77 55.14 114.16 55.16 113.88 55.16ZM 113.83 62.29 C 113.83 65.12 113.85 65.73 114 68.30 L 113.85 68.44 L 109.01 68.51 L 108.89 68.37 C 108.94 65.33 109.01 62.29 109.01 59.26 C 109.01 55.49 108.91 54.12 108.75 51.94 L 108.87 51.82 L 113.10 51.82 L 114.33 51.80 C 116.66 51.75 118.80 51.73 120.16 52.78 C 120.78 53.25 121.81 54.48 121.81 56.57 C 121.81 57.70 121.53 58.53 121.27 59.07 C 120.64 60.41 119.72 60.83 118.94 61.19 L 121.08 65.35 L 122.68 68.11 L 122.59 68.32 L 117.62 68.53 L 117.36 68.34 L 116.09 65.38 L 114.61 62.27ZM 113.83 62.29"/><path style="fill:var(--lg-rek)" d="M 129.69 61.56 L 129.69 64.81 C 131.53 64.81 133.25 64.76 135.67 64.67 L 135.82 64.81 L 135.58 68.30 L 135.37 68.44 C 132.14 68.44 131.60 68.41 130.90 68.41 C 128.31 68.41 126.96 68.46 124.73 68.51 L 124.61 68.34 C 124.68 65.64 124.71 64.17 124.71 60.98 C 124.71 55.33 124.66 54.36 124.54 51.96 L 124.68 51.82 L 135.28 51.82 L 135.39 51.91 L 135.23 55.16 L 135.08 55.28 L 129.65 55.28 L 129.65 58.27 L 134.80 58.17 L 134.94 58.34 L 134.76 61.42 L 134.59 61.56ZM 129.69 61.56"/><path style="fill:var(--lg-rek)" d="M 143.21 59.87 C 143.23 61.05 143.28 62.25 143.28 63.42 C 143.32 66.01 143.32 66.20 143.47 68.32 L 143.32 68.44 C 141.30 68.41 140.66 68.41 138.50 68.51 L 138.33 68.37 C 138.41 65.78 138.45 64.17 138.45 61.64 C 138.45 56.19 138.33 54.36 138.17 51.96 L 138.31 51.82 C 140.33 51.84 140.95 51.84 143.25 51.75 L 143.39 51.87 L 143.23 59.14 L 146.15 53.96 L 147.28 51.91 L 147.44 51.82 L 152.62 51.75 L 152.76 51.91 C 149.96 55.58 149.42 56.43 147.89 58.81 L 150.95 64.44 C 152.32 66.79 152.46 67.05 153.19 68.11 L 153.12 68.32 L 147.70 68.53 L 147.49 68.44 C 146.74 66.79 146.62 66.53 145.68 64.60ZM 143.21 59.87"/><path style="fill:var(--lg-rek)" d="M 160.41 51.84 C 160.39 52.43 160.34 53.04 160.32 53.63 C 160.25 55.61 160.23 62.48 160.20 64.76 C 163.12 64.74 163.66 64.72 166.04 64.62 L 166.16 64.76 L 165.92 68.30 L 165.80 68.44 C 160.76 68.39 159.47 68.41 155.26 68.51 L 155.14 68.37 C 155.16 66.81 155.16 66.25 155.16 65.35 C 155.16 63.35 155.14 61.35 155.12 59.35 C 155.12 54.81 155.12 54.31 155.05 51.91 L 155.19 51.80 L 160.25 51.75ZM 160.41 51.84"/><path style="fill:var(--lg-rek)" d="M 176.32 61.00 L 175.74 58.50 L 174.96 54.95 C 174.68 56.19 174.53 56.74 174.02 58.62 L 173.41 61.00ZM 172.53 64.39 L 171.62 68.34 L 171.45 68.44 L 167.12 68.44 L 167.00 68.27 L 172.14 51.94 L 172.28 51.82 L 178.25 51.75 L 178.42 51.87 L 183.20 68.25 L 183.03 68.44 L 180.61 68.44 C 179.81 68.44 179.01 68.48 178.18 68.51 L 178.02 68.39 L 177.12 64.39ZM 172.53 64.39"/><path style="fill:var(--lg-rek)" d="M 194.28 61.89 C 194.45 61.26 194.59 60.62 194.76 59.96 C 195.18 58.29 195.67 56.62 196.12 54.95 C 196.38 53.94 196.64 52.92 196.87 51.91 L 197.04 51.82 L 203.42 51.75 L 203.56 51.89 C 203.63 54.74 203.68 55.98 203.89 59.89 C 204.03 62.69 204.19 65.5 204.33 68.30 L 204.19 68.44 C 202.26 68.41 201.58 68.44 199.58 68.51 L 199.46 68.37 L 199.28 59.16 L 199.28 55.63 L 198.41 58.83 L 198.03 60.27 L 195.89 68.30 L 195.70 68.44 C 194.14 68.41 193.72 68.41 192.02 68.51 L 191.86 68.37 C 190.92 64.69 190.68 63.78 189.93 60.95 L 189.55 59.56 L 188.45 55.49 L 188.35 58.83 C 188.30 60.83 188.26 62.83 188.26 64.83 C 188.26 66.06 188.28 67.05 188.30 68.30 L 188.14 68.44 L 184.21 68.51 L 184.09 68.37 C 184.56 61.78 184.66 59.77 184.87 51.94 L 185.01 51.82 L 188.19 51.82 C 189.32 51.80 190.42 51.77 191.53 51.75 L 191.67 51.82ZM 194.28 61.89"/><path style="fill:var(--lg-sub)" d="M 111.55 73.45 C 111.70 73.32 111.78 73.13 111.78 72.93 C 111.78 72.80 111.75 72.64 111.66 72.50 C 111.47 72.20 111.13 72.18 110.67 72.18 C 110.59 72.18 110.48 72.18 110.27 72.19 C 110.26 72.91 110.26 73.00 110.27 73.69 C 110.74 73.69 111.25 73.71 111.55 73.45 M 110.29 76.05 C 109.93 76.05 109.93 76.05 109.61 76.07 L 109.57 76.02 C 109.59 75.42 109.59 74.82 109.59 74.22 C 109.59 72.83 109.57 72.35 109.53 71.73 L 109.57 71.69 L 109.73 71.69 C 109.83 71.69 110.14 71.68 110.35 71.68 L 110.73 71.67 C 111.07 71.67 111.39 71.67 111.69 71.78 C 112.17 71.94 112.47 72.28 112.47 72.87 C 112.47 73.37 112.21 73.87 111.42 74.08 C 111.52 74.23 112.00 74.93 112.11 75.09 C 112.30 75.36 112.39 75.49 112.78 75.99 L 112.75 76.05 C 112.63 76.05 112.50 76.05 112.37 76.06 C 112.25 76.07 112.11 76.07 111.98 76.08 L 111.94 76.05 C 111.92 76.01 111.89 75.97 111.87 75.92 C 111.69 75.61 111.48 75.31 111.28 75.01 C 110.91 74.45 110.87 74.39 110.73 74.19 C 110.53 74.19 110.5 74.20 110.28 74.19 C 110.28 74.53 110.29 75.49 110.32 76.00ZM 110.29 76.05"/><path style="fill:var(--lg-sub)" d="M 118.17 75.54 C 118.16 75.75 118.16 75.80 118.14 76.00 L 118.10 76.05 C 116.90 76.05 116.71 76.05 115.53 76.07 L 115.50 76.02 C 115.52 75.53 115.54 75.20 115.54 74.07 C 115.54 73.03 115.54 72.44 115.5 71.73 L 115.53 71.69 C 116.75 71.68 116.99 71.68 118.12 71.67 L 118.16 71.71 C 118.14 71.90 118.13 71.97 118.12 72.19 L 118.08 72.24 C 117.28 72.21 117.02 72.21 116.24 72.21 C 116.22 72.78 116.22 72.95 116.22 73.52 C 116.98 73.53 117.21 73.52 117.96 73.51 L 118 73.55 C 117.97 73.77 117.97 73.83 117.96 74.03 L 117.93 74.07 C 117.21 74.05 117.06 74.05 116.22 74.05 C 116.20 74.77 116.21 74.94 116.22 75.53 C 117.15 75.53 117.34 75.53 118.14 75.50ZM 118.17 75.54"/><path style="fill:var(--lg-sub)" d="M 123.99 71.72 C 123.60 72.17 122.89 73.02 122.40 73.64 C 122.98 74.44 123.58 75.21 124.21 75.98 L 124.18 76.05 C 123.81 76.05 123.78 76.05 123.38 76.07 L 123.33 76.03 C 122.99 75.53 121.82 73.98 121.66 73.78 C 121.66 74.09 121.66 75.25 121.71 76.00 L 121.67 76.05 C 121.32 76.05 121.31 76.05 120.98 76.07 L 120.96 76.02 C 120.98 75.34 120.98 75.21 120.98 73.50 C 120.98 72.58 120.97 72.22 120.93 71.73 L 120.97 71.69 C 121.30 71.68 121.35 71.68 121.66 71.67 L 121.69 71.71 C 121.66 72.66 121.66 72.85 121.66 73.68 C 121.71 73.63 121.76 73.57 121.81 73.50 C 121.84 73.47 122.92 72.13 123.20 71.73 L 123.25 71.69 C 123.59 71.69 123.62 71.68 123.95 71.67ZM 123.99 71.72"/><path style="fill:var(--lg-sub)" d="M 129.23 75.53 C 129.21 75.73 129.21 75.82 129.19 76.00 L 129.16 76.05 C 128.07 76.05 127.97 76.05 126.81 76.07 L 126.77 76.02 C 126.79 75.52 126.80 74.78 126.80 73.70 C 126.80 72.75 126.79 72.23 126.76 71.73 L 126.80 71.69 C 127.13 71.68 127.19 71.68 127.51 71.67 L 127.55 71.71 C 127.48 72.86 127.48 74.34 127.48 74.49 C 127.48 74.97 127.49 75.22 127.50 75.51 C 128.18 75.51 128.37 75.50 129.19 75.48ZM 129.23 75.53"/><path style="fill:var(--lg-sub)" d="M 132.71 74.22 C 132.91 74.22 133.10 74.23 133.30 74.23 C 133.51 74.23 133.73 74.22 133.95 74.22 L 133.36 72.13ZM 133.93 71.82 C 134.14 72.5 134.37 73.26 134.56 73.85 C 134.75 74.44 135.06 75.39 135.24 75.99 L 135.22 76.03 C 134.90 76.04 134.76 76.05 134.50 76.06 L 134.46 76.02 C 134.30 75.44 134.25 75.27 134.09 74.71 C 133.85 74.71 133.60 74.71 133.36 74.71 C 133.09 74.71 132.80 74.71 132.56 74.71 C 132.38 75.29 132.34 75.44 132.19 75.99 L 132.15 76.03 C 131.88 76.03 131.82 76.03 131.51 76.05 L 131.49 76.01 C 131.51 75.94 131.53 75.88 131.55 75.82 C 131.79 75.15 132.02 74.49 132.24 73.82 C 132.61 72.73 132.75 72.32 132.92 71.73 L 132.98 71.69 C 133.41 71.68 133.46 71.68 133.86 71.66 L 133.90 71.71ZM 133.93 71.82"/><path style="fill:var(--lg-sub)" d="M 142.06 71.71 C 142.09 73.14 142.14 74.57 142.22 76.00 L 142.19 76.05 C 141.88 76.05 141.84 76.05 141.52 76.07 L 141.49 76.02 C 141.49 75.32 141.49 75.11 141.47 74.43 L 141.46 73.78 C 141.46 73.33 141.45 72.39 141.45 72.16 C 141.35 72.51 141.26 72.84 141.00 73.71 L 140.71 74.60 C 140.49 75.29 140.41 75.53 140.27 76.00 L 140.23 76.05 C 139.90 76.05 139.87 76.05 139.52 76.07 L 139.48 76.02 C 139.45 75.92 139.42 75.82 139.39 75.71 C 139.34 75.52 139.07 74.60 139.00 74.40 L 138.76 73.53 C 138.51 72.65 138.49 72.55 138.40 72.16 C 138.39 72.78 138.39 72.91 138.37 73.53 L 138.32 74.63 C 138.30 75.36 138.30 75.52 138.29 76.00 L 138.26 76.05 C 137.97 76.05 137.93 76.05 137.67 76.07 L 137.64 76.02 C 137.65 75.90 137.66 75.77 137.68 75.65 C 137.74 74.91 137.76 74.17 137.80 73.44 C 137.87 72.34 137.87 72.28 137.87 71.73 L 137.91 71.69 C 138.36 71.69 138.47 71.68 138.86 71.67 L 138.91 71.71 C 139.02 72.21 139.12 72.57 139.25 72.98 L 139.92 75.48 L 140.70 72.91 C 140.95 72.10 140.96 72.07 141.05 71.73 L 141.09 71.69 C 141.54 71.69 141.60 71.68 142.02 71.67ZM 142.06 71.71"/><path style="fill:var(--lg-sub)" d="M 148.74 76.00 L 148.71 76.05 C 148.34 76.05 148.32 76.05 147.94 76.07 L 147.90 76.02 C 147.53 75.37 147.17 74.73 146.80 74.08 L 145.82 72.33 L 145.89 74.45 C 145.89 74.71 145.90 74.97 145.91 75.23 C 145.93 75.74 145.93 75.75 145.94 76.00 L 145.90 76.05 C 145.63 76.05 145.60 76.05 145.31 76.07 L 145.27 76.02 C 145.30 75.44 145.30 74.84 145.30 74.26 C 145.30 73.42 145.30 72.57 145.27 71.73 L 145.30 71.69 C 145.68 71.68 145.74 71.68 146.09 71.67 L 146.16 71.71 C 146.58 72.46 147.01 73.25 147.41 73.97 L 148.18 75.32 L 148.13 73.27 C 148.11 72.30 148.10 72.16 148.08 71.73 L 148.11 71.69 C 148.39 71.69 148.45 71.68 148.70 71.67 L 148.74 71.71 C 148.72 72.46 148.71 73.24 148.71 74.00 C 148.71 74.58 148.72 75.16 148.73 75.75ZM 148.74 76.00"/><path style="fill:var(--lg-sub)" d="M 152.62 71.71 C 152.60 72.13 152.59 72.61 152.59 73.67 C 152.59 74.86 152.60 75.37 152.64 76.00 L 152.60 76.05 C 152.33 76.05 152.25 76.05 151.92 76.07 L 151.88 76.02 C 151.89 75.65 151.91 75.32 151.91 74.52 C 151.91 73.59 151.91 72.66 151.86 71.74 L 151.89 71.69 C 152.17 71.69 152.26 71.69 152.58 71.67ZM 153.04 70.73 C 152.74 71.03 152.68 71.10 152.41 71.44 L 152.34 71.46 C 152.17 71.45 152.10 71.45 151.89 71.45 L 151.86 71.42 C 151.92 71.31 152.10 71.01 152.24 70.71 L 152.28 70.69 L 152.99 70.69ZM 153.04 70.73"/><path style="fill:var(--lg-sub)" d="M 160.30 74.22 C 160.5 74.22 160.69 74.23 160.89 74.23 C 161.10 74.23 161.32 74.22 161.54 74.22 L 160.95 72.13ZM 161.52 71.82 C 161.73 72.5 161.96 73.26 162.14 73.85 C 162.33 74.44 162.64 75.39 162.83 75.99 L 162.81 76.03 C 162.48 76.04 162.35 76.05 162.09 76.06 L 162.05 76.02 C 161.89 75.44 161.84 75.27 161.68 74.71 C 161.44 74.71 161.19 74.71 160.95 74.71 C 160.67 74.71 160.39 74.71 160.14 74.71 C 159.96 75.29 159.93 75.44 159.78 75.99 L 159.74 76.03 C 159.47 76.03 159.41 76.03 159.10 76.05 L 159.08 76.01 C 159.09 75.94 159.12 75.88 159.14 75.82 C 159.38 75.15 159.61 74.49 159.83 73.82 C 160.20 72.73 160.33 72.32 160.51 71.73 L 160.57 71.69 C 161 71.68 161.05 71.68 161.45 71.66 L 161.49 71.71ZM 161.52 71.82"/><path style="fill:var(--lg-sub)" d="M 168.72 73.94 C 168.69 74.43 168.69 74.92 168.69 75.29 C 168.69 75.55 168.69 75.66 168.70 75.84 L 168.66 75.89 C 168.23 76.06 167.82 76.14 167.35 76.14 C 166.75 76.14 166.08 75.99 165.62 75.50 C 165.32 75.17 165.08 74.63 165.08 73.92 C 165.08 73.21 165.32 72.63 165.67 72.25 C 166.22 71.63 166.94 71.60 167.27 71.60 C 167.94 71.60 168.36 71.78 168.53 71.86 L 168.57 71.91 C 168.53 72.12 168.52 72.22 168.5 72.50 L 168.45 72.51 C 168.25 72.39 167.89 72.14 167.31 72.14 C 167.09 72.14 166.55 72.17 166.17 72.69 C 165.86 73.11 165.83 73.64 165.83 73.92 C 165.83 74.94 166.36 75.60 167.35 75.60 C 167.66 75.60 167.85 75.54 167.99 75.50 L 168 75.03 C 168 74.56 167.97 74.19 167.96 73.96 L 168 73.92 C 168.33 73.92 168.40 73.92 168.69 73.91ZM 168.72 73.94"/><path style="fill:var(--lg-sub)" d="M 174.26 75.54 C 174.24 75.75 174.24 75.80 174.23 76.00 L 174.18 76.05 C 172.98 76.05 172.79 76.05 171.62 76.07 L 171.58 76.02 C 171.60 75.53 171.62 75.20 171.62 74.07 C 171.62 73.03 171.62 72.44 171.58 71.73 L 171.62 71.69 C 172.83 71.68 173.07 71.68 174.21 71.67 L 174.25 71.71 C 174.23 71.90 174.21 71.97 174.20 72.19 L 174.16 72.24 C 173.37 72.21 173.10 72.21 172.32 72.21 C 172.30 72.78 172.30 72.95 172.30 73.52 C 173.06 73.53 173.30 73.52 174.05 73.51 L 174.08 73.55 C 174.05 73.77 174.05 73.83 174.05 74.03 L 174.01 74.07 C 173.30 74.05 173.14 74.05 172.30 74.05 C 172.29 74.77 172.30 74.94 172.30 75.53 C 173.23 75.53 173.42 75.53 174.22 75.50ZM 174.26 75.54"/><path style="fill:var(--lg-sub)" d="M 180.49 76.00 L 180.46 76.05 C 180.10 76.05 180.07 76.05 179.70 76.07 L 179.65 76.02 C 179.28 75.37 178.92 74.73 178.55 74.08 L 177.57 72.33 L 177.64 74.45 C 177.64 74.71 177.66 74.97 177.66 75.23 C 177.68 75.74 177.68 75.75 177.69 76.00 L 177.66 76.05 C 177.39 76.05 177.36 76.05 177.06 76.07 L 177.03 76.02 C 177.05 75.44 177.06 74.84 177.06 74.26 C 177.06 73.42 177.05 72.57 177.02 71.73 L 177.05 71.69 C 177.43 71.68 177.5 71.68 177.85 71.67 L 177.91 71.71 C 178.33 72.46 178.76 73.25 179.17 73.97 L 179.93 75.32 L 179.89 73.27 C 179.86 72.30 179.85 72.16 179.83 71.73 L 179.87 71.69 C 180.14 71.69 180.21 71.68 180.45 71.67 L 180.49 71.71 C 180.48 72.46 180.46 73.24 180.46 74.00 C 180.46 74.58 180.47 75.16 180.48 75.75ZM 180.49 76.00"/><path style="fill:var(--lg-sub)" d="M 186.07 72.22 C 185.55 72.21 185.47 72.21 184.94 72.21 C 184.92 72.82 184.92 72.92 184.92 73.47 C 184.92 75.02 184.95 75.64 184.97 76.00 L 184.93 76.05 C 184.58 76.05 184.56 76.05 184.22 76.07 L 184.19 76.02 C 184.22 75.16 184.23 74.30 184.23 73.43 C 184.23 72.80 184.21 72.47 184.21 72.21 C 183.67 72.21 183.61 72.21 183.06 72.23 L 183.02 72.19 C 183.03 71.97 183.03 71.95 183.05 71.73 L 183.08 71.69 C 183.52 71.69 184.23 71.69 184.68 71.68 C 185.15 71.68 185.63 71.67 186.10 71.67 L 186.14 71.71 C 186.12 71.93 186.11 72 186.11 72.17ZM 186.07 72.22"/><path style="fill:var(--lg-sub)" d="M 192.01 71.71 C 192.00 72.28 191.99 72.42 191.99 72.91 C 191.99 73.17 191.99 73.37 192.00 73.83 L 192.00 74.39 C 192.00 74.76 192.00 75.29 191.64 75.68 C 191.35 76.00 190.87 76.14 190.37 76.14 C 189.58 76.14 189.18 75.82 189.02 75.64 C 188.69 75.26 188.69 74.89 188.69 74.16 L 188.69 73.53 C 188.69 72.64 188.69 72.53 188.67 71.73 L 188.71 71.69 C 189.05 71.68 189.10 71.68 189.41 71.67 L 189.43 71.71 C 189.41 72.35 189.41 73.47 189.41 74.07 C 189.41 74.69 189.42 75.07 189.64 75.32 C 189.75 75.45 189.98 75.62 190.41 75.62 C 190.57 75.62 191.05 75.61 191.29 75.15 C 191.42 74.89 191.42 74.54 191.42 74.06 C 191.42 73.34 191.42 72.44 191.37 71.73 L 191.41 71.69 C 191.69 71.68 191.73 71.68 191.97 71.67ZM 192.01 71.71"/><path style="fill:var(--lg-sub)" d="M 197.15 73.45 C 197.30 73.32 197.38 73.13 197.38 72.93 C 197.38 72.80 197.35 72.64 197.26 72.50 C 197.07 72.20 196.73 72.18 196.27 72.18 C 196.19 72.18 196.08 72.18 195.87 72.19 C 195.86 72.91 195.86 73.00 195.87 73.69 C 196.34 73.69 196.85 73.71 197.15 73.45 M 195.89 76.05 C 195.54 76.05 195.53 76.05 195.21 76.07 L 195.17 76.02 C 195.19 75.42 195.19 74.82 195.19 74.22 C 195.19 72.83 195.17 72.35 195.14 71.73 L 195.17 71.69 L 195.33 71.69 C 195.44 71.69 195.74 71.68 195.95 71.68 L 196.33 71.67 C 196.67 71.67 197 71.67 197.30 71.78 C 197.77 71.94 198.07 72.28 198.07 72.87 C 198.07 73.37 197.81 73.87 197.02 74.08 C 197.12 74.23 197.60 74.93 197.71 75.09 C 197.91 75.36 197.99 75.49 198.38 75.99 L 198.35 76.05 C 198.23 76.05 198.10 76.05 197.98 76.06 C 197.85 76.07 197.71 76.07 197.58 76.08 L 197.54 76.05 C 197.52 76.01 197.49 75.97 197.47 75.92 C 197.29 75.61 197.08 75.31 196.88 75.01 C 196.51 74.45 196.48 74.39 196.33 74.19 C 196.14 74.19 196.10 74.20 195.88 74.19 C 195.88 74.53 195.89 75.49 195.92 76.00ZM 195.89 76.05"/><path style="fill:var(--lg-sub)" d="M 201.86 74.22 C 202.06 74.22 202.26 74.23 202.46 74.23 C 202.66 74.23 202.89 74.22 203.10 74.22 L 202.51 72.13ZM 203.08 71.82 C 203.29 72.5 203.52 73.26 203.71 73.85 C 203.90 74.44 204.21 75.39 204.39 75.99 L 204.37 76.03 C 204.05 76.04 203.91 76.05 203.65 76.06 L 203.61 76.02 C 203.46 75.44 203.41 75.27 203.25 74.71 C 203.00 74.71 202.76 74.71 202.51 74.71 C 202.24 74.71 201.95 74.71 201.71 74.71 C 201.53 75.29 201.49 75.44 201.34 75.99 L 201.30 76.03 C 201.03 76.03 200.97 76.03 200.66 76.05 L 200.64 76.01 C 200.66 75.94 200.68 75.88 200.71 75.82 C 200.94 75.15 201.17 74.49 201.39 73.82 C 201.76 72.73 201.90 72.32 202.08 71.73 L 202.13 71.69 C 202.56 71.68 202.62 71.68 203.01 71.66 L 203.05 71.71ZM 203.08 71.82"/></symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="nav-top">
+    <a href="#top" aria-label="Skoreklam, na začátek"><svg class="logo" aria-hidden="true"><use href="#skologo" width="100%" height="100%"/></svg></a>
+    <nav class="nav-links" aria-label="Hlavní navigace">
+      <a href="#sluzby">Služby</a>
+      <a href="#postup">Jak to probíhá</a>
+      <a href="#realizace">Realizace</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-phone" href="tel:+420739377083"><b>+420 739 377 083</b><span>Jakub Skořepa</span></a>
+      <a class="btn btn-navy btn-sm" href="#kontakt">Poptávka</a>
+    </div>
+  </div>
+  <div class="side-body">
+    <div><span class="mono" id="galCount">20 realizací</span><h2>Realizace</h2></div>
+    <div class="filters" id="filters" role="group" aria-label="Filtr realizací"></div>
+    <div class="side-foot">
+      <a class="btn btn-line btn-sm" href="#sluzby">← Zpět na služby</a>
+      <span>Jakub Skořepa<br><b>+420 739 377 083</b></span>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" id="hero" aria-label="Interaktivní ukázka světelné reklamy">
+  <canvas id="city" role="img" aria-label="Noční obchodní centrum v nadhledu. Kliknutím na reklamy na budově je rozsvítíte, kolem chodí lidé a jezdí auta."></canvas>
+  <div class="hero-copy">
+    <span class="eyebrow">Skoreklam · světelná reklama</span>
+    <h1>Navrhneme, vytiskneme, <span class="glow">rozsvítíme.</span></h1>
+    <p class="lede"><b>Klikněte na cokoli na budově</b> a rozsviťte to. Světelnou reklamu navrhneme, vyrobíme a namontujeme.</p>
+    <div class="hero-cta">
+      <a class="btn btn-sodium" href="#kontakt">Nezávazná poptávka</a>
+      <a class="btn btn-glass" href="#sluzby">Co vyrábíme</a>
+    </div>
+  </div>
+  <div class="hero-ui">
+    <span class="pill"><span id="litCount">Rozsvíceno 0 / 8</span><i id="litDots" aria-hidden="true"></i></span>
+    <button class="btn btn-glass btn-sm" id="allBtn" type="button">Rozsvítit vše</button>
+    <button class="btn btn-glass btn-sm" id="sndBtn" type="button" aria-pressed="false">Zvuk</button>
+  </div>
+  <div class="sr" role="group" aria-label="Reklamy na budově" id="kbList"></div>
+  <span class="htip" id="htip"></span>
+  <div class="hcard" id="hcard" hidden></div>
+</section>
+
+<section class="sec wrap" id="sluzby" aria-label="Služby">
+  <div class="sec-head">
+    <div><span class="eyebrow">Co pro vás vyrobíme?</span><h2>Světelná reklama od nápisu po celou fasádu.</h2></div>
+    <p>Hlavní obor je světelná reklama a 3D výroba. Najeďte na službu a rozsvítí se. Kliknutím ji rovnou vyberete do poptávky.</p>
+  </div>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<section class="sec wrap" id="postup" aria-label="Jak to probíhá" style="padding-top:0">
+  <div class="sec-head">
+    <div><span class="eyebrow">Jak to probíhá</span><h2>Od zaměření po rozsvícení.</h2></div>
+    <p>Celou zakázku vede jeden člověk. Nemusíte koordinovat grafika, výrobce, elektrikáře ani montážníky.</p>
+  </div>
+  <div class="steps">
+    <div class="step rv"><div class="n">01</div><h3>Zaměření</h3><p>Přijedeme, změříme a nafotíme místo. Zjistíme, kde je přívod elektřiny.</p></div>
+    <div class="step rv"><div class="n">02</div><h3>Návrh</h3><p>Pošleme vizualizaci na fotce vašeho místa, ve dne i v noci, ke schválení.</p></div>
+    <div class="step rv"><div class="n">03</div><h3>Výroba</h3><p>Vyrobíme písmena, boxy, rámy i konstrukci a vše otestujeme.</p></div>
+    <div class="step rv"><div class="n">04</div><h3>Montáž</h3><p>Namontujeme, zapojíme a předáme. Reklama svítí ještě ten den.</p></div>
+  </div>
+</section>
+
+<section class="band" aria-label="O nás">
+  <div class="wrap">
+    <blockquote>Ve Skoreklam rozumíme síle světla i tisku a jsme tu, abychom <em>vaše myšlenky převedli k životu.</em></blockquote>
+    <div class="who"><span class="ava" aria-hidden="true">JS</span><div><b>Jakub Skořepa</b><span>zakázky a poptávky</span></div></div>
+  </div>
+</section>
+
+<section class="gal" id="realizace" aria-label="Realizace">
+  <div class="gal-head">
+    <div><span class="eyebrow">Realizace</span><h2 style="margin-top:14px">Hotové výrobky.</h2></div>
+    <p>Výběr z naší dílny i hotových instalací. Najeďte na náhled, kliknutím ho zvětšíte. Vlevo filtrujte podle typu.</p>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="sec wrap" id="kontakt" aria-label="Kontakt a poptávka">
+  <div class="sec-head">
+    <div><span class="eyebrow">Kontakt</span><h2>Napište, co potřebujete.</h2></div>
+    <p>Stačí pár řádků a ideálně fotka místa. Ozveme se s návrhem a cenou.</p>
+  </div>
+  <div class="ask-grid">
+    <form class="card form" id="form" novalidate>
+      <div class="field"><label for="fWhat">Co potřebujete</label><select id="fWhat"></select></div>
+      <div class="field"><label for="fSize">Rozměr nebo počet</label><input id="fSize" type="text" placeholder="např. 240 × 80 cm"></div>
+      <div class="field"><label for="fName">Jméno nebo firma</label><input id="fName" type="text" autocomplete="name" placeholder="Jana Nováková"></div>
+      <div class="field"><label for="fContact">Telefon nebo e-mail</label><input id="fContact" type="text" autocomplete="email" placeholder="jana@firma.cz"></div>
+      <div class="field"><label for="fWhere">Kde to bude</label><select id="fWhere"><option>Fasáda</option><option>Výloha</option><option>Střecha</option><option>Interiér</option><option>Před budovou</option><option>Jinde</option></select></div>
+      <div class="field"><label for="fDate">Kdy to potřebujete</label><input id="fDate" type="date"></div>
+      <div class="field full"><label for="fNote">Poznámka</label><textarea id="fNote" placeholder="Barva světla, provoz celou noc nebo časovač, přívod elektřiny, cokoli dalšího."></textarea></div>
+      <div class="form-foot"><span class="note" id="formHint">Vyplňte aspoň službu a kontakt.</span><button class="btn btn-navy" type="submit">Připravit poptávku</button></div>
+      <div class="out" id="out" hidden></div>
+    </form>
+    <aside class="card contact" aria-label="Kontaktní údaje">
+      <svg class="logo" role="img" aria-label="Skoreklam, reklamní agentura"><use href="#skologo" width="100%" height="100%"/></svg>
+      <div class="cline"><div><span>Jakub Skořepa · telefon</span><a href="tel:+420739377083">+420 739 377 083</a></div><button class="copy" type="button" data-copy="+420 739 377 083">kopírovat</button></div>
+      <div class="cline"><div><span>e-mail</span><a href="mailto:jakubskorepa@centrum.cz">jakubskorepa@centrum.cz</a></div><button class="copy" type="button" data-copy="jakubskorepa@centrum.cz">kopírovat</button></div>
+      <div class="cline" style="grid-template-columns:1fr"><div><span>web</span><a href="https://skoreklam.cz" style="font-size:16px">www.skoreklam.cz</a></div></div>
+    </aside>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <svg class="logo" role="img" aria-label="Skoreklam"><use href="#skologo" width="100%" height="100%"/></svg>
+    <span class="mono">© 2026 Skoreklam · Jakub Skořepa</span>
+    <nav aria-label="Patička"><a href="#sluzby">Služby</a><a href="#postup">Jak to probíhá</a><a href="#realizace">Realizace</a><a href="#kontakt">Kontakt</a></nav>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Náhled realizace" aria-hidden="true">
+  <button class="x" type="button" id="lbClose" aria-label="Zavřít náhled"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+  <div class="lb-stage"><div class="lb-frame" id="lbFrame"></div></div>
+  <div class="lb-bar"><div id="lbTitle"></div><span class="mono" id="lbNum" style="color:#a9b2c1"></span><div style="display:flex;gap:8px"><button class="btn btn-line btn-sm" type="button" id="lbPrev">← Předchozí</button><button class="btn btn-line btn-sm" type="button" id="lbNext">Další →</button></div></div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const PI = Math.PI;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.documentElement.lang = 'cs';
+const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const mixc = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
+const rgb = c => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+const rgba = (c, a) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${clamp(a).toFixed(3)})`;
+function hsl2rgb(h, s, l) { h /= 360; const f = n => { const k = (n + h * 12) % 12; const a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); }; return [f(0), f(8), f(4)]; }
+const SIGN = (w, s) => `${w} ${Math.max(6, s).toFixed(1)}px "Big Shoulders Display","Arial Narrow",Impact,sans-serif`;
+const SCRIPT = s => `400 ${Math.max(8, s).toFixed(1)}px "Yellowtail","Brush Script MT",cursive`;
+function rr(c, x, y, w, h, r) { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h); }
+function glow(c, x, y, r, L, a) { if (a <= .003 || r <= 0) return; const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, rgba(L, a)); g.addColorStop(1, rgba(L, 0)); c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = g; c.fillRect(x - r, y - r, 2 * r, 2 * r); c.restore(); }
+function center(c) { c.textAlign = 'center'; c.textBaseline = 'middle'; }
+
+/* ---------- services ---------- */
+const SVCS = [
+  { k: 'světelná reklama', name: '3D světelná písmena', g: '#ffbe78', text: 'Prostorová písmena s čelním, bočním nebo halo svícením. Na fasády, vstupy i recepce.',
+    svg: '<text x="60" y="58" text-anchor="middle" font-family="Big Shoulders Display,Impact,sans-serif" font-weight="800" font-size="50" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".35" transform="translate(4 4)">ABC</text><text x="60" y="58" text-anchor="middle" font-family="Big Shoulders Display,Impact,sans-serif" font-weight="800" font-size="50" fill="none" stroke="currentColor" stroke-width="2">ABC</text>' },
+  { k: 'světelná reklama', name: '3D loga', g: '#84b2e3', text: 'Logo jako prostorový objekt z 3D tisku, se světlem i bez něj.',
+    svg: '<circle cx="64" cy="44" r="27" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".35"/><circle cx="60" cy="40" r="27" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="60" cy="40" r="19" fill="none" stroke="currentColor" stroke-width="2"/><path d="M60 27 71 47H49Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' },
+  { k: 'světelná reklama', name: 'Světelné boxy a výstrčky', g: '#d6e8ff', text: 'Prosvětlené boxy nad vchod a oboustranné výstrčky kolmo k fasádě.',
+    svg: '<rect x="8" y="30" width="66" height="26" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 43h42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M116 18H96v8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="96" cy="40" r="13" fill="none" stroke="currentColor" stroke-width="2"/>' },
+  { k: 'světelná reklama', name: 'LED lišty', g: '#ffd29a', text: 'Světelné linky kolem výloh, nápisů a podhledů.',
+    svg: '<path d="M10 16h100" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="20" y="30" width="80" height="40" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M60 30v40" stroke="currentColor" stroke-width="1.2" opacity=".4"/>' },
+  { k: 'světelná reklama', name: 'Světelné rámy', g: '#e6f1ff', text: 'Hliníkové rámy s prosvětlenou grafikou, kterou snadno vyměníte.',
+    svg: '<rect x="28" y="8" width="64" height="64" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="36" y="16" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M42 50 52 38l8 8 6-6 12 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' },
+  { k: 'světelná reklama', name: 'Textilní rámy', g: '#bcd6f4', text: 'Grafika na textilii napnutá v rámu a rovnoměrně podsvícená zezadu.',
+    svg: '<rect x="18" y="10" width="84" height="60" rx="2" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M26 30q8-6 16 0t16 0 16 0 16 0 8 0M26 42q8-6 16 0t16 0 16 0 16 0 8 0M26 54q8-6 16 0t16 0 16 0 16 0 8 0" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".7"/>' },
+  { k: 'světelná reklama', name: 'Konstrukce a montáž', g: '#ffbe78', text: 'Nosné konstrukce pro reklamu na hotely a budovy, včetně montáže a zapojení.',
+    svg: '<rect x="14" y="6" width="92" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M14 28v44M45 28v44M76 28v44M106 28v44M14 72h92M14 28l31 44 31-44 30 44" fill="none" stroke="currentColor" stroke-width="1.6"/>' },
+  { k: 'světelná reklama', name: 'LED neon', g: '#ff5aa8', text: 'Ohebný neon na nápisy do kaváren, barů a výloh. Bezpečný a úsporný.',
+    svg: '<text x="60" y="54" text-anchor="middle" font-family="Yellowtail,cursive" font-size="44" fill="none" stroke="currentColor" stroke-width="2">neon</text>' },
+  { k: 'světelná reklama', name: 'Chytré LED', g: '#b48cff', text: 'Digitální pásky s efekty a animacemi, které se mění podle času nebo události.',
+    svg: '<rect x="14" y="14" width="92" height="52" rx="4" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="0 9" stroke-linecap="round"/><path d="M40 40h40" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".5"/>' },
+  { k: 'tisk a další', name: 'Bannery a síťovina', g: '#84b2e3', text: 'Plachty na ploty a síťovina na lešení i velké fasády.',
+    svg: '<rect x="10" y="16" width="100" height="48" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="23" r="3" fill="currentColor"/><circle cx="103" cy="23" r="3" fill="currentColor"/><circle cx="17" cy="57" r="3" fill="currentColor"/><circle cx="103" cy="57" r="3" fill="currentColor"/><path d="M28 36h50M28 46h34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
+  { k: 'tisk a další', name: 'Roll-upy', g: '#d6e8ff', text: 'Stojany na veletrhy, konference a do prodejen. Rozložíte za minutu.',
+    svg: '<rect x="44" y="4" width="32" height="64" rx="1" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M44 22h32" stroke="currentColor" stroke-width="1.6"/><rect x="38" y="68" width="44" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>' },
+  { k: 'tisk a další', name: 'Vizitky a tiskoviny', g: '#ffd29a', text: 'Vizitky, katalogy a tašky ve stejném stylu jako vaše reklama.',
+    svg: '<rect x="18" y="20" width="56" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="2" transform="rotate(-10 46 37)"/><rect x="46" y="30" width="56" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M54 42h22M54 50h30" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' }
+];
+const IMGS = ['pismena', 'loga', 'boxy', 'listy', 'ramy', 'textil', 'konstrukce', 'neon', 'chytre-led', 'bannery', 'rollupy', 'tiskoviny'];
+$('#tiles').innerHTML = SVCS.map((s, i) => `<button class="tile rv" type="button" data-i="${i}" style="--g:${s.g}"><span class="ill"><img src="img/${IMGS[i]}.webp" alt="${s.name}" loading="lazy" width="800" height="450"></span><span class="k">${s.k}</span><h3>${s.name}</h3><p>${s.text}</p><span class="more">Poptat <i aria-hidden="true">→</i></span></button>`).join('');
+$('#tiles').addEventListener('click', e => { const b = e.target.closest('.tile'); if (!b) return; $('#fWhat').value = SVCS[+b.dataset.i].name; $('#kontakt').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); setTimeout(() => $('#fSize').focus({ preventScroll: true }), reduced ? 0 : 700); });
+
+/* ---------- hero: interactive isometric shopping centre ---------- */
+const hero = $('#hero'), cv = $('#city'), c = cv.getContext('2d');
+let W = 1, H = 1, D = 1, S = 40, ox = 0, oy = 0, mob = false, now = 0, last = 0;
+const par = { x: 0, y: 0, tx: 0, ty: 0 };
+const logoImg = new Image();
+(() => {
+  const sym = $('#skologo'); if (!sym) return;
+  const body = sym.innerHTML.replace(/var\(--lg-sko\)/g, '#3358a2').replace(/var\(--lg-rek\)/g, '#84b2e3').replace(/var\(--lg-sub\)/g, '#231f20').replace(/var\(--lg-arc\)/g, '#231f20');
+  logoImg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 34 146 49" width="584" height="196">${body}</svg>`);
+})();
+function layout() {
+  D = Math.min(window.devicePixelRatio || 1, 2); W = hero.clientWidth; H = hero.clientHeight;
+  cv.width = Math.round(W * D); cv.height = Math.round(H * D);
+  mob = W < 760;
+  if (mob) { S = Math.min(W / 21.5, (H * .5) / 17); ox = W * .07 + 6 * S; oy = H - 22 - 11.6 * S; }
+  else { S = Math.min(W * .6 / 20, (H - 110) / 18.6); ox = W - 14 - 14 * S; oy = 100 + 7.6 * S; }
+}
+const P = (x, y, z) => [ox + (x - y) * S + par.x, oy + (x + y) * S * .5 - z * S + par.y];
+function poly(pts) { c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); }
+function scr() { c.setTransform(D, 0, 0, D, 0, 0); }
+function fY(x0, y0, z0) { const p = P(x0, y0, z0); c.setTransform(D * S / 100, D * S / 200, 0, D * S / 100, D * p[0], D * p[1]); }
+function fX(x0, y0, z0) { const p = P(x0, y0, z0); c.setTransform(D * S / 100, -D * S / 200, 0, D * S / 100, D * p[0], D * p[1]); }
+function box(x0, x1, y0, y1, z0, z1, top, sx, sy) {
+  poly([P(x0, y1, z0), P(x1, y1, z0), P(x1, y1, z1), P(x0, y1, z1)]); c.fillStyle = sy; c.fill();
+  poly([P(x1, y1, z0), P(x1, y0, z0), P(x1, y0, z1), P(x1, y1, z1)]); c.fillStyle = sx; c.fill();
+  poly([P(x0, y0, z1), P(x1, y0, z1), P(x1, y1, z1), P(x0, y1, z1)]); c.fillStyle = top; c.fill();
+}
+function gEll(x, y, r, L, a) { if (a <= .003) return; const p = P(x, y, 0); c.save(); c.translate(p[0], p[1]); c.scale(1, .5); glow(c, 0, 0, r * S * 1.41, L, a); c.restore(); }
+function inPoly(pt, pts) { let ins = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const [xi, yi] = pts[i], [xj, yj] = pts[j]; if (((yi > pt[1]) !== (yj > pt[1])) && (pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi)) ins = !ins; } return ins; }
+
+const ITEMS = [
+  { id: 'pismena', name: '3D světelná písmena', svc: '3D světelná písmena', L: [255, 214, 160], xc: 7, w: 10, text: 'Prostorová písmena na ocelové konstrukci na střeše. Ve dne čitelná, v noci vidět z dálky.' },
+  { id: 'boxy', name: 'Světelné boxy', svc: 'Světelné boxy a výstrčky', L: [225, 238, 255], xc: 7, w: 12, text: 'Prosvětlené boxy nad vchody obchodů. Každý nájemce má svůj, celé centrum působí jednotně.' },
+  { id: 'vystrcka', name: 'Výstrčka', svc: 'Světelné boxy a výstrčky', L: [255, 220, 170], xc: 5, w: 1.2, text: 'Oboustranný box kolmo k fasádě. Uvidí ho i lidé, kteří jdou po chodníku podél budovy.' },
+  { id: 'listy', name: 'LED lišty', svc: 'LED lišty', L: [132, 178, 227], xc: 7, w: 14, text: 'Světelné linky po obrysu budovy. Centrum dostane v noci jasnou siluetu.' },
+  { id: 'textil', name: 'Podsvícený textilní rám', svc: 'Textilní rámy', L: [235, 242, 255], xc: 11.1, w: 5.2, text: 'Grafika na textilii v hliníkovém rámu, rovnoměrně prosvícená. Kampaň vyměníte za pár minut.' },
+  { id: 'neon', name: 'LED neon', svc: 'LED neon', L: [255, 90, 168], xc: 2.4, w: 4, text: 'Ohebný neon ve výloze kavárny. Bezpečný, úsporný a nerozbije se.' },
+  { id: 'chytre', name: 'Chytré LED', svc: 'Chytré LED', L: [180, 140, 255], xc: 7, w: 14, fx: 0, text: 'Každý bod pásku řídíme zvlášť. Klikněte znovu a efekt se přepne.' },
+  { id: 'totem', name: 'Totem u parkoviště', svc: 'Konstrukce a montáž', L: [214, 232, 255], xc: 15.4, w: 1.4, text: 'Svítící sloup s logem a navigací. Řidiči ho uvidí už ze silnice. Dodáme i základ a konstrukci.' }
+];
+const FXN = ['duha', 'běžící světlo', 'pulz'];
+ITEMS.forEach(it => { it.on = false; it.t0 = 0; it.polys = []; it.hot = [0, 0]; });
+const IT = Object.fromEntries(ITEMS.map(it => [it.id, it]));
+function lv(it) { if (!it.on) return 0; if (reduced) return 1; const k = now - it.t0; if (k > .9) return 1; const p = [1, 0, .8, 0, 0, 1, .3, 1, 1]; return p[Math.min(p.length - 1, Math.floor(k / .9 * p.length))]; }
+
+const ST = { hov: null, kb: -1, rain: 0, rainT: 0, card: -1 };
+const STARS = Array.from({ length: 150 }, (_, i) => ({ x: hash(i * 3.1), y: hash(i * 7.7) * .55, r: .5 + hash(i * 1.3) * 1.2, p: hash(i) * 6 }));
+const BG = [[-12, -6, -3, 3, 7], [-5, 1, -10, -4, 10], [2, 8, -12, -6, 11], [9, 15, -11, -5, 8], [16, 22, -9, -3, 10], [23, 29, -7, -1, 7], [-16, -10, 4, 10, 5], [27, 33, 0, 6, 6]].sort((a, b) => (a[0] + a[2]) - (b[0] + b[2]));
+const LAMPS = [[-2.5, 12.5], [3.5, 12.5], [9.5, 12.5], [18, 12.5], [23.5, 12.5]];
+const TREES = [[1.2, 9.7], [12.3, 9.9], [-3.6, 8.2]];
+const PARKED = [{ x: 16.4, y: 3, col: [70, 30, 34] }, { x: 21.6, y: 3.2, col: [40, 48, 62] }, { x: 19, y: 10, col: [90, 92, 98] }];
+const birds = [2.7, 5.2, 8.4, 11.1].map((x, i) => ({ x, st: 'sit', t: 0, i, px: 0, py: 0 }));
+const people = [];
+const lanes = [8.3, 9.4, 10.7, 11.8];
+function spawnPerson(i, init) {
+  const dir = Math.random() < .5 ? 1 : -1;
+  people[i] = { x: init ? -4 + Math.random() * 26 : (dir > 0 ? -7 : 25), y: lanes[(i + Math.floor(Math.random() * 4)) % 4], dir, v: 1 + Math.random() * .4, ph: Math.random() * 6, look: 0, flash: 0, stop: 0, col: ['#0c1018', '#16131f', '#101a22', '#1c1612'][i % 4], coat: ['#2a3550', '#4a2a30', '#2f3f3a', '#3c3428'][(i + 1) % 4], hiv: false };
+}
+const cars = []; let nextCar = 1.5, nextVan = 5, van = null, worker = null;
+function newCar() { const dir = Math.random() < .5 ? 1 : -1; cars.push({ x: dir > 0 ? -16 : 34, y: dir > 0 ? 14.2 : 15.8, dir, v: 6 + Math.random() * 3, len: 4.2, wid: 1.8, col: [[150, 28, 34], [30, 40, 60], [200, 200, 205], [20, 22, 26], [40, 90, 120]][Math.floor(Math.random() * 5)], flash: 0, van: false }); }
+
+/* ---------- sound (WebAudio, only after the visitor turns it on) ---------- */
+let AC = null, humG = null, noiseBuf = null, sndOn = false;
+function audio() {
+  if (AC) return AC;
+  try {
+    AC = new (window.AudioContext || window.webkitAudioContext)();
+    noiseBuf = AC.createBuffer(1, AC.sampleRate * .3, AC.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    humG = AC.createGain(); humG.gain.value = 0; humG.connect(AC.destination);
+    [100, 200, 300].forEach((f, i) => { const o = AC.createOscillator(); o.type = i ? 'sine' : 'triangle'; o.frequency.value = f; const g = AC.createGain(); g.gain.value = [.5, .25, .1][i]; o.connect(g); g.connect(humG); o.start(); });
+  } catch (e) { AC = null; }
+  return AC;
+}
+function noise(dur, f, q, vol) { if (!sndOn || !AC) return; const s = AC.createBufferSource(); s.buffer = noiseBuf; const bq = AC.createBiquadFilter(); bq.type = 'bandpass'; bq.frequency.value = f; bq.Q.value = q; const g = AC.createGain(); const t = AC.currentTime; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur); s.connect(bq); bq.connect(g); g.connect(AC.destination); s.start(t); s.stop(t + dur); }
+function tone(f, dur, vol, type = 'sine', at = 0) { if (!sndOn || !AC) return; const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + at; o.type = type; o.frequency.value = f; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur); }
+const sfx = {
+  on() { noise(.05, 2400, 1.5, .5); tone(70, .12, .25, 'sine'); tone(1200, .04, .05, 'square', .03); },
+  honk() { tone(392, .32, .06, 'square'); tone(494, .32, .05, 'square'); },
+  shutter() { noise(.03, 5000, 1, .4); noise(.04, 3000, 1, .3); },
+  chirp() { [0, .08, .16].forEach(a => tone(2400 + Math.random() * 900, .06, .03, 'sine', a)); }
+};
+$('#sndBtn').addEventListener('click', e => {
+  sndOn = !sndOn; e.currentTarget.setAttribute('aria-pressed', sndOn); e.currentTarget.textContent = sndOn ? 'Zvuk zapnutý' : 'Zvuk';
+  if (sndOn) { const a = audio(); if (a && a.state === 'suspended') a.resume(); sfx.on(); }
+});
+
+/* ---------- lighting actions ---------- */
+const order = ['pismena', 'boxy', 'listy', 'textil', 'neon', 'vystrcka', 'chytre', 'totem'];
+function lightOn(it, quiet) { if (it.on) return; it.on = true; it.t0 = now; if (!quiet) sfx.on(); if (it.id === 'pismena') birds.forEach(b => { if (b.st === 'sit') { b.st = 'fly'; b.t = now + b.i * .12; } }); if (it.id === 'pismena') setTimeout(sfx.chirp, 300); updCount(); }
+function updCount() {
+  const n = ITEMS.filter(i => i.on).length;
+  $('#litCount').textContent = `Rozsvíceno ${n} / ${ITEMS.length}`;
+  $('#litDots').innerHTML = ITEMS.map(i => `<b class="${i.on ? 'on' : ''}"></b>`).join('');
+  $('#allBtn').textContent = n === ITEMS.length ? 'Zhasnout vše' : 'Rozsvítit vše';
+}
+$('#allBtn').addEventListener('click', () => {
+  if (ITEMS.every(i => i.on)) { ITEMS.forEach(i => i.on = false); birds.forEach(b => { b.st = 'sit'; }); closeCard(); updCount(); sfx.on(); return; }
+  order.map(id => IT[id]).filter(i => !i.on).forEach((it, k) => setTimeout(() => lightOn(it), reduced ? 0 : k * 260));
+});
+const hcard = $('#hcard');
+function openCard(i) {
+  const it = ITEMS[i]; ST.card = i;
+  hcard.innerHTML = `<button class="cx" type="button" aria-label="Zavřít"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><small>${it.svc}</small><h3>${it.name}</h3><p>${it.text}</p><div class="row"><button class="btn btn-sodium btn-sm" type="button" data-a="ask">Poptat</button>${it.id === 'chytre' ? `<button class="btn btn-glass btn-sm" type="button" data-a="fx">Efekt: ${FXN[it.fx]}</button>` : ''}</div>`;
+  hcard.hidden = false; placeCard();
+}
+function placeCard() { if (ST.card < 0) return; const it = ITEMS[ST.card], cw = hcard.offsetWidth, ch = hcard.offsetHeight; let x = it.hot[0] + 22, y = it.hot[1] - ch / 2; if (x + cw > W - 12) x = it.hot[0] - cw - 22; x = clamp(x, 12, W - cw - 12); y = clamp(y, 90, H - ch - 80); hcard.style.left = x + 'px'; hcard.style.top = y + 'px'; }
+function closeCard() { ST.card = -1; hcard.hidden = true; }
+hcard.addEventListener('click', e => {
+  const it = ITEMS[ST.card]; if (!it) return;
+  if (e.target.closest('.cx')) return closeCard();
+  const a = e.target.closest('[data-a]'); if (!a) return;
+  if (a.dataset.a === 'ask') { $('#fWhat').value = it.svc; closeCard(); $('#kontakt').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); }
+  if (a.dataset.a === 'fx') { it.fx = (it.fx + 1) % 3; sfx.on(); openCard(ST.card); }
+});
+function activate(i) { const it = ITEMS[i]; if (!it.on) lightOn(it); else if (it.id === 'chytre') { it.fx = (it.fx + 1) % 3; sfx.on(); } openCard(i); }
+$('#kbList').innerHTML = ITEMS.map((it, i) => `<button type="button" data-i="${i}">${it.name}</button>`).join('');
+$('#kbList').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) activate(+b.dataset.i); });
+$('#kbList').addEventListener('focusin', e => { const b = e.target.closest('[data-i]'); ST.kb = b ? +b.dataset.i : -1; });
+$('#kbList').addEventListener('focusout', () => ST.kb = -1);
+
+/* ---------- scene pieces ---------- */
+function drawSky() {
+  scr();
+  const rk = ST.rain, g = c.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, rgb(mixc([9, 12, 28], [6, 8, 15], rk))); g.addColorStop(.55, rgb(mixc([26, 28, 58], [14, 16, 26], rk))); g.addColorStop(1, '#0b0e18');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  STARS.forEach(s => { c.fillStyle = `rgba(220,230,255,${((1 - rk) * (.3 + .35 * Math.sin(now * 1.3 + s.p))).toFixed(3)})`; c.fillRect(s.x * W - par.x * .3, s.y * H - par.y * .3, s.r, s.r); });
+  const mx = mob ? W - 46 : W * .9 - par.x * .4, my = mob ? 84 + 40 : 150 - par.y * .4, mr = mob ? 18 : 26;
+  ST.moon = [mx, my, mr];
+  glow(c, mx, my, mr * 5, [200, 215, 255], .22 * (1 - rk * .8));
+  c.fillStyle = '#eef2ff'; c.beginPath(); c.arc(mx, my, mr, 0, PI * 2); c.fill();
+  c.fillStyle = 'rgba(0,0,0,.08)'; [[-.3, -.2, .25], [.3, .25, .2], [.1, -.45, .12]].forEach(([a, b, r]) => { c.beginPath(); c.arc(mx + a * mr, my + b * mr, r * mr, 0, PI * 2); c.fill(); });
+  if (rk > .01) { c.fillStyle = `rgba(30,34,48,${(.95 * rk).toFixed(3)})`; [[-1.6, .1, 1.3], [-.2, -.2, 1.6], [1.4, .2, 1.2], [.4, .6, 1.4]].forEach(([a, b, r]) => { c.beginPath(); c.arc(mx + a * mr + (1 - rk) * 80, my + b * mr, r * mr, 0, PI * 2); c.fill(); }); }
+  if (!reduced) { const px = ((now * 22) % (W + 200)) - 100, py = H * .12 + Math.sin(now * .2) * 10; c.fillStyle = Math.sin(now * 6) > .7 ? '#ff4b4b' : 'rgba(255,255,255,.7)'; c.fillRect(px, py, 2.2, 2.2); }
+}
+function drawGround() {
+  scr();
+  poly([P(-60, -14, 0), P(80, -14, 0), P(80, 80, 0), P(-60, 80, 0)]); c.fillStyle = '#0f131c'; c.fill();
+  BG.forEach(([x0, x1, y0, y1, h]) => {
+    box(x0, x1, y0, y1, 0, h, '#0d111b', '#0c101a', '#111725');
+    fY(x0, y1, h); for (let r = 0; r < Math.floor(h / 1.6); r++) for (let k = 0; k < Math.floor((x1 - x0) / 1.2); k++) if (hash(x0 * 7 + r * 13 + k * 3) > .7) { c.fillStyle = `rgba(255,200,140,${(.25 + .25 * hash(r + k)).toFixed(2)})`; c.fillRect(40 + k * 120, 60 + r * 160, 50, 70); }
+    scr();
+  });
+  poly([P(-12, 6, 0), P(14.6, 6, 0), P(14.6, 13, 0), P(-12, 13, 0)]); c.fillStyle = '#1a1f2b'; c.fill();
+  c.strokeStyle = 'rgba(255,255,255,.035)'; c.lineWidth = 1; c.beginPath();
+  for (let x = -12; x <= 14.6; x += 1.5) { const a = P(x, 6, 0), b = P(x, 13, 0); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+  for (let y = 6; y <= 13; y += 1.5) { const a = P(-12, y, 0), b = P(14.6, y, 0); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); }
+  c.stroke();
+  poly([P(14.6, -4, 0), P(30, -4, 0), P(30, 13, 0), P(14.6, 13, 0)]); c.fillStyle = '#131823'; c.fill();
+  c.strokeStyle = 'rgba(230,234,240,.28)'; c.lineWidth = 1.2; c.beginPath();
+  for (let x = 15.4; x < 30; x += 2.6) { [[.5, 5.6], [7.4, 12.4]].forEach(([a, b]) => { const p1 = P(x, a, 0), p2 = P(x, b, 0); c.moveTo(p1[0], p1[1]); c.lineTo(p2[0], p2[1]); }); }
+  c.stroke();
+  poly([P(-60, 13, 0), P(80, 13, 0), P(80, 13.25, 0), P(-60, 13.25, 0)]); c.fillStyle = '#2a303e'; c.fill();
+  poly([P(-60, 13.25, 0), P(80, 13.25, 0), P(80, 16.8, 0), P(-60, 16.8, 0)]); c.fillStyle = '#0b0f16'; c.fill();
+  c.strokeStyle = 'rgba(230,230,220,.35)'; c.lineWidth = Math.max(1, S * .05); c.setLineDash([S * .9, S * .7]); c.beginPath(); { const a = P(-60, 15, 0), b = P(80, 15, 0); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); } c.stroke(); c.setLineDash([]);
+  for (let k = 0; k < 6; k++) { const x = 5.4 + k * .5; poly([P(x, 13.4, 0), P(x + .28, 13.4, 0), P(x + .28, 16.6, 0), P(x, 16.6, 0)]); c.fillStyle = 'rgba(230,230,224,.3)'; c.fill(); }
+  poly([P(-60, 16.8, 0), P(80, 16.8, 0), P(80, 30, 0), P(-60, 30, 0)]); c.fillStyle = '#171b25'; c.fill();
+  LAMPS.forEach(([x, y]) => gEll(x, y - .4, 2.6, [255, 178, 92], .22));
+  ITEMS.forEach(it => {
+    const l = lv(it); if (l <= 0 || it.id === 'totem') return;
+    const L = it.id === 'chytre' ? (it.avg || it.L) : it.L, k = (.18 + .25 * ST.rain) * l;
+    const a = P(it.xc, 6.15, 0), b = P(it.xc, 10.5 + ST.rain * 2, 0);
+    c.save(); c.globalCompositeOperation = 'lighter'; c.translate(a[0], a[1]); c.rotate(Math.atan2(b[1] - a[1], b[0] - a[0]));
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]), wd = Math.min(it.w, 5) * S * .45;
+    const g = c.createLinearGradient(0, 0, len, 0); g.addColorStop(0, rgba(L, k)); g.addColorStop(1, rgba(L, 0));
+    c.fillStyle = g; c.beginPath(); c.ellipse(len * .4, 0, len * .6, wd * .5, 0, 0, PI * 2); c.fill(); c.restore();
+  });
+  if (lv(IT.totem) > 0) gEll(15.4, 13.2, 2.4, IT.totem.L, .25 * lv(IT.totem));
+}
+function textFit(txt, w, size, weight) { c.font = SIGN(weight, size); const m = c.measureText(txt).width; return Math.min(1, w / m); }
+function drawMall() {
+  scr();
+  poly([P(14, 6, 0), P(14, 0, 0), P(14, 0, 7), P(14, 6, 7)]); c.fillStyle = '#141a27'; c.fill();
+  poly([P(0, 6, 0), P(14, 6, 0), P(14, 6, 7), P(0, 6, 7)]); c.fillStyle = '#1c2436'; c.fill();
+  poly([P(0, 0, 7), P(14, 0, 7), P(14, 6, 7), P(0, 6, 7)]); c.fillStyle = '#0f141f'; c.fill();
+  box(2, 3.4, .8, 2.1, 7, 7.55, '#1b2131', '#131826', '#1a2030'); box(10.4, 12, 1, 2.3, 7, 7.45, '#1b2131', '#131826', '#1a2030');
+  fX(14, 6, 7);
+  for (let r = 0; r < 2; r++) for (let k = 0; k < 5; k++) { const x = 40 + k * 112, y = 50 + r * 150; c.fillStyle = '#0d1524'; c.fillRect(x, y, 80, 120); if (hash(k * 5 + r * 11 + 2) > .5) { c.fillStyle = 'rgba(255,200,140,.32)'; c.fillRect(x, y, 80, 120); } }
+  c.fillStyle = '#161d2c'; c.fillRect(0, 380, 600, 45); c.fillStyle = '#0c111b'; c.fillRect(380, 470, 140, 230);
+  fY(0, 6, 7);
+  c.fillStyle = '#151c2b'; c.fillRect(0, 378, 1400, 48);
+  for (let k = 0; k < 6; k++) for (let r = 0; r < 2; r++) { const x = 60 + k * 122, y = 50 + r * 152; c.fillStyle = '#0e182b'; c.fillRect(x, y, 110, 140); if (hash(k * 7 + r * 3) > .55) { c.fillStyle = 'rgba(255,200,140,.3)'; c.fillRect(x, y, 110, 140); } c.fillStyle = 'rgba(255,255,255,.05)'; c.fillRect(x, y, 110, 8); }
+  // textile frame
+  const tl = lv(IT.textil);
+  c.fillStyle = '#7a808c'; c.fillRect(828, 48, 544, 314);
+  c.save(); c.beginPath(); c.rect(840, 60, 520, 290); c.clip();
+  const sk = c.createLinearGradient(0, 60, 0, 350); sk.addColorStop(0, '#2b5fb8'); sk.addColorStop(.55, '#84b2e3'); sk.addColorStop(.75, '#ffd6a0'); sk.addColorStop(1, '#f08a5d'); c.fillStyle = sk; c.fillRect(840, 60, 520, 290);
+  c.fillStyle = '#1e3570'; c.beginPath(); c.moveTo(840, 300); c.lineTo(960, 210); c.lineTo(1040, 270); c.lineTo(1170, 180); c.lineTo(1360, 290); c.lineTo(1360, 350); c.lineTo(840, 350); c.closePath(); c.fill();
+  c.fillStyle = '#fff'; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.font = SIGN(800, 62); c.fillText('NOVÁ KOLEKCE', 868, 136); c.font = SIGN(700, 30); c.fillText('JARO · LÉTO', 870, 172);
+  c.fillStyle = `rgba(4,6,12,${(.78 * (1 - tl)).toFixed(3)})`; c.fillRect(840, 60, 520, 290);
+  if (tl > 0) { c.globalCompositeOperation = 'lighter'; c.fillStyle = rgba(IT.textil.L, .12 * tl); c.fillRect(840, 60, 520, 290); c.globalCompositeOperation = 'source-over'; }
+  c.restore();
+  // café window + neon
+  c.fillStyle = '#0d0f17'; c.fillRect(40, 472, 400, 218); c.fillStyle = 'rgba(255,170,110,.16)'; c.fillRect(40, 600, 400, 90);
+  c.fillStyle = '#1a141a'; [[90, 620, 60, 70], [300, 610, 70, 80]].forEach(([x, y, w, h]) => { rr(c, x, y, w, h, 18); c.fill(); });
+  const nl = lv(IT.neon), txt = 'dobrou chuť';
+  c.font = SCRIPT(64); c.textAlign = 'left'; c.textBaseline = 'middle';
+  const tw = c.measureText(txt).width, sc0 = Math.min(1, 330 / tw);
+  c.save(); c.translate(40 + (400 - tw * sc0) / 2, 548); c.scale(sc0, 1);
+  const N = [...txt].length, on = reduced ? N : clamp((now - IT.neon.t0 - .15) / 1.4) * N;
+  let xx = 0;
+  [...txt].forEach((ch, i) => {
+    const cw = c.measureText(ch).width, l = IT.neon.on ? clamp(on - i) * nl * (Math.random() < .004 ? .3 : 1) : 0;
+    if (ch !== ' ') { c.fillStyle = '#3a2833'; c.fillText(ch, xx, 0); if (l > 0) { c.shadowColor = rgba(IT.neon.L, 1); c.shadowBlur = 14 * D * l; c.fillStyle = rgba(IT.neon.L, l); c.fillText(ch, xx, 0); c.shadowBlur = 0; c.fillStyle = rgba([255, 225, 240], .6 * l); c.fillText(ch, xx, 0); } }
+    xx += cw;
+  });
+  c.restore();
+  // shop boxes
+  const bl = lv(IT.boxy);
+  [[60, 'KAVÁRNA'], [960, 'SPORT']].forEach(([x, t]) => {
+    c.fillStyle = '#0b0f18'; c.fillRect(x, 466, 380, 10);
+    c.save(); if (bl > 0) { c.shadowColor = rgba(IT.boxy.L, bl); c.shadowBlur = 18 * D * bl; } c.fillStyle = rgb(mixc([42, 49, 66], [246, 250, 255], bl)); c.fillRect(x, 426, 380, 42); c.restore();
+    c.fillStyle = bl > .4 ? '#1e3570' : '#151a26'; c.font = SIGN(800, 34); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(t, x + 190, 448);
+  });
+  // entrance
+  c.fillStyle = '#0c1019'; c.fillRect(540, 428, 320, 24);
+  c.fillStyle = 'rgba(255,200,140,.42)'; c.fillRect(560, 452, 280, 248);
+  c.strokeStyle = '#0c1019'; c.lineWidth = 8; c.beginPath(); c.moveTo(700, 452); c.lineTo(700, 700); c.moveTo(560, 452); c.lineTo(560, 700); c.moveTo(840, 452); c.lineTo(840, 700); c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.08)'; c.fillRect(560, 452, 280, 6);
+  // right shop window
+  c.fillStyle = '#0d1220'; c.fillRect(960, 482, 400, 208); c.fillStyle = 'rgba(200,220,255,.12)'; c.fillRect(960, 482, 400, 208);
+  c.fillStyle = '#1a2133'; [[1020, 560], [1140, 548], [1260, 566]].forEach(([x, y]) => { rr(c, x, y, 50, 130, 20); c.fill(); c.beginPath(); c.arc(x + 25, y - 14, 14, 0, PI * 2); c.fill(); });
+  scr();
+  glow(c, ...P(7, 6, 1.8), S * 2.4, [255, 190, 120], .16);
+  if (tl > 0) glow(c, ...P(11.1, 6, 4.95), S * 4.4, IT.textil.L, .22 * tl);
+  if (nl > 0) glow(c, ...P(2.4, 6, 1.5), S * 3, IT.neon.L, .2 * nl);
+  if (bl > 0) { glow(c, ...P(2.5, 6, 2.6), S * 3, IT.boxy.L, .16 * bl); glow(c, ...P(11.6, 6, 2.6), S * 3, IT.boxy.L, .16 * bl); }
+  // výstrčka
+  const vl = lv(IT.vystrcka);
+  fX(5, 6.95, 3.15);
+  c.strokeStyle = '#3a4150'; c.lineWidth = 6; c.beginPath(); c.moveTo(95, 8); c.lineTo(12, 8); c.lineTo(12, 18); c.stroke();
+  c.save(); if (vl > 0) { c.shadowColor = rgba(IT.vystrcka.L, vl); c.shadowBlur = 20 * D * vl; } c.fillStyle = rgb(mixc([44, 50, 64], [250, 246, 238], vl)); c.beginPath(); c.arc(47, 56, 36, 0, PI * 2); c.fill(); c.restore();
+  c.fillStyle = vl > .4 ? '#1e3570' : '#151a26'; c.font = SIGN(900, 52); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('i', 47, 58);
+  scr();
+  if (vl > 0) glow(c, ...P(5, 6.5, 2.6), S * 2.2, IT.vystrcka.L, .3 * vl);
+  // chytré LED band
+  const cl = lv(IT.chytre), it = IT.chytre, NN = 64, avg = [0, 0, 0];
+  for (let i = 0; i < NN; i++) {
+    const x = .25 + i / (NN - 1) * 13.5, p = P(x, 6.02, 2.98);
+    let col = it.L, v = 1;
+    if (it.fx === 0) col = hsl2rgb((i / NN * 360 + now * 70) % 360, 1, .6);
+    else if (it.fx === 1) { const head = (now * NN / 2.2) % NN, k = (head - i + NN) % NN; v = .06 + .94 * Math.exp(-k / 5); }
+    else v = .15 + .85 * (.5 + .5 * Math.sin(now * 2.4 - i * .2));
+    avg[0] += col[0] * v / NN; avg[1] += col[1] * v / NN; avg[2] += col[2] * v / NN;
+    if (cl > 0) glow(c, p[0], p[1], S * .45, col, .55 * v * cl);
+    c.fillStyle = cl > .05 ? rgba(mixc(col, [255, 255, 255], .45), .25 + .75 * v * cl) : '#2a3142'; c.beginPath(); c.arc(p[0], p[1], Math.max(1.2, S * .06), 0, PI * 2); c.fill();
+  }
+  it.avg = avg.map(a => a * 1.4);
+  // LED outline
+  const ll = lv(IT.listy), L = IT.listy.L;
+  const edges = [[P(0, 6, 0), P(0, 6, 7), P(14, 6, 7), P(14, 0, 7)], [P(14, 6, 7), P(14, 6, 0)], [P(0, 6, 7), P(0, 0, 7), P(14, 0, 7)]];
+  c.save(); c.lineCap = 'round'; c.lineJoin = 'round';
+  edges.forEach((e, k) => {
+    const path = () => { c.beginPath(); e.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); };
+    if (ll > 0) { c.globalCompositeOperation = 'lighter'; c.strokeStyle = rgba(L, .18 * ll); c.lineWidth = Math.max(6, S * .3); path(); c.stroke(); c.globalCompositeOperation = 'source-over'; c.shadowColor = rgba(L, ll); c.shadowBlur = 14 * ll; }
+    c.strokeStyle = ll > 0 ? rgb(mixc([60, 68, 84], mixc(L, [255, 255, 255], .45), ll)) : '#2a3142'; c.lineWidth = Math.max(1.5, S * .06) * (k === 2 ? .7 : 1); path(); c.stroke(); c.shadowBlur = 0;
+  });
+  c.restore();
+  // roof truss + 3D letters
+  const pl = lv(IT.pismena), PL = IT.pismena.L;
+  fY(1, 4.6, 7.55);
+  c.strokeStyle = '#3a4253'; c.lineWidth = 7; c.beginPath(); c.moveTo(0, 0); c.lineTo(1200, 0); c.moveTo(0, 55); c.lineTo(1200, 55);
+  for (let u = 0; u <= 1200; u += 150) { c.moveTo(u, 0); c.lineTo(u, 55); if (u < 1200) { c.moveTo(u, 55); c.lineTo(u + 150, 0); } } c.stroke();
+  scr();
+  if (pl > 0) glow(c, ...P(7, 4.6, 8.6), S * 6.5, PL, .28 * pl);
+  const LT = 'GALERIE'; c.font = SIGN(900, 250); const lw = c.measureText(LT).width, lsx = 1100 / lw;
+  for (let k = 7; k >= 1; k--) { fY(1.5, 4.6 - k * .055, 9.6); c.scale(lsx, 1); c.font = SIGN(900, 250); c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillStyle = rgb(mixc([22, 27, 40], [70, 62, 54], pl * .6)); c.fillText(LT, 0, 200); }
+  fY(1.5, 4.6, 9.6); c.scale(lsx, 1); c.font = SIGN(900, 250); c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+  c.save(); if (pl > 0) { c.shadowColor = rgba(PL, pl); c.shadowBlur = 26 * D * pl; } c.fillStyle = rgb(mixc([40, 47, 64], [255, 246, 232], pl)); c.fillText(LT, 0, 200); c.restore();
+  scr();
+  // pigeons
+  birds.forEach(b => {
+    const base = P(b.x, 4.6, 9.62);
+    if (b.st === 'sit') { b.px = base[0]; b.py = base[1]; bird(b.px, b.py, S * .22, 0, true); }
+    else if (b.st === 'fly') {
+      const k = now - b.t; if (k < 0) { bird(base[0], base[1], S * .22, 0, true); return; }
+      const x = base[0] + k * (90 + b.i * 25) + Math.sin(k * 3 + b.i) * 10, y = base[1] - k * (70 + b.i * 18) + k * k * 6;
+      if (y < -40 || x > W + 40 || reduced) { b.st = 'gone'; return; }
+      bird(x, y, S * .22, Math.sin(k * 22 + b.i), false);
+    }
+  });
+}
+function bird(x, y, s, flap, sit) {
+  c.fillStyle = '#0b0e16'; c.strokeStyle = '#0b0e16';
+  if (sit) { c.beginPath(); c.ellipse(x, y - s * .55, s * .7, s * .45, 0, 0, PI * 2); c.fill(); c.beginPath(); c.arc(x + s * .55, y - s * .95, s * .28, 0, PI * 2); c.fill(); return; }
+  c.lineWidth = Math.max(1.4, s * .22); c.lineCap = 'round'; c.beginPath(); c.moveTo(x - s * 1.4, y - flap * s * .9); c.quadraticCurveTo(x - s * .5, y - s * .4, x, y); c.quadraticCurveTo(x + s * .5, y - s * .4, x + s * 1.4, y - flap * s * .9); c.stroke();
+}
+function drawTotem() {
+  const tl = lv(IT.totem), L = IT.totem.L;
+  gEll(15.4, 12.25, 1.1, [0, 0, 0], 0);
+  box(15, 15.8, 12, 12.5, 0, 5.2, '#1a2030', '#121724', '#1b2232');
+  fY(15, 12.5, 5.2);
+  const face = rgb(mixc([40, 46, 62], [240, 246, 255], tl));
+  c.save(); if (tl > 0) { c.shadowColor = rgba(L, tl); c.shadowBlur = 16 * D * tl; } c.fillStyle = face; c.fillRect(8, 16, 64, 120); c.fillRect(8, 160, 64, 66); c.fillRect(8, 240, 64, 66); c.restore();
+  c.fillStyle = '#1e3570'; c.beginPath(); c.arc(40, 66, 22, 0, PI * 2); c.fill(); c.fillStyle = '#84b2e3'; c.beginPath(); c.arc(40, 66, 10, 0, PI * 2); c.fill();
+  c.fillStyle = tl > .4 ? '#1e3570' : '#161b28'; c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.font = SIGN(800, 20); c.fillText('GALERIE', 40, 116); c.font = SIGN(900, 50); c.fillText('P', 40, 196); c.font = SIGN(800, 18); c.fillText('9–21', 40, 274);
+  scr();
+  if (tl > 0) glow(c, ...P(15.4, 12.5, 4), S * 3, L, .3 * tl);
+}
+function drawLamp(x, y) {
+  const a = P(x, y, 0), b = P(x, y, 4.4), h = P(x, y - .7, 4.5), w = Math.max(1.5, S * .08);
+  c.strokeStyle = '#1f2533'; c.lineWidth = w; c.lineCap = 'round'; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.lineTo(h[0], h[1]); c.stroke();
+  c.fillStyle = '#ffd7a0'; c.beginPath(); c.ellipse(h[0], h[1] + 2, S * .2, S * .08, 0, 0, PI * 2); c.fill();
+  glow(c, h[0], h[1] + 2, S * 1.6, [255, 178, 92], .38);
+}
+function drawTree(x, y) {
+  const a = P(x, y, 0), b = P(x, y, 2.3);
+  c.strokeStyle = '#1a1612'; c.lineWidth = Math.max(2, S * .14); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
+  [[0, 3, 1], [-.5, 2.6, .8], [.6, 2.7, .75], [.1, 3.6, .7]].forEach(([dx, z, r], i) => { const p = P(x + dx * .5, y - dx * .5, z); c.fillStyle = i === 3 ? '#1b2a2c' : '#122022'; c.beginPath(); c.arc(p[0], p[1], r * S, 0, PI * 2); c.fill(); });
+  const near = ITEMS.find(it => it.id !== 'totem' && lv(it) > .5 && Math.abs(it.xc - x) < it.w / 2 + 2.5);
+  if (near) { const p = P(x - .3, y - .3, 3.4); glow(c, p[0], p[1], S * 1.1, near.id === 'chytre' ? (near.avg || near.L) : near.L, .14); }
+}
+function drawBench(x, y) { box(x, x + 1.8, y, y + .5, .4, .5, '#2a2622', '#1d1a17', '#24201c'); box(x, x + 1.8, y, y + .1, .5, .95, '#2a2622', '#1d1a17', '#24201c'); }
+function drawPerson(p) {
+  const b = P(p.x, p.y, 0), sc = S / 42, x = b[0], y = b[1], walking = p.v > .05 && !p.stop;
+  c.fillStyle = 'rgba(0,0,0,.35)'; c.beginPath(); c.ellipse(x, y, 12 * sc, 5 * sc, 0, 0, PI * 2); c.fill();
+  const sw = walking ? Math.sin(p.ph) * 8 * sc : 0;
+  c.strokeStyle = p.col; c.lineWidth = 6.5 * sc; c.lineCap = 'round'; c.beginPath(); c.moveTo(x, y - 38 * sc); c.lineTo(x + sw, y - 2 * sc); c.moveTo(x, y - 38 * sc); c.lineTo(x - sw, y - 2 * sc); c.stroke();
+  c.fillStyle = p.hiv ? '#f28a1e' : p.coat; rr(c, x - 9 * sc, y - 68 * sc, 18 * sc, 34 * sc, 7 * sc); c.fill();
+  if (p.hiv) { c.fillStyle = '#e8f0a0'; c.fillRect(x - 9 * sc, y - 52 * sc, 18 * sc, 3 * sc); }
+  c.fillStyle = '#d9b8a0'; c.beginPath(); c.arc(x - p.look * 2.5 * sc, y - 76 * sc, 7 * sc, 0, PI * 2); c.fill();
+  c.fillStyle = p.hiv ? '#f2c21e' : p.col; c.beginPath(); c.arc(x - p.look * 2.5 * sc, y - 79 * sc, 7.3 * sc, PI, 2 * PI); c.fill();
+  const near = ITEMS.find(it => lv(it) > .5 && Math.abs(it.xc - p.x) < it.w / 2 + 1.5);
+  if (near) { c.strokeStyle = rgba(near.id === 'chytre' ? (near.avg || near.L) : near.L, .55); c.lineWidth = 1.5 * sc; c.beginPath(); c.arc(x - p.look * 2.5 * sc, y - 76 * sc, 7.5 * sc, PI * .9, PI * 1.6); c.stroke(); }
+  if (p.flash > 0) { const hx = x - 12 * sc, hy = y - 74 * sc; c.fillStyle = '#111'; c.fillRect(hx - 3 * sc, hy - 5 * sc, 6 * sc, 10 * sc); glow(c, hx, hy, 40 * sc * (1 + p.flash), [255, 255, 255], .9 * p.flash); }
+  p.hit = [x, y - 40 * sc, 26 * sc];
+}
+function drawCar(o) {
+  const x0 = o.x, x1 = o.x + o.len, y0 = o.y - o.wid / 2, y1 = o.y + o.wid / 2, C = o.col;
+  gEll(o.x + o.len / 2, o.y, o.len * .45, [0, 0, 0], 0);
+  const sh = P(o.x + o.len / 2, o.y, 0); c.fillStyle = 'rgba(0,0,0,.4)'; c.beginPath(); c.ellipse(sh[0], sh[1], o.len * S * .62, o.len * S * .2, 0, 0, PI * 2); c.fill();
+  const top = o.van ? 2.3 : 1.0;
+  box(x0, x1, y0, y1, .3, top, rgb(mixc(C, [255, 255, 255], .12)), rgb(mixc(C, [0, 0, 0], .45)), rgb(mixc(C, [0, 0, 0], .2)));
+  if (!o.van) box(x0 + .9, x1 - 1.1, y0 + .14, y1 - .14, 1.0, 1.52, '#1a2232', '#0e131d', '#141b28');
+  else { box(x1 - .1, x1 + .9, y0 + .05, y1 - .05, .3, 1.5, '#e8eaee', '#9aa0aa', '#d0d4da'); fY(x0 + .3, y1, 2.1); c.fillStyle = '#ffffff'; c.fillRect(0, 0, 420, 150); if (logoImg.complete && logoImg.naturalWidth) c.drawImage(logoImg, 30, 20, 300, 100); c.fillStyle = '#3358a2'; c.font = SIGN(700, 26); c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillText('SVĚTELNÁ REKLAMA · +420 739 377 083', 34, 148); scr(); }
+  c.fillStyle = '#07090d'; [x0 + .8, x1 - .8].forEach(wx => { const p = P(wx, y1, .3); c.beginPath(); c.ellipse(p[0], p[1], S * .3, S * .3, 0, 0, PI * 2); c.fill(); });
+  if (o.parked) { o.hit = null; return; }
+  const front = o.dir > 0 ? x1 + (o.van ? .9 : 0) : x0, back = o.dir > 0 ? x0 : x1, fl = 1 + o.flash * 2.5;
+  [y0 + .35, y1 - .35].forEach(yy => { const p = P(front, yy, .7); glow(c, p[0], p[1], S * .9 * fl, [255, 244, 220], .75); });
+  const a = P(front, y0 + .2, 0), b = P(front, y1 - .2, 0), e1 = P(front + o.dir * 7 * fl, y0 - .6, 0), e2 = P(front + o.dir * 7 * fl, y1 + .6, 0);
+  c.save(); c.globalCompositeOperation = 'lighter'; const g = c.createLinearGradient(a[0], a[1], e1[0], e1[1]); g.addColorStop(0, `rgba(255,240,210,${(.22 * Math.min(fl, 2)).toFixed(3)})`); g.addColorStop(1, 'rgba(255,240,210,0)');
+  c.fillStyle = g; poly([a, b, e2, e1]); c.fill(); c.restore();
+  [y0 + .35, y1 - .35].forEach(yy => { const p = P(back, yy, .8); glow(c, p[0], p[1], S * .5, [255, 40, 40], .6); });
+  o.hit = [P(o.x + o.len / 2, o.y, .8), o.len * S * .55];
+}
+
+/* ---------- update + render ---------- */
+function update(dt) {
+  par.x += (par.tx - par.x) * .05; par.y += (par.ty - par.y) * .05;
+  ST.rain += (ST.rainT - ST.rain) * .03;
+  if (reduced) return;
+  people.forEach((p, i) => {
+    const near = ITEMS.some(it => lv(it) > .5 && Math.abs(it.xc - p.x) < it.w / 2 + .6);
+    p.look += ((near ? 1 : 0) - p.look) * .08; p.flash = Math.max(0, p.flash - dt * 1.8); p.stop = Math.max(0, p.stop - dt);
+    const v = p.stop > 0 ? 0 : p.v * (near ? .35 : 1); p.x += p.dir * v * dt; p.ph += v * dt * 6;
+    if (p.x > 26 || p.x < -9) spawnPerson(i, false);
+  });
+  if (now > nextCar) { newCar(); nextCar = now + 2.5 + Math.random() * 4; }
+  for (let i = cars.length - 1; i >= 0; i--) { const o = cars[i]; o.flash = Math.max(0, o.flash - dt * 1.5); const slow = o.dir > 0 && o.x > 11 && o.x < 15 && lv(IT.totem) > .5 ? .5 : 1; o.x += o.dir * o.v * slow * dt; if (o.x > 40 || o.x < -22) cars.splice(i, 1); }
+  if (!van && now > nextVan) van = { x: -14, y: 13.95, dir: 1, v: 5, len: 4.4, wid: 2.1, col: [236, 238, 242], van: true, flash: 0, st: 'drive' };
+  if (van) {
+    van.flash = Math.max(0, van.flash - dt * 1.5);
+    if (van.st === 'drive' || van.st === 'leave') { van.x += van.v * dt; if (van.st === 'leave') van.v = Math.min(8, van.v + dt * 3); if (van.x > 38) { van = null; nextVan = now + 18 + Math.random() * 10; } }
+    else if (van.st === 'stopping') { van.v = Math.max(0, van.v - dt * 7); van.x += van.v * dt; if (van.v === 0) { van.st = 'work'; worker = { x: van.x + 2.2, y: 12.9, ty: 7.1, dir: 1, v: 1.6, ph: 0, look: 1, flash: 0, stop: 0, col: '#1c2230', coat: '#f28a1e', hiv: true, phase: 'go', wait: 0 }; } }
+  }
+  if (worker) {
+    const w = worker;
+    if (w.phase === 'go') { w.y -= w.v * dt; w.ph += dt * 9; if (w.y <= w.ty) { w.phase = 'fix'; w.wait = 1.1; const nxt = order.map(id => IT[id]).find(it => !it.on); if (nxt) lightOn(nxt); else sfx.chirp(); } }
+    else if (w.phase === 'fix') { w.wait -= dt; w.v = 0; if (w.wait <= 0) { w.phase = 'back'; w.v = 1.6; } }
+    else { w.y += w.v * dt; w.ph += dt * 9; if (w.y >= 12.9) { worker = null; if (van) { van.st = 'leave'; van.v = 1; } } }
+  }
+}
+function render() {
+  drawSky(); drawGround(); drawMall(); scr();
+  const dyn = [];
+  LAMPS.forEach(([x, y]) => dyn.push([x + y, () => drawLamp(x, y)]));
+  TREES.forEach(([x, y]) => dyn.push([x + y, () => drawTree(x, y)]));
+  dyn.push([6 + 10.6, () => drawBench(6, 10.6)]);
+  dyn.push([15.4 + 12.25, drawTotem]);
+  PARKED.forEach(o => dyn.push([o.x + 2 + o.y, () => drawCar({ x: o.x, y: o.y, dir: 1, len: 4, wid: 1.8, col: o.col, flash: 0, van: false, parked: true })]));
+  people.forEach(p => dyn.push([p.x + p.y, () => drawPerson(p)]));
+  if (worker) dyn.push([worker.x + worker.y, () => drawPerson(worker)]);
+  cars.forEach(o => dyn.push([o.x + o.len / 2 + o.y + 2, () => drawCar(o)]));
+  if (van) dyn.push([van.x + van.len / 2 + van.y + 2, () => drawCar(van)]);
+  dyn.sort((a, b) => a[0] - b[0]).forEach(d => { scr(); d[1](); });
+  scr();
+  // hit areas and hotspots
+  const F = (x0, x1, y, z0, z1) => [P(x0, y, z0), P(x1, y, z0), P(x1, y, z1), P(x0, y, z1)];
+  IT.pismena.polys = [F(1.2, 13, 4.6, 7.3, 9.8)];
+  IT.boxy.polys = [F(.5, 4.5, 6, 2.2, 3.05), F(9.5, 13.5, 6, 2.2, 3.05)];
+  IT.vystrcka.polys = [[P(5, 6, 2.1), P(5, 7, 2.1), P(5, 7, 3.2), P(5, 6, 3.2)]];
+  IT.listy.polys = [F(0, 14, 6, 6.55, 7.25), [P(14, 6, 6.6), P(14, 0, 6.6), P(14, 0, 7.3), P(14, 6, 7.3)]];
+  IT.textil.polys = [F(8.3, 13.7, 6, 3.4, 6.55)];
+  IT.neon.polys = [F(.4, 4.4, 6, .1, 2.3)];
+  IT.chytre.polys = [F(0, 14, 6, 2.78, 3.2)];
+  IT.totem.polys = [[P(15, 12.5, 0), P(15.8, 12.5, 0), P(15.8, 12, 5.2), P(15, 12, 5.4), P(15, 12.5, 5.2)]];
+  const HS = { pismena: P(7, 4.6, 8.6), boxy: P(11.5, 6, 2.6), vystrcka: P(5, 6.5, 2.65), listy: P(13.2, 6, 7), textil: P(11, 6, 5), neon: P(2.4, 6, 1.2), chytre: P(4, 6, 2.98), totem: P(15.4, 12.5, 4.4) };
+  ITEMS.forEach((it, i) => {
+    it.hot = HS[it.id];
+    const hov = ST.hov && ST.hov.t === 'item' && ST.hov.i === i, kb = ST.kb === i;
+    if (hov || kb) { c.save(); c.strokeStyle = 'rgba(255,200,140,.8)'; c.lineWidth = 1.5; c.setLineDash([5, 5]); c.lineDashOffset = -now * 18; it.polys.forEach(pp => { poly(pp); c.stroke(); }); c.restore(); }
+    if (!it.on) {
+      const [hx, hy] = it.hot, k = (now * .9 + i * .23) % 1, r0 = mob ? 6 : 5;
+      c.strokeStyle = `rgba(255,190,110,${(.75 * (1 - k)).toFixed(3)})`; c.lineWidth = 1.6; c.beginPath(); c.arc(hx, hy, r0 + k * 16, 0, PI * 2); c.stroke();
+      c.fillStyle = '#ffb35c'; c.beginPath(); c.arc(hx, hy, r0 * (hov ? 1.4 : 1), 0, PI * 2); c.fill();
+      c.fillStyle = '#1b1206'; c.fillRect(hx - r0 * .55, hy - .8, r0 * 1.1, 1.6); c.fillRect(hx - .8, hy - r0 * .55, 1.6, r0 * 1.1);
+    }
+  });
+  if (ST.rain > .02 && !reduced) {
+    c.strokeStyle = `rgba(170,190,225,${(.22 * ST.rain).toFixed(3)})`; c.lineWidth = 1; c.beginPath();
+    for (let i = 0; i < 180; i++) { const x = (hash(i * 3.3) * W + now * 40) % W, y = (hash(i * 9.1) * H + now * 700 * (.7 + hash(i) * .5)) % H; c.moveTo(x, y); c.lineTo(x - 3, y + 14); }
+    c.stroke();
+  }
+  const vg = c.createRadialGradient(W * .6, H * .55, Math.min(W, H) * .35, W * .6, H * .55, Math.max(W, H) * .85); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.55)'); c.fillStyle = vg; c.fillRect(0, 0, W, H);
+  if (ST.card >= 0) placeCard();
+}
+
+/* ---------- pointer ---------- */
+function pick(x, y) {
+  const pt = [x, y], m = ST.moon;
+  if (m && Math.hypot(x - m[0], y - m[1]) < m[2] + 10) return { t: 'moon', name: ST.rainT ? 'Rozehnat mraky' : 'Zatáhnout oblohu' };
+  for (let i = 0; i < ITEMS.length; i++) if (Math.hypot(x - ITEMS[i].hot[0], y - ITEMS[i].hot[1]) < (mob ? 22 : 16)) return { t: 'item', i, name: ITEMS[i].name };
+  if (van && van.hit && Math.hypot(x - van.hit[0][0], y - van.hit[0][1]) < van.hit[1]) return { t: 'van', name: 'Dodávka Skoreklam: zastavit a namontovat' };
+  for (const o of cars) if (o.hit && Math.hypot(x - o.hit[0][0], y - o.hit[0][1]) < o.hit[1]) return { t: 'car', o, name: 'Auto' };
+  for (const p of people) if (p.hit && Math.hypot(x - p.hit[0], y - p.hit[1]) < p.hit[2] + 6) return { t: 'person', p, name: 'Kolemjdoucí' };
+  for (const id of ['vystrcka', 'neon', 'boxy', 'chytre', 'totem', 'textil', 'listy', 'pismena']) { const it = IT[id]; if (it.polys.some(pp => inPoly(pt, pp))) return { t: 'item', i: ITEMS.indexOf(it), name: it.name }; }
+  return null;
+}
+const htip = $('#htip');
+hero.addEventListener('pointermove', e => {
+  const r = hero.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  par.tx = (x / W - .5) * -14; par.ty = (y / H - .5) * -8;
+  if (e.target !== cv) { ST.hov = null; hero.classList.remove('hov'); htip.classList.remove('on'); return; }
+  ST.hov = pick(x, y); hero.classList.toggle('hov', !!ST.hov);
+  if (ST.hov && e.pointerType === 'mouse') { htip.textContent = ST.hov.name; htip.style.left = x + 'px'; htip.style.top = y + 'px'; htip.classList.add('on'); } else htip.classList.remove('on');
+}, { passive: true });
+hero.addEventListener('pointerleave', () => { ST.hov = null; par.tx = par.ty = 0; htip.classList.remove('on'); hero.classList.remove('hov'); });
+cv.addEventListener('click', e => {
+  const r = hero.getBoundingClientRect(), h = pick(e.clientX - r.left, e.clientY - r.top);
+  if (!h) { closeCard(); return; }
+  if (h.t === 'item') activate(h.i);
+  else if (h.t === 'moon') { ST.rainT = ST.rainT ? 0 : 1; sfx.on(); }
+  else if (h.t === 'car') { h.o.flash = 1; sfx.honk(); }
+  else if (h.t === 'person') { h.p.flash = 1; h.p.stop = 1.2; sfx.shutter(); }
+  else if (h.t === 'van') { if (van.st === 'drive') { van.st = 'stopping'; van.flash = 1; sfx.honk(); } }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && ST.card >= 0) closeCard(); });
+
+let heroVis = true;
+new IntersectionObserver(es => es.forEach(e => heroVis = e.isIntersecting)).observe(hero);
+layout();
+for (let i = 0; i < (W < 760 ? 2 : 3); i++) spawnPerson(i, true);
+if (reduced) { people.forEach(p => p.v = 0); }
+function heroFrame(t) {
+  const dt = Math.min(.05, last ? t - last : .016); last = t; now = t;
+  if (humG && AC) humG.gain.value = sndOn ? .006 * ITEMS.filter(i => i.on).length : 0;
+  update(dt); render();
+}
+layout(); addEventListener('resize', () => { layout(); });
+updCount();
+
+/* ---------- gallery ---------- */
+const CATS = [{ id: 'pismena', name: '3D písmena' }, { id: 'loga', name: '3D loga' }, { id: 'boxy', name: 'Světelné boxy' }, { id: 'instalace', name: 'Hotové instalace' }];
+const WORDS = { pismena: ['BISTRO'], loga: ['LOGO'], boxy: ['BOX'], instalace: ['FASÁDA'] };
+const HUES = { pismena: 32, loga: 210, boxy: 40, instalace: 200 };
+/* PHOTOS: fotky realizací; další přidat sem (src, cat, title, w, h) */
+const PHOTOS = [{"src": "real/r01.webp", "cat": "pismena", "title": "Realizace 01", "w": 1200, "h": 515}, {"src": "real/r02.webp", "cat": "pismena", "title": "Realizace 02", "w": 1077, "h": 1200}, {"src": "real/r03.webp", "cat": "pismena", "title": "Realizace 03", "w": 1077, "h": 1200}, {"src": "real/r04.webp", "cat": "pismena", "title": "Realizace 04", "w": 1077, "h": 1200}, {"src": "real/r05.webp", "cat": "loga", "title": "Realizace 05", "w": 900, "h": 1200}, {"src": "real/r06.webp", "cat": "boxy", "title": "Realizace 06", "w": 900, "h": 1200}, {"src": "real/r07.webp", "cat": "pismena", "title": "Realizace 07", "w": 900, "h": 1200}, {"src": "real/r08.webp", "cat": "boxy", "title": "Realizace 08", "w": 900, "h": 1200}, {"src": "real/r09.webp", "cat": "loga", "title": "Realizace 09", "w": 1077, "h": 1200}, {"src": "real/r10.webp", "cat": "instalace", "title": "Realizace 10", "w": 1077, "h": 1200}, {"src": "real/r11.webp", "cat": "loga", "title": "Realizace 11", "w": 900, "h": 1200}, {"src": "real/r12.webp", "cat": "pismena", "title": "Realizace 12", "w": 1077, "h": 1200}, {"src": "real/r13.webp", "cat": "pismena", "title": "Realizace 13", "w": 1077, "h": 1200}, {"src": "real/r14.webp", "cat": "boxy", "title": "Realizace 14", "w": 1200, "h": 1077}, {"src": "real/r15.webp", "cat": "pismena", "title": "Realizace 15", "w": 515, "h": 1200}, {"src": "real/r16.webp", "cat": "boxy", "title": "Realizace 16", "w": 900, "h": 1200}, {"src": "real/r17.webp", "cat": "instalace", "title": "Realizace 17", "w": 1081, "h": 1200}, {"src": "real/r18.webp", "cat": "pismena", "title": "Realizace 18", "w": 1200, "h": 675}, {"src": "real/r19.webp", "cat": "pismena", "title": "Realizace 19", "w": 1200, "h": 1077}, {"src": "real/r20.webp", "cat": "instalace", "title": "Realizace 20", "w": 1200, "h": 817}];
+let filter = 'all', shown = PHOTOS.map((_, i) => i);
+const grid = $('#grid');
+const catName = id => CATS.find(c => c.id === id).name;
+function artHTML(p, i) { const w = WORDS[p.cat], h = (HUES[p.cat] + (hash(i) - .5) * 40) | 0; return `<div class="art" style="--h:${h};--px:${(25 + hash(i * 3) * 50) | 0}%;--py:${(25 + hash(i * 5) * 40) | 0}%"><b class="${p.cat === 'neon' ? 'script' : ''}">${w[i % w.length]}</b></div>`; }
+grid.innerHTML = PHOTOS.map((p, i) => `<button class="ph" type="button" data-i="${i}" data-cat="${p.cat}" style="grid-row:span ${Math.max(8, Math.round((240 * (p.h || 3) / (p.w || 4) + 12) / 22))}" aria-label="${p.title}, ${catName(p.cat)}">${p.src ? `<img src="${p.src}" alt="${p.title}" loading="lazy">` : artHTML(p, i)}<span class="glare" aria-hidden="true"></span><span class="cap"><span>${catName(p.cat)}</span><span></span></span></button>`).join('');
+function buildFilters() {
+  const count = id => id === 'all' ? PHOTOS.length : PHOTOS.filter(p => p.cat === id).length;
+  $('#filters').innerHTML = [{ id: 'all', name: 'Vše' }, ...CATS].filter(c => count(c.id)).map(c => `<button class="filt" type="button" data-f="${c.id}" aria-pressed="${filter === c.id}">${c.name}<small>${count(c.id)}</small></button>`).join('');
+}
+buildFilters();
+$('#filters').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]'); if (!b) return;
+  filter = b.dataset.f; buildFilters();
+  const tiles = $$('.ph', grid);
+  tiles.forEach(tl => { if (!(filter === 'all' || tl.dataset.cat === filter)) { tl.classList.add('out'); setTimeout(() => { if (tl.classList.contains('out')) tl.hidden = true; }, 320); } });
+  setTimeout(() => {
+    let k = 0;
+    tiles.forEach(tl => { if (filter === 'all' || tl.dataset.cat === filter) { tl.hidden = false; tl.classList.add('out'); setTimeout(() => tl.classList.remove('out'), 20 + (k++) * 25); } });
+    shown = tiles.filter(tl => filter === 'all' || tl.dataset.cat === filter).map(tl => +tl.dataset.i);
+    const n = shown.length; $('#galCount').textContent = `${n} ${n === 1 ? 'realizace' : n < 5 ? 'realizace' : 'realizací'}`;
+  }, 330);
+  const g = $('#realizace').getBoundingClientRect(); if (g.top < -10) window.scrollTo({ top: g.top + scrollY - 20, behavior: reduced ? 'auto' : 'smooth' });
+});
+grid.addEventListener('pointermove', e => {
+  const tl = e.target.closest('.ph'); if (!tl || reduced) return;
+  const r = tl.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+  tl.style.transform = `rotateX(${((.5 - y) * 10).toFixed(2)}deg) rotateY(${((x - .5) * 12).toFixed(2)}deg) scale(1.03)`;
+  tl.style.setProperty('--gx', (x * 100).toFixed(1) + '%'); tl.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
+});
+grid.addEventListener('pointerout', e => { const tl = e.target.closest('.ph'); if (tl && !tl.contains(e.relatedTarget)) tl.style.transform = ''; });
+grid.addEventListener('click', e => { const tl = e.target.closest('.ph'); if (tl) openLb(+tl.dataset.i); });
+const lb = $('#lb'); let lbI = 0, lbFrom = null;
+function showLb() { const p = PHOTOS[lbI]; $('#lbFrame').innerHTML = p.src ? `<img src="${p.src}" alt="${p.title}">` : artHTML(p, lbI); $('#lbTitle').innerHTML = `<small>${catName(p.cat)}</small>${p.title}`; $('#lbNum').textContent = `${shown.indexOf(lbI) + 1} / ${shown.length}`; }
+function openLb(i) { lbFrom = document.activeElement; lbI = i; showLb(); lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); $('#lbClose').focus({ preventScroll: true }); }
+function closeLb() { lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); if (lbFrom) lbFrom.focus({ preventScroll: true }); }
+function stepLb(d) { const k = shown.indexOf(lbI); lbI = shown[(k + d + shown.length) % shown.length]; showLb(); }
+$('#lbClose').addEventListener('click', closeLb); $('#lbPrev').addEventListener('click', () => stepLb(-1)); $('#lbNext').addEventListener('click', () => stepLb(1));
+lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-stage')) closeLb(); });
+document.addEventListener('keydown', e => { if (!lb.classList.contains('open')) return; if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowRight') stepLb(1); if (e.key === 'ArrowLeft') stepLb(-1); });
+
+/* ---------- nav collapses into rail over the gallery ---------- */
+const nav = $('#nav'), gal = $('#realizace');
+function navState() { const g = gal.getBoundingClientRect(); nav.classList.toggle('side', g.top < innerHeight * .4 && g.bottom > innerHeight * .6); }
+addEventListener('scroll', navState, { passive: true });
+
+/* ---------- reveal ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+$$('.rv').forEach((el, i) => { el.style.animationDelay = ((i % 4) * .07) + 's'; io.observe(el); });
+
+/* ---------- form ---------- */
+const fWhat = $('#fWhat');
+fWhat.innerHTML = '<option value="">Vyberte službu</option>' + SVCS.map(s => `<option>${s.name}</option>`).join('') + '<option>Něco jiného</option>';
+async function copyText(text, btn) { try { await navigator.clipboard.writeText(text); const o = btn.textContent; btn.textContent = 'zkopírováno'; setTimeout(() => btn.textContent = o, 1500); return true; } catch (e) { return false; } }
+function selectText(el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = id => $(id).value.trim(), hint = $('#formHint');
+  if (!v('#fWhat') || !v('#fContact')) { hint.textContent = 'Doplňte prosím službu a telefon nebo e-mail.'; hint.style.color = '#b4561a'; (!v('#fWhat') ? fWhat : $('#fContact')).focus(); return; }
+  hint.textContent = 'Vyplňte aspoň službu a kontakt.'; hint.style.color = '';
+  const dt = v('#fDate') ? new Date(v('#fDate')).toLocaleDateString('cs-CZ') : 'neuvedeno';
+  const txt = [`Poptávka · ${v('#fWhat')}`, `Rozměr nebo počet: ${v('#fSize') || 'neuvedeno'}`, `Místo: ${v('#fWhere')}`, `Termín: ${dt}`, `Jméno: ${v('#fName') || 'neuvedeno'}`, `Kontakt: ${v('#fContact')}`, v('#fNote') ? `Poznámka: ${v('#fNote')}` : ''].filter(Boolean).join('\n');
+  const out = $('#out'); out.hidden = false;
+  out.innerHTML = `<p>Poptávka je připravená. Zkopírujte ji a pošlete na jakubskorepa@centrum.cz, ideálně s fotkou místa.</p><pre id="outTxt"></pre><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-navy btn-sm" type="button" id="cpy">Kopírovat text</button><a class="btn btn-line btn-sm" id="mailA" href="#">Otevřít v e-mailu</a></div>`;
+  $('#outTxt').textContent = txt;
+  $('#mailA').href = 'mailto:jakubskorepa@centrum.cz?subject=' + encodeURIComponent('Poptávka: ' + v('#fWhat')) + '&body=' + encodeURIComponent(txt);
+  $('#cpy').addEventListener('click', async ev => { if (!(await copyText(txt, ev.currentTarget))) selectText($('#outTxt')); });
+});
+$$('.copy').forEach(b => b.addEventListener('click', async () => { if (!(await copyText(b.dataset.copy, b))) selectText(b.previousElementSibling.querySelector('a')); }));
+
+/* ---------- loop ---------- */
+function loop(t) { if (heroVis) heroFrame(t / 1000); requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+navState();
+})();
+</script>
+
+</body>
+</html>
