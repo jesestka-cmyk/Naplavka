@@ -11,9 +11,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* layout: a story that starts in the grey photo studio of the video and darkens into the night workshop, where every object is a light source; content sits in a 1240px frame */
+/* layout: a story that starts in the white photo studio of the video and darkens into the night workshop, where every object is a light source; content sits in a 1240px frame */
 :root{
-  --studio:#bcbdbb; --studio-2:#a3a6a5;
+  --studio:#fcfcfc; --studio-2:#d9dad8;
   --ink:#121416; --ink-2:#3b3f44;
   --night:#0c0d10; --night-2:#15171b; --night-3:#1d2025;
   --paper:#ece9e2; --mute:#8f939a; --line:rgba(236,233,226,.12); --line-2:rgba(236,233,226,.22);
@@ -51,17 +51,19 @@ h1,h2,h3{font-family:var(--f-display);font-variation-settings:"wdth" 78;text-wra
 @media (max-width:520px){.top nav a.opt{display:none}.brand span{display:none}.brand{padding:6px}}
 
 /* ---------- film ---------- */
-#film{position:relative;height:820vh;background:var(--studio)}
-.film-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(120% 90% at 50% 40%,#c8c8c7 0%,var(--studio) 55%,var(--studio-2) 100%)}
+#film{position:relative;height:880vh;background:var(--studio)}
+.film-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--studio)}
+#glyphCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.film-fog{position:absolute;inset:0;pointer-events:none;background:radial-gradient(115% 95% at 50% 40%,rgba(205,206,204,0) 52%,rgba(190,192,190,.42) 100%)}
 #filmCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.film-scrim{position:absolute;inset:auto 0 0 0;height:58%;background:linear-gradient(to top,rgba(178,180,178,.94) 0%,rgba(178,180,178,.82) 46%,rgba(178,180,178,0) 100%);pointer-events:none;display:none}
+.film-scrim{position:absolute;inset:auto 0 0 0;height:58%;background:linear-gradient(to top,rgba(250,250,249,.95) 0%,rgba(250,250,249,.84) 46%,rgba(250,250,249,0) 100%);pointer-events:none;display:none}
 .film-shade{position:absolute;inset:0;background:var(--night);opacity:0;pointer-events:none}
 .blk{position:absolute;top:42%;transform:translateY(-50%);width:min(30vw,440px);color:var(--ink);visibility:hidden}
 .blk.l,.blk.r{z-index:1}
-.blk.l::before,.blk.r::before{content:"";position:absolute;inset:-22px -26px;border-radius:22px;background:rgba(200,201,199,.55);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 0 0 1px rgba(255,255,255,.25) inset;opacity:var(--bk,0);z-index:-1}
+.blk.l::before,.blk.r::before{content:"";position:absolute;inset:-22px -26px;border-radius:22px;background:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 0 0 1px rgba(18,20,22,.06) inset,0 18px 50px -24px rgba(18,20,22,.18);opacity:var(--bk,0);z-index:-1}
 .blk.l{left:max(var(--gut-l),5vw)}
 .blk.r{right:max(var(--gut-r),5vw)}
-.blk-hero{visibility:visible;left:max(var(--gut-l),5vw);top:auto;bottom:max(9vh,64px);transform:none;width:min(60vw,820px)}
+.blk-hero{visibility:visible;left:max(var(--gut-l),5vw);top:auto;bottom:max(33vh,64px);transform:none;width:min(60vw,820px)}
 .blk-hero h1{color:#fff;mix-blend-mode:difference}
 .blk.blk-hero p{max-width:26ch}
 .blk.blk-hero .eyebrow{max-width:30ch}
@@ -77,15 +79,15 @@ h1,h2,h3{font-family:var(--f-display);font-variation-settings:"wdth" 78;text-wra
 .career{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
 .career li{font:400 11px/1 var(--f-mono);letter-spacing:.04em;padding:8px 10px;border-radius:8px;border:1px solid rgba(18,20,22,.22);background:rgba(255,255,255,.18)}
 .career b{font-weight:500}
-.blk-final{left:max(var(--gut-l),5vw);top:auto;bottom:max(12vh,80px);transform:none;width:min(60vw,760px)}
-.blk-final h2{font-size:clamp(44px,6.4vw,104px)}
+.blk-final{left:max(var(--gut-l),5vw);top:auto;bottom:max(33vh,80px);transform:none;width:min(30vw,520px)}
+.blk-final h2{font-size:clamp(44px,5.4vw,96px);color:#fff;mix-blend-mode:difference}
 .blk-final .eyebrow{color:inherit;opacity:.7}
 .film-hud{position:absolute;right:var(--gut-r);bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:14px;color:var(--ink-2);font:400 10px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
 .hint{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink-2);font:400 10px var(--f-mono);letter-spacing:.14em;text-transform:uppercase}
 .hint i{width:1px;height:34px;background:linear-gradient(var(--ink-2),transparent);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
 @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
 @media (max-width:760px){
-  #film{height:720vh}
+  #film{height:780vh}
   .film-scrim{display:block}
   .blk.l::before,.blk.r::before{display:none}
   .blk-hero h1{color:var(--ink);mix-blend-mode:normal}
@@ -214,7 +216,7 @@ h1,h2,h3{font-family:var(--f-display);font-variation-settings:"wdth" 78;text-wra
 .under .eyebrow{color:#8fd8ea}
 
 /* ---------- second video ---------- */
-.v2{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:22px;overflow:hidden;border:1px dashed var(--line-2);display:grid;place-items:center;text-align:center;background:#0f1013 url("f/240.webp") center/cover}
+.v2{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:22px;overflow:hidden;border:1px dashed var(--line-2);display:grid;place-items:center;text-align:center;background:#0f1013 url("f/240.webp") center 28%/cover}
 .v2::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,13,16,.72),rgba(12,13,16,.9))}
 .v2-in{position:relative;display:grid;gap:12px;justify-items:center;padding:20px}
 .v2 .play{width:64px;height:64px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center}
@@ -243,6 +245,48 @@ h1,h2,h3{font-family:var(--f-display);font-variation-settings:"wdth" 78;text-wra
 .rm #chip{height:auto}
 .rm .chip-stage{position:relative;height:100vh}
 
+/* ---------- city game ---------- */
+.city{display:grid;gap:14px}
+.city-screen{padding:10px}
+.city-tg{display:flex;gap:6px}
+.tg{appearance:none;border:1px solid var(--line-2);background:transparent;color:var(--paper);font:500 11px var(--f-mono);letter-spacing:.06em;padding:6px 10px;border-radius:999px;cursor:pointer}
+.tg[aria-pressed="true"]{background:var(--paper);color:var(--night)}
+.tg.pulse{border-color:var(--led);color:var(--led);animation:tgp 1.6s ease-in-out infinite}
+@keyframes tgp{50%{box-shadow:0 0 0 6px rgba(255,184,92,.12)}}
+.city-wrap{position:relative}
+#gameCv{display:block;width:100%;border-radius:14px;touch-action:pan-y;background:#e9ecec;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.city-toast{position:absolute;left:50%;top:12px;transform:translate(-50%,-6px);padding:9px 16px;border-radius:16px;background:rgba(12,13,16,.88);color:var(--paper);font:500 13px/1.45 var(--f-body);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;width:max-content;max-width:min(560px,calc(100% - 24px));text-align:center}
+.city-toast b{color:var(--led);font-weight:600}
+.city-toast.show{opacity:1;transform:translate(-50%,0)}
+.city-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 6px 4px;color:var(--mute)}
+.city-ctl[hidden]{display:none}
+.city-ctl input{flex:1 1 140px;min-width:0;background:#111317;border:1px solid var(--line-2);color:var(--paper);font:600 15px var(--f-body);text-transform:uppercase;letter-spacing:.06em;padding:9px 12px;border-radius:10px}
+.city-ctl .sw,.city-ctl .fx{display:flex;flex-wrap:wrap;gap:6px}
+.city-ctl .sw button{width:28px;height:28px;border-radius:50%;border:2px solid transparent;background:var(--c);cursor:pointer;box-shadow:0 0 0 1px var(--line-2)}
+.city-ctl .sw button.on{border-color:var(--night);box-shadow:0 0 0 2px var(--paper)}
+.city-ctl .fx button{appearance:none;border:1px solid var(--line-2);background:transparent;color:var(--paper);font:500 12px var(--f-body);padding:7px 11px;border-radius:999px;cursor:pointer}
+.city-ctl .fx button.on{background:var(--led);border-color:var(--led);color:var(--on-led)}
+.ctl-x{margin-left:auto;appearance:none;border:0;background:transparent;color:var(--mute);font-size:22px;line-height:1;cursor:pointer;padding:4px 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font:500 11.5px var(--f-mono);letter-spacing:.04em;padding:6px 11px;border-radius:999px;border:1px solid var(--line);color:var(--mute);white-space:nowrap;transition:background .3s,color .3s,border-color .3s}
+.chips span.on{color:var(--on-led);background:var(--led);border-color:var(--led);box-shadow:0 0 14px rgba(255,184,92,.35)}
+.chips span.sec{border-style:dashed}
+.city-foot{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px}
+.sents{flex:1 1 320px;min-width:0;border:1px solid var(--line);border-radius:12px;padding:0 14px}
+.sents summary{cursor:pointer;list-style:none;padding:11px 0;font:500 13px var(--f-body);color:var(--paper);display:flex;gap:8px;align-items:center}
+.sents summary::-webkit-details-marker{display:none}
+.sents summary::after{content:"▾";margin-left:auto;color:var(--mute);transition:transform .2s}
+.sents[open] summary::after{transform:rotate(180deg)}
+.sents summary span{font:400 11px var(--f-mono);color:var(--led)}
+.sents ol{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:8px}
+.sents li{font-size:14px;line-height:1.5;color:#c9cbd0}
+.sents li b{color:var(--led);font-weight:600;margin-right:6px}
+.sents li.empty{color:var(--mute);font-size:13px}
+.mini-btns{display:flex;gap:6px;flex-wrap:wrap}
+.btn.sm{font-size:12px;padding:8px 12px;border-radius:999px}
+.city .win{padding:10px 14px;border-radius:12px;font-size:13.5px;line-height:1.45}
+.city .win b{display:inline;font:700 14px var(--f-body);margin-right:6px}
+@media (max-width:520px){.chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--gut-r)) 0 0;padding-right:var(--gut-r)}.chips::-webkit-scrollbar{display:none}.screen-bar{font-size:10px}}
 /* ---------- game ---------- */
 .game{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px}
 .screen{position:relative;padding:12px;border-radius:24px;background:#08090b;border:1px solid var(--line);box-shadow:0 30px 80px -40px rgba(255,184,92,.35)}
@@ -365,8 +409,6 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
 </style>
 </head>
 <body>
-
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs></defs></svg>
 
 <header class="top">
@@ -375,9 +417,9 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
     <nav aria-label="Hlavní">
       <a class="opt" href="#pole">Projekty</a>
       <a class="opt" href="#o-mne">O mně</a>
-      <a href="#eseje">Eseje</a>
       <a class="opt" href="#hra">Hra</a>
       <a href="#spoluprace">Spolupráce</a>
+      <a href="#eseje">Eseje</a>
     </nav>
   </div>
 </header>
@@ -386,7 +428,9 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
 <!-- ================= FILM ================= -->
 <section id="film" aria-label="Příběh ve videu">
   <div class="film-stage" id="filmStage">
-    <canvas id="filmCanvas" role="img" aria-label="Jarda stojí v ateliéru, podívá se nahoru, z úst mu vylétají písmena a pak se zase vrátí."></canvas>
+    <canvas id="filmCanvas" role="img" aria-label="Jarda stojí v bílém ateliéru, podívá se nahoru, z úst mu vylétají písmena a pak se usměje."></canvas>
+    <div class="film-fog"></div>
+    <canvas id="glyphCanvas" aria-hidden="true"></canvas>
     <div class="film-scrim"></div>
 
     <div class="blk blk-hero" data-a="0" data-b="0" data-c="14" data-d="40" data-in="none" data-out="scatter">
@@ -395,19 +439,19 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
       <p class="fade lede">Spojuju světlo, materiál a kód. Posouvej dolů a pusť slova ven.</p>
     </div>
 
-    <div class="blk l" data-a="54" data-b="72" data-c="88" data-d="98" data-in="mouth" data-out="scatter">
+    <div class="blk l" data-a="78" data-b="86" data-c="92" data-d="97" data-in="mouth" data-out="scatter">
       <span class="eyebrow">prolog · slova</span>
       <h2 class="fly">Celý život sbírám slova.</h2>
       <p class="fade">Z knížek, schůzek, ze zápisků, z mobilu. Tady jsou všechna ta slova, která musela ven.</p>
     </div>
 
-    <div class="blk r" data-a="98" data-b="112" data-c="124" data-d="132" data-in="mouth" data-out="scatter">
+    <div class="blk r" data-a="97" data-b="104" data-c="109" data-d="113" data-in="mouth" data-out="scatter">
       <span class="eyebrow">kapitola I</span>
       <h2 class="fly">Kód, myšlenka, obraz.</h2>
       <p class="fade">Můj svět se přesunul od pevných podkladů k digitálnímu plátnu. Zkouším propojovat to, co mě napadá, s možnostmi moderních nástrojů a umělé inteligence. Není to o dokonalých šablonách, ale o tom dát myšlenkám vizuální podobu a sledovat, kam až se dá zajít.</p>
     </div>
 
-    <div class="blk l" data-a="130" data-b="140" data-c="150" data-d="168" data-in="mouth" data-out="mouth">
+    <div class="blk l" data-a="113" data-b="119" data-c="123" data-d="129" data-in="mouth" data-out="mouth">
       <span class="eyebrow">kapitola II</span>
       <h2 class="fly">Hledání cesty, ne škatulek.</h2>
       <p class="fade">Člověk stráví roky tím, že plní očekávání druhých a hraje role, které se od něj čekají. Zlom přichází ve chvíli, kdy si dovolíš se zastavit, zahodit plány a začít zjišťovat, co vlastně chceš ty sám. Není to o dokonalém směru, ale o tom jít kupředu a zkoušet nové věci.</p>
@@ -415,7 +459,7 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
 
     <div class="film-shade" id="filmShade"></div>
 
-    <div class="blk blk-final" id="blkFinal" data-a="176" data-b="200" data-c="9999" data-d="9999" data-in="rise" data-out="none">
+    <div class="blk blk-final" id="blkFinal" data-a="160" data-b="190" data-c="9999" data-d="9999" data-in="rise" data-out="none">
       <span class="eyebrow">tohle jsem já</span>
       <h2 class="fly">A pak jsem začal stavět.</h2>
     </div>
@@ -440,7 +484,7 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
 <section class="sec wrap" id="pole" aria-label="Projekty">
   <div class="sec-head">
     <div><span class="eyebrow led rv">co dělám teď</span><h2 class="rv">Jedna dílna, <em>osm světů.</em></h2></div>
-    <p class="rv">Všechno, co dělám, se potkává v Ilustru. Klikni na svět a uvidíš, co dělá pro lidi. Jak přesně to funguje uvnitř, si nechávám pro sebe.</p>
+    <p class="rv">Všechno, co dělám, se potkává v Ilustru. Klikni na svět a podívej se, co umí. Zbytek už mluví sám za sebe.</p>
   </div>
   <div class="pole-grid">
     <div class="panel">
@@ -481,10 +525,10 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
           <li><b>obchod</b><span>B2B jednání, práce s partnery, nabídky a projekty od první schůzky po předání.</span></li>
         </ul>
       </div>
-      <div class="ab rv"><h3>Tvorba</h3><p>Tvořím tam, kde se potkává ruka a obrazovka. Nápad si nejdřív popíšu nebo načrtnu, pak ho zkouším v kódu, ve světle a v materiálu, dokud nezačne žít. Nejvíc mě baví chvíle, kdy fyzický předmět a digitální zážitek splynou a člověk už nepozná, kde končí jeden a začíná druhý. Každá věc u mě začíná otázkou, co má člověk cítit, když k ní přijde.</p></div>
+      <div class="ab rv"><h3>Tvorba</h3><p>Stavím věci napříč světy. Ať už vyvíjím vlastní nápady, nebo doručuji klientskou zakázku, princip se nemění. Propojuji hmatatelnou hmotu, světlo a moderní technologie do jednoho funkčního celku. Od prvotní myšlenky až po finální realizaci bez zbytečných mezičlánků.</p></div>
       <div class="ab rv"><h3>Směřování</h3><p>Chci stavět světelné monumenty. Velké objekty ze světla na náměstích, ve foyer a na festivalech, které se dají obejít, projít a které reagují na lidi kolem sebe. Místa, kde se člověk zastaví, zvedne hlavu a chvíli se jen dívá. K tomu prostory, které vnímají: showroomy, kde tě výrobek pozdraví, a recepce, kde ti logo poradí cestu. Chci, aby Ilustro bylo dílnou, kam se chodí, když má něco zůstat v paměti.</p></div>
       <div class="ab rv"><h3>Filozofie</h3><p>Technologie má sloužit člověku, ne ho přehlušit. Nejlepší řešení je to, které vypadá samozřejmě. Hrát si je vážná práce, protože hračka je nejpoctivější test nápadu. A nejsilnější inteligence není ta umělá ani ta lidská, ale ta, která vznikne mezi nimi.</p></div>
-      <div class="ab rv"><h3>Propojení</h3><p>Celý život propojuju věci, které spolu zdánlivě nesouvisí. Papír se světlem, obchod s tvorbou, staré řemeslo s AI. Lidi z výroby s lidmi od kódu. Většina nápadů nevznikne v jednom oboru, ale na jejich hranici. Právě tam jsem doma.</p></div>
+      <div class="ab rv"><h3>Propojení</h3><p>Věřit tomu, že obory existují odděleně, je omyl. Celý život propojuji to, co k sobě zdánlivě nepatří – papír se světlem, obchod s tvorbou, tradici řemesla s inteligencí kódu. Propojuji lidi z dílny s těmi, kdo píší software. Ty nejlepší myšlenky a projekty se nikdy nerodí uprostřed jedné oblasti, ale přesně tam, kde se tyhle odlišné světy propojují. Právě v tomhle prostoru dávám věcem reálný tvar.</p></div>
     </div>
   </div>
 </section>
@@ -557,6 +601,68 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
   </article>
 </section>
 
+<!-- ================= CHIP (hand + processor) ================= -->
+<section id="chip" aria-label="Myšlenka na dlani">
+  <div class="chip-stage" id="chipStage">
+    <canvas id="chipCanvas" role="img" aria-label="Ruka zespodu vyjede nahoru a drží na dlani procesor."></canvas>
+    <svg class="traces" id="traces" aria-hidden="true"></svg>
+    <div class="chip-title" id="chipTitle"><span class="eyebrow led">na dlani</span><h2>Myšlenka na dlani.</h2></div>
+    <div class="chip-end" id="chipEnd"><p>Každé světlo začíná <em>myšlenkou.</em></p></div>
+    <div class="chip-hud mono" id="cCount">snímek 001 / 240</div>
+  </div>
+</section>
+
+<!-- ================= GAME ================= -->
+<section class="sec wrap" id="hra" aria-label="Hra Rozsviť ulici">
+  <div class="sec-head">
+    <div><span class="eyebrow led rv">hra</span><h2 class="rv">Rozsviť <em>ulici.</em></h2></div>
+    <p class="rv">Kus města, které čeká na světlo. Přepni na noc a najdi deset míst, která jdou rozsvítit. Každé odemkne jednu větu. A někde nahoře se skrývá tajemství.</p>
+  </div>
+  <div class="city">
+    <div class="screen city-screen">
+      <div class="screen-bar mono"><span id="cHint" class="on">setmí se? přepni na noc</span><span id="cityCount">0 / 10</span>
+        <span class="city-tg"><button class="tg" id="cDay" type="button" aria-pressed="false">☾ noc</button><button class="tg" id="cSnd" type="button" aria-pressed="false">zvuk: vyp</button></span></div>
+      <div class="city-wrap">
+        <canvas id="gameCv" role="img" aria-label="Izometrické město s křižovatkou, auty a chodci. V noci jde rozsvítit deset míst: pekárna, kavárna, kino, lékárna, květinářství, hotel, stánek DiDo, dílna Ilustro, světelný box a chytrý pásek."></canvas>
+        <div class="city-toast" id="cToast" role="status" aria-live="polite"></div>
+      </div>
+      <div class="city-ctl" id="ctlBox" hidden>
+        <span class="mono">světelný box</span>
+        <input id="boxTxt" maxlength="12" autocomplete="off" aria-label="Text ve světelném boxu" placeholder="tvůj vzkaz">
+        <span class="sw"><button type="button" class="on" data-boxcol="#fff1d6" style="--c:#fff1d6" aria-label="teplá bílá"></button><button type="button" data-boxcol="#eef6ff" style="--c:#eef6ff" aria-label="studená bílá"></button><button type="button" data-boxcol="#ffb85c" style="--c:#ffb85c" aria-label="oranžová"></button><button type="button" data-boxcol="#6ec3ff" style="--c:#6ec3ff" aria-label="modrá"></button></span>
+        <button type="button" class="ctl-x" aria-label="Zavřít">×</button>
+      </div>
+      <div class="city-ctl" id="ctlStrip" hidden>
+        <span class="mono">chytrý pásek</span>
+        <span class="fx"><button type="button" class="on" data-fx="duha">duha</button><button type="button" data-fx="beh">běžící</button><button type="button" data-fx="dych">dýchání</button><button type="button" data-fx="jiskry">jiskření</button><button type="button" data-fx="vlna">vlna</button></span>
+        <span class="sw"><button type="button" class="on" data-stripcol="#ffffff" style="--c:#ffffff" aria-label="bílá"></button><button type="button" data-stripcol="#ffd9a1" style="--c:#ffd9a1" aria-label="teplá"></button><button type="button" data-stripcol="#ffb85c" style="--c:#ffb85c" aria-label="oranžová"></button><button type="button" data-stripcol="#ff5a6e" style="--c:#ff5a6e" aria-label="červená"></button><button type="button" data-stripcol="#5ad1ff" style="--c:#5ad1ff" aria-label="modrá"></button><button type="button" data-stripcol="#9b7bff" style="--c:#9b7bff" aria-label="fialová"></button></span>
+        <button type="button" class="ctl-x" aria-label="Zavřít">×</button>
+      </div>
+    </div>
+    <div class="chips" id="finds" role="list" aria-label="Místa k rozsvícení"></div>
+    <div class="win" id="win" role="status"><b>Celá ulice svítí.</b><span id="winStats"></span></div>
+    <div class="city-foot">
+      <details class="sents"><summary>Odemčené věty <span id="sentN">0 / 10</span></summary><ol id="sentList"></ol></details>
+      <span class="mini-btns"><button class="btn sm" id="gReset" type="button">Hrát znovu</button><button class="btn sm" id="gSkip" type="button">Rozsvítit všechno</button></span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLLABORATION ================= -->
+<section class="sec wrap" id="spoluprace" aria-label="Spolupráce">
+  <div class="sec-head">
+    <div><span class="eyebrow led rv">spolupráce</span><h2 class="rv">Pojďme postavit <em>něco většího.</em></h2></div>
+    <p class="rv">Tahle stránka je pozvánka. Hledám lidi a firmy, se kterými postavíme víc, než zvládne každý sám.</p>
+  </div>
+  <div class="collab">
+    <div class="panel co rv"><span class="mono">firmy a značky</span><h3>Prostor, který si všimne</h3><p>Showroom, recepce nebo výstava, která člověka pozná a promluví na něj o vaší značce.</p></div>
+    <div class="panel co rv"><span class="mono">agentury, produkce, studia</span><h3>Ruce na světlo a výrobu</h3><p>Když vám u zakázky chybí světlo, výroba nebo interaktivní technologie. Umím být subdodavatelem v pozadí i partnerem u stolu.</p></div>
+    <div class="panel co rv"><span class="mono">architekti, designéři, nábytek</span><h3>Světlo uvnitř věcí</h3><p>Světlo a reakce zabudované přímo do prostoru, nábytku a materiálu.</p></div>
+    <div class="panel co rv"><span class="mono">vývojáři, robotici, tvůrci</span><h3>Co ještě nikdo neudělal</h3><p>Vy přinesete kód nebo mechaniku, já dílnu, výrobu a cit pro to, jak má věc působit na lidi.</p></div>
+    <div class="panel co rv"><span class="mono">partneři a investoři</span><h3>Prostor, světlo a AI</h3><p>Pro ty, kdo věří, že tyhle tři věci k sobě patří a že z nich vyroste nový obor.</p></div>
+  </div>
+</section>
+
 <!-- ================= ESSAYS ================= -->
 <section class="sec wrap" id="eseje" aria-label="Eseje o tvoření">
   <div class="sec-head">
@@ -577,62 +683,11 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
   </div>
 </section>
 
-<!-- ================= CHIP (hand + processor) ================= -->
-<section id="chip" aria-label="Myšlenka na dlani">
-  <div class="chip-stage" id="chipStage">
-    <canvas id="chipCanvas" role="img" aria-label="Ruka zespodu vyjede nahoru a drží na dlani procesor."></canvas>
-    <svg class="traces" id="traces" aria-hidden="true"></svg>
-    <div class="chip-title" id="chipTitle"><span class="eyebrow led">na dlani</span><h2>Myšlenka na dlani.</h2></div>
-    <div class="chip-end" id="chipEnd"><p>Každé světlo začíná <em>myšlenkou.</em></p></div>
-    <div class="chip-hud mono" id="cCount">snímek 001 / 240</div>
-  </div>
-</section>
-
-<!-- ================= GAME ================= -->
-<section class="sec wrap" id="hra" aria-label="Hra Rozsviť slovo">
-  <div class="sec-head">
-    <div><span class="eyebrow led rv">hra</span><h2 class="rv">Rozsviť <em>slovo.</em></h2></div>
-    <p class="rv">Písmena víří jako ve videu. Klikni na to, které chybí, a pošli na něj paprsek světla. Na počítači stačí písmeno napsat na klávesnici. Každé hotové slovo odemkne jednu větu.</p>
-  </div>
-  <div class="game">
-    <div class="screen">
-      <div class="screen-bar mono"><span id="gLvl">slovo 1 / 5</span><span id="gNeed" class="on">hledej: S</span><span id="gStat">zásahy 0 · minutí 0</span></div>
-      <canvas id="gameCv" role="img" aria-label="LED panel s vířícími písmeny. Nahoře je hledané slovo, dole lampa, která střílí paprsky světla."></canvas>
-    </div>
-    <div class="side">
-      <div class="panel">
-        <h3>Odemčené věty</h3>
-        <ol class="unl" id="unl"></ol>
-      </div>
-      <div class="win" id="win" role="status"><b>Všech pět slov svítí.</b><span id="winStats"></span></div>
-      <div class="btns">
-        <button class="btn" id="gReset" type="button">Hrát znovu</button>
-        <button class="btn" id="gSkip" type="button">Ukázat všechny věty</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= COLLABORATION ================= -->
-<section class="sec wrap" id="spoluprace" aria-label="Spolupráce">
-  <div class="sec-head">
-    <div><span class="eyebrow led rv">spolupráce</span><h2 class="rv">Pojďme postavit <em>něco většího.</em></h2></div>
-    <p class="rv">Tahle stránka je pozvánka. Hledám lidi a firmy, se kterými postavíme víc, než zvládne každý sám.</p>
-  </div>
-  <div class="collab">
-    <div class="panel co rv"><span class="mono">firmy a značky</span><h3>Prostor, který si všimne</h3><p>Showroom, recepce nebo výstava, která člověka pozná a promluví na něj o vaší značce.</p></div>
-    <div class="panel co rv"><span class="mono">agentury, produkce, studia</span><h3>Ruce na světlo a výrobu</h3><p>Když vám u zakázky chybí světlo, výroba nebo interaktivní technologie. Umím být subdodavatelem v pozadí i partnerem u stolu.</p></div>
-    <div class="panel co rv"><span class="mono">architekti, designéři, nábytek</span><h3>Světlo uvnitř věcí</h3><p>Světlo a reakce zabudované přímo do prostoru, nábytku a materiálu.</p></div>
-    <div class="panel co rv"><span class="mono">vývojáři, robotici, tvůrci</span><h3>Co ještě nikdo neudělal</h3><p>Vy přinesete kód nebo mechaniku, já dílnu, výrobu a cit pro to, jak má věc působit na lidi.</p></div>
-    <div class="panel co rv"><span class="mono">partneři a investoři</span><h3>Prostor, světlo a AI</h3><p>Pro ty, kdo věří, že tyhle tři věci k sobě patří a že z nich vyroste nový obor.</p></div>
-  </div>
-</section>
-
 <!-- ================= CONTACT ================= -->
 <section class="wrap end" id="kontakt" aria-label="Kontakt">
   <span class="eyebrow led rv">epilog</span>
-  <h2 class="rv">Slova se <em>vrací.</em></h2>
-  <p class="rv">Všechno, co tu je, se jednou vrátí dovnitř a promění se v další věc. Máš nápad, který by měl svítit, mluvit nebo reagovat? Pojďme ho postavit.</p>
+  <h2 class="rv">Nekonečný <em>koloběh.</em></h2>
+  <p class="rv">Světů a myšlenek je nekonečně, neustále vznikají další. Ilustro je sice moje základna, ale tvoření nezná pevné hranice – mnohé projekty žijí a rostou zcela mimo ni. Prozkoumej tyhle vesmíry a podívej se, kde se naše cesty mohou protnout, a pokud v tom uvidíš smysl pro společnou věc, pojďme to propojit.</p>
   <div class="mail rv">
     <code id="mailTxt">jaroslav.klimes@ilustro.cz</code>
     <button class="btn led" id="copyMail" type="button">Zkopírovat e-mail</button>
@@ -701,7 +756,7 @@ button.ess h3{font-size:clamp(34px,4vw,56px)}
   <div class="m-text">
     <span class="m-eyebrow">[ kapitola III · jak pracuju ]</span>
     <p class="m-title" id="mTitle">Nepíšu kód. <em>Stavím.</em></p>
-    <p class="m-sub" id="mSub">Nejsem programátor a nebudu se za něj vydávat. S AI jako parťákem jsem postavil živé vizitky, mluvící světelné logo a řadu webů. Já přináším nápad a cit pro detail, AI řemeslo, které jsem se nikdy neučil. Někdo tomu říká vibecoding, já tomu říkám dialog.</p>
+    <p class="m-sub" id="mSub">Nejsem programátor a nebudu se za něj vydávat. S AI jako parťákem jsem postavil živé vizitky, mluvící světelné logo a řadu webů. Já přináším nápad a cit pro detail, AI řemeslo, které jsem se nikdy neučil. Někdo tomu říká vibecoding, já tomu říkám propojení.</p>
     <span class="m-foot" id="mFoot">nápad · dialog · prototyp · výroba · světlo</span>
   </div>
 </div>
@@ -749,32 +804,129 @@ loadFrame(0);
 const order = []; for (let s of [24, 8, 2, 1]) for (let i = 0; i < N; i += s) if (!order.includes(i)) order.push(i);
 order.forEach((i, k) => { if (i) setTimeout(() => loadFrame(i), 20 + k * 6); });
 
+// 16:9 source (1920x1080, white studio, shoulders outpainted around the portrait video): cover-fit everywhere
+const FW = 1920, FH = 1080, FBG = '#fcfcfc';
 let CW = 0, CH = 0, DPR = 1, cover = { s: 1, x: 0, y: 0 }, lastDrawn = -1, curFrame = 0, needDraw = true;
 function sizeFilm() {
   DPR = Math.min(devicePixelRatio || 1, 2);
   const r = cv.getBoundingClientRect(); CW = r.width; CH = r.height;
   cv.width = Math.round(CW * DPR); cv.height = Math.round(CH * DPR);
-  const s = Math.max(CW / 1280, CH / 720);
-  cover = { s, x: (CW - 1280 * s) / 2, y: (CH - 720 * s) / 2 };
-  needDraw = true;
+  const s = Math.max(CW / FW, CH / FH);
+  cover = { s, x: (CW - FW * s) / 2, y: (CH - FH * s) / 2 };
+  needDraw = true; sizeGlyphs();
 }
 function nearestLoaded(i) { for (let d = 0; d < N; d++) { if (frames[i - d]) return i - d; if (frames[i + d]) return i + d; } return -1; }
-function drawFrame(i) {
+function drawFrame(f) {
+  const i = Math.min(N - 1, Math.floor(f)), t = f - i;
   const k = nearestLoaded(i); if (k < 0) return;
-  if (k === lastDrawn && !needDraw) return;
+  // cross-fade to the next frame so slow scrolling stays smooth
+  const k2 = (k === i && t > .04 && frames[i + 1]) ? i + 1 : -1;
+  const key = k * 100 + (k2 >= 0 ? Math.round(t * 16) : 0);
+  if (key === lastDrawn && !needDraw) return;
   fx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  fx.drawImage(frames[k], cover.x, cover.y, 1280 * cover.s, 720 * cover.s);
-  lastDrawn = k; needDraw = false;
+  fx.globalAlpha = 1; fx.fillStyle = FBG; fx.fillRect(0, 0, CW, CH);
+  const w = FW * cover.s, h = FH * cover.s;
+  fx.drawImage(frames[k], cover.x, cover.y, w, h);
+  if (k2 >= 0) { fx.globalAlpha = t; fx.drawImage(frames[k2], cover.x, cover.y, w, h); fx.globalAlpha = 1; }
+  lastDrawn = key; needDraw = false;
 }
 // scroll -> frame (more scroll where the letters fly)
-const KF = [[0, 0], [.08, 30], [.15, 54], [.40, 100], [.78, 166], [.86, 182], [.92, 239]];
+const KF = [[0, 0], [.08, 24], [.14, 56], [.19, 78], [.76, 129], [.82, 150], [.87, 192], [.92, 239]];
 function frameAt(p) {
   for (let i = 1; i < KF.length; i++) if (p <= KF[i][0]) { const [p0, f0] = KF[i - 1], [p1, f1] = KF[i]; return f0 + (f1 - f0) * (p - p0) / (p1 - p0); }
   return 239;
 }
 function mouth(f) {
-  const up = smooth(28, 44, f) * (1 - smooth(160, 176, f));
-  return { x: cover.x + lerp(640, 636, up) * cover.s, y: cover.y + lerp(320, 262, up) * cover.s };
+  const up = smooth(24, 56, f) * (1 - smooth(128, 150, f));
+  return { x: cover.x + lerp(960, 957, up) * cover.s, y: cover.y + lerp(489, 393, up) * cover.s };
+}
+
+/* ================= FILM: 3D letters & digits pour out of the mouth, then get swallowed ================= */
+const gv = $('#glyphCanvas'), glyx = gv.getContext('2d');
+const GL_CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHJKLMNOPRSTUVZ0123456789ŽŠŘČÁÉÝ&?!';
+const GS = 128, glyphSprite = {};
+function sprite(ch) { // white letter, depth fading grey to black, soft cast shadow; rendered once per glyph
+  const key = ch;
+  if (glyphSprite[key]) return glyphSprite[key];
+  const pad = 46, depth = 13, fnt = `800 ${GS}px "Bricolage Grotesque","Arial Black",Arial,sans-serif`;
+  const c = document.createElement('canvas'), x = c.getContext('2d'); x.font = fnt;
+  const w = Math.ceil(x.measureText(ch).width);
+  c.width = w + pad * 2 + depth; c.height = Math.ceil(GS * 1.3) + pad * 2 + depth;
+  x.font = fnt; x.textBaseline = 'middle'; x.textAlign = 'center';
+  const cx = (w + pad * 2) / 2, cy = (GS * 1.3 + pad * 2) / 2;
+  x.save(); x.shadowColor = 'rgba(0,0,0,.16)'; x.shadowBlur = 26; x.shadowOffsetX = depth + 8; x.shadowOffsetY = depth + 14;
+  x.fillStyle = '#9a9a9a'; x.fillText(ch, cx + depth, cy + depth); x.restore();
+  for (let d = depth; d > 0; d--) { // depth: light grey at the front, mid grey at the back
+    const k = 1 - d / depth, v = 150 + 62 * k;
+    x.fillStyle = `rgb(${v | 0},${v | 0},${v | 0})`; x.fillText(ch, cx + d * .8, cy + d);
+  }
+  // white face
+  const g = x.createLinearGradient(0, cy - GS * .5, 0, cy + GS * .5);
+  g.addColorStop(0, '#ffffff'); g.addColorStop(.65, '#f6f6f6'); g.addColorStop(1, '#e2e2e2');
+  x.fillStyle = g; x.fillText(ch, cx, cy);
+  return (glyphSprite[key] = { c, ox: cx, oy: cy });
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { for (const k in glyphSprite) delete glyphSprite[k]; });
+const GLYPHS = (() => {
+  let seed = 20261015; const r = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  return Array.from({ length: 74 }, () => ({
+    ch: GL_CH[Math.floor(r() * GL_CH.length)], te: 78 + r() * 30, ts: 114 + r() * 8,
+    ang: -Math.PI / 2 + (r() - .5) * Math.PI * 1.55, dist: .28 + r() * .8, z: .45 + r() * 1.15,
+    rot: (r() - .5) * 1.3, spin: (r() - .5) * 2.6, flip: r() * 6.28, flipS: .6 + r() * 1.6, swirl: (r() - .5) * 1.1, bob: r() * 6.28
+  })).sort((a, b) => a.z - b.z); // far ones first
+})();
+// a few light sparks: white dots with a thin comet tail, travelling with the letters
+const SPARKS = (() => {
+  let seed = 777; const r = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  return Array.from({ length: 18 }, () => ({ te: 80 + r() * 26, ts: 113 + r() * 9, ang: -Math.PI / 2 + (r() - .5) * Math.PI * 1.7, dist: .45 + r() * .7, swirl: (r() < .5 ? -1 : 1) * (.8 + r() * 1.2), size: 1.1 + r() * 1.3 }));
+})();
+function sparkPos(p, f, M, R) {
+  const u = clamp((f - p.te) / 10), e = easeOut(u), age = Math.max(0, f - p.te), a = p.ang + p.swirl * age * .03, reach = R * p.dist * e;
+  let x = M.x + Math.cos(a) * reach, y = M.y + Math.sin(a) * reach * .78;
+  const sw = smooth(p.ts, p.ts + 8, f);
+  if (sw > 0) { const k = sw * sw; x = lerp(x, M.x, k) + Math.sin(sw * Math.PI) * 60 * Math.sign(p.swirl); y = lerp(y, M.y, k) - Math.sin(sw * Math.PI) * 40; }
+  return { x, y, u, sw };
+}
+let GLW = 0, GLH = 0, glyphsOn = false;
+function sizeGlyphs() { const r = gv.getBoundingClientRect(); GLW = r.width; GLH = r.height; gv.width = Math.round(GLW * DPR); gv.height = Math.round(GLH * DPR); glyphsOn = true; }
+function drawGlyphs(f, now) {
+  if (f < 76 || f > 131) { if (glyphsOn) { glyx.setTransform(1, 0, 0, 1, 0, 0); glyx.clearRect(0, 0, gv.width, gv.height); glyphsOn = false; } return; }
+  glyphsOn = true;
+  glyx.setTransform(DPR, 0, 0, DPR, 0, 0); glyx.clearRect(0, 0, GLW, GLH);
+  const M = mouth(f), R = Math.max(GLW * .55, GLH * .62), base = Math.max(Math.min(GLW, GLH * 1.25) / 900, .62), t = now / 1000;
+  for (const g of GLYPHS) {
+    const u = clamp((f - g.te) / 13); if (u <= 0) continue;
+    const sw = smooth(g.ts, g.ts + 8, f); if (sw >= 1) continue;
+    const e = easeOut(u), age = f - g.te, a = g.ang + g.swirl * age * .018, reach = R * g.dist * e * (.55 + .45 * g.z);
+    let x = M.x + Math.cos(a) * reach + Math.sin(t * .9 + g.bob) * 7 * e;
+    let y = M.y + Math.sin(a) * reach * .78 + Math.cos(t * .7 + g.bob) * 6 * e;
+    if (sw > 0) { const k = sw * sw; x = lerp(x, M.x, k) + Math.sin(sw * Math.PI) * 70 * g.swirl; y = lerp(y, M.y, k) - Math.sin(sw * Math.PI) * 46; }
+    const sc = base * g.z * (.3 + .7 * e) * (1 - .92 * sw) * .72;
+    const tumble = .5 + .5 * Math.abs(Math.cos(g.flip + age * .035 * g.flipS + t * .25));
+    const sp = sprite(g.ch);
+    glyx.globalAlpha = clamp(u * 3) * (g.z < .7 ? .72 : 1) * (1 - smooth(.8, 1, sw));
+    glyx.save(); glyx.translate(x, y); glyx.rotate(g.rot + g.spin * age * .02 + sw * g.spin * 1.5); glyx.scale(sc * tumble, sc);
+    glyx.drawImage(sp.c, -sp.ox, -sp.oy); glyx.restore();
+  }
+  glyx.globalAlpha = 1;
+  // sparks: a bright dot leaving a trail of tiny fragments that shrink and fade
+  for (const p of SPARKS) {
+    const P = sparkPos(p, f, M, R); if (P.u <= 0 || P.sw >= 1) continue;
+    const al = clamp(P.u * 3) * (1 - smooth(.8, 1, P.sw));
+    glyx.shadowColor = `rgba(40,40,40,${(.5 * al).toFixed(3)})`; glyx.shadowBlur = 3;
+    let px = P.x, py = P.y, run = 0; const maxRun = 70 + 30 * p.size;
+    for (let k = 1; k <= 16; k++) {
+      const Q = sparkPos(p, f - k * .45, M, R);
+      run += Math.hypot(Q.x - px, Q.y - py); px = Q.x; py = Q.y;
+      if (run > maxRun || Q.u <= 0) break;
+      const fade = 1 - k / 17, j = Math.sin(k * 12.9898 + p.te * 78.233) * 43758.5453, jj = (j - Math.floor(j) - .5) * 5 * (k / 16);
+      glyx.fillStyle = `rgba(255,255,255,${(al * fade * .85).toFixed(3)})`;
+      glyx.beginPath(); glyx.arc(Q.x + jj, Q.y - jj * .6, Math.max(.4, p.size * .9 * fade), 0, 7); glyx.fill();
+    }
+    glyx.fillStyle = `rgba(255,255,255,${al.toFixed(3)})`;
+    glyx.beginPath(); glyx.arc(P.x, P.y, p.size * 1.5, 0, 7); glyx.fill();
+  }
+  glyx.shadowBlur = 0; glyx.shadowColor = 'transparent';
 }
 
 /* ================= FILM: flying letters ================= */
@@ -866,7 +1018,7 @@ function updateBlocks(f, dark) {
       s.transform = (x || y || rot || sc !== 1) ? `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(1)}deg) scale(${sc.toFixed(3)})` : 'none';
       s.opacity = op.toFixed(3);
       if (B.hero) {}
-      else if (glow > .02) { s.color = mixc(B.final ? PAPER : INK, [255, 255, 255], glow); s.textShadow = `0 0 ${(14 * glow).toFixed(1)}px rgba(255,255,255,${(.9 * glow).toFixed(2)})`; }
+      else if (glow > .02) { s.color = B.final ? '' : mixc(INK, [0, 0, 0], glow); s.textShadow = `1px 1px 0 rgba(170,170,170,${(.8 * glow).toFixed(2)}),0 0 ${(10 * glow).toFixed(1)}px rgba(0,0,0,${(.15 * glow).toFixed(2)})`; }
       else if (s.color) { s.color = ''; s.textShadow = ''; }
     });
     const wIn = B.inM === 'none' ? 1 : clamp((tin - .3) / .7), wOut = clamp(tout * 1.8), nW = B.words.length || 1;
@@ -884,7 +1036,7 @@ function updateFilm() {
   const p = clamp(-r.top / total);
   const f = frameAt(p), dark = smooth(.92, 1, p);
   curFrame = Math.round(f);
-  drawFrame(curFrame);
+  drawFrame(f); drawGlyphs(f, performance.now());
   fCount.textContent = `snímek ${String(curFrame + 1).padStart(3, '0')} / 240`;
   shade.style.opacity = dark.toFixed(3);
   hint.style.opacity = (1 - clamp(p * 25)).toFixed(2);
@@ -1160,222 +1312,559 @@ function symTick(now) {
   sx.fillStyle = 'rgba(207,227,242,.8)'; sx.fillText('AI', 6, SH - 6);
 }
 
-/* ================= GAME: Rozsviť slovo ================= */
-const FONT = {
-  A: [' ### ', '#   #', '#   #', '#####', '#   #', '#   #', '#   #'], B: ['#### ', '#   #', '#   #', '#### ', '#   #', '#   #', '#### '],
-  C: [' ### ', '#   #', '#    ', '#    ', '#    ', '#   #', ' ### '], D: ['#### ', '#   #', '#   #', '#   #', '#   #', '#   #', '#### '],
-  E: ['#####', '#    ', '#    ', '#### ', '#    ', '#    ', '#####'], F: ['#####', '#    ', '#    ', '#### ', '#    ', '#    ', '#    '],
-  G: [' ### ', '#   #', '#    ', '# ###', '#   #', '#   #', ' ####'], H: ['#   #', '#   #', '#   #', '#####', '#   #', '#   #', '#   #'],
-  I: [' ### ', '  #  ', '  #  ', '  #  ', '  #  ', '  #  ', ' ### '], J: ['  ###', '   # ', '   # ', '   # ', '   # ', '#  # ', ' ##  '],
-  K: ['#   #', '#  # ', '# #  ', '##   ', '# #  ', '#  # ', '#   #'], L: ['#    ', '#    ', '#    ', '#    ', '#    ', '#    ', '#####'],
-  M: ['#   #', '## ##', '# # #', '# # #', '#   #', '#   #', '#   #'], N: ['#   #', '#   #', '##  #', '# # #', '#  ##', '#   #', '#   #'],
-  O: [' ### ', '#   #', '#   #', '#   #', '#   #', '#   #', ' ### '], P: ['#### ', '#   #', '#   #', '#### ', '#    ', '#    ', '#    '],
-  Q: [' ### ', '#   #', '#   #', '#   #', '# # #', '#  # ', ' ## #'], R: ['#### ', '#   #', '#   #', '#### ', '# #  ', '#  # ', '#   #'],
-  S: [' ####', '#    ', '#    ', ' ### ', '    #', '    #', '#### '], T: ['#####', '  #  ', '  #  ', '  #  ', '  #  ', '  #  ', '  #  '],
-  U: ['#   #', '#   #', '#   #', '#   #', '#   #', '#   #', ' ### '], V: ['#   #', '#   #', '#   #', '#   #', '#   #', ' # # ', '  #  '],
-  W: ['#   #', '#   #', '#   #', '# # #', '# # #', '# # #', ' # # '], X: ['#   #', '#   #', ' # # ', '  #  ', ' # # ', '#   #', '#   #'],
-  Y: ['#   #', '#   #', ' # # ', '  #  ', '  #  ', '  #  ', '  #  '], Z: ['#####', '    #', '   # ', '  #  ', ' #   ', '#    ', '#####']
-};
-const ACC = { 'Ě': ['E', [[1, -2], [3, -2], [2, -1]]], 'Á': ['A', [[3, -2], [2, -1]]] };
-const strip = c => c.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-function glyph(c) { // -> list of [x,y] pixels, y may be negative for accents
-  const base = ACC[c] ? ACC[c][0] : c, rows = FONT[base]; if (!rows) return [];
-  const px = []; rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === '#') px.push([x, y]); }));
-  if (ACC[c]) px.push(...ACC[c][1]); return px;
-}
-const GLY = {}; [...Object.keys(FONT), 'Ě', 'Á'].forEach(c => GLY[c] = glyph(c));
-const WORDS = [
-  ['SVĚTLO', 'Světlo je můj materiál. Stejně jako papír, dřevo a kód.'],
-  ['NÁPAD', 'Nápady sbírám v noci do telefonu. Ty nejlepší chytám pod hladinou.'],
-  ['ROBOT', 'Stroje stavím, aby reagovaly na lidi. Ne aby je nahradily.'],
-  ['DIALOG', 'S AI nepíšu příkazy. Vedu rozhovor.'],
-  ['ILUSTRO', 'Tohle všechno je Ilustro. Pojďme spolu něco rozsvítit.']
-];
-const unl = $('#unl');
-WORDS.forEach(([w], i) => { const li = document.createElement('li'); li.innerHTML = `<span class="k">${w}</span><span class="v">zamčeno</span>`; unl.appendChild(li); });
-const gcv = $('#gameCv'), gx = gcv.getContext('2d'), lb = document.createElement('canvas'), lx = lb.getContext('2d'), gb = document.createElement('canvas'), glx = gb.getContext('2d');
-let mask = null, GW = 0, GH = 0, GD = 1, cell = 7, cols = 0, rows = 0, Rb, Gb, Bb, img, gimg, gameVisible = false;
-const G = { lvl: 0, filled: 0, letters: [], beams: [], flyers: [], sparks: [], hits: 0, miss: 0, missWord: 0, cele: 0, t0: 0, tEnd: 0, hover: -1, emFlash: 0, done: false };
-function sizeGame() {
-  GD = Math.min(devicePixelRatio || 1, 2); GW = gcv.clientWidth; cell = GW < 560 ? 6 : 7;
-  GH = Math.round(clamp(GW * .62, 380, 560)); gcv.style.height = GH + 'px';
-  cols = Math.floor(GW / cell); rows = Math.floor(GH / cell);
-  gcv.width = Math.round(GW * GD); gcv.height = Math.round(GH * GD);
-  lb.width = gb.width = cols; lb.height = gb.height = rows;
-  img = lx.createImageData(cols, rows); gimg = glx.createImageData(cols, rows);
-  Rb = new Float32Array(cols * rows); Gb = new Float32Array(cols * rows); Bb = new Float32Array(cols * rows);
-  mask = document.createElement('canvas'); mask.width = gcv.width; mask.height = gcv.height;
-  const m = mask.getContext('2d'); m.setTransform(GD, 0, 0, GD, 0, 0);
-  m.fillStyle = '#090a0c'; m.fillRect(0, 0, GW, GH); m.globalCompositeOperation = 'destination-out';
-  const rad = cell * .38; m.beginPath();
-  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) { const X = x * cell + cell / 2, Y = y * cell + cell / 2; m.moveTo(X + rad, Y); m.arc(X, Y, rad, 0, Math.PI * 2); }
-  m.fill();
-  G.letters.forEach(L => { L.x = clamp(L.x, 2, cols - 7); L.y = clamp(L.y, 16, rows - 16); });
-}
-function stamp(x, y, r, g, b) { x |= 0; y |= 0; if (x < 0 || y < 0 || x >= cols || y >= rows) return; const i = y * cols + x;
-  if (r > Rb[i]) Rb[i] = r; if (g > Gb[i]) Gb[i] = g; if (b > Bb[i]) Bb[i] = b; }
-function stampGlyph(c, x, y, r, g, b) { const p = GLY[c]; if (!p) return; const X = Math.round(x), Y = Math.round(y); for (const [a, d] of p) stamp(X + a, Y + d, r, g, b); }
-const emitter = () => ({ x: cols / 2, y: rows - 7 });
-const swirlC = () => ({ x: cols / 2, y: (16 + rows - 12) / 2 });
-function spawnWord() {
-  const w = WORDS[G.lvl][0], E = emitter(), C = swirlC(); G.letters = []; G.filled = 0; G.missWord = 0;
-  const pool = [...w]; const nDecoy = 9 + G.lvl * 3, AZ = 'ABCDEFGHIJKLMNOPRSTUVYZ';
-  for (let i = 0; i < nDecoy; i++) pool.push(AZ[(Math.random() * AZ.length) | 0]);
-  const rx = (cols - 12) / 2, ry = (rows - 30) / 2;
-  pool.forEach((c, i) => {
-    const a = Math.random() * Math.PI * 2;
-    G.letters.push({ c, x: E.x - 2.5, y: E.y - 4, vx: Math.cos(a) * 30, vy: -20 - Math.random() * 30, a, rad: .35 + Math.random() * .65, rx, ry, w: (Math.random() < .5 ? 1 : -1) * 0, flash: 0, state: 'free', ph: Math.random() * 9 });
-  });
-  const dir = Math.random() < .5 ? 1 : -1; G.letters.forEach(L => L.w = dir * (.22 + G.lvl * .06) * (1.2 - L.rad * .5));
-  updHud();
-}
-function needChar() { return WORDS[G.lvl][0][G.filled]; }
-function updHud() {
-  const w = WORDS[G.lvl][0];
-  $('#gLvl').textContent = G.done ? 'hotovo' : `slovo ${G.lvl + 1} / ${WORDS.length}`;
-  $('#gNeed').textContent = G.done ? 'všechno svítí' : (G.filled < w.length ? `hledej: ${needChar()}` : 'svítí!');
-  $('#gStat').textContent = `zásahy ${G.hits} · minutí ${G.miss}`;
-  $$('li', unl).forEach((li, i) => li.classList.toggle('cur', !G.done && i === G.lvl));
-}
-function slotPos(i) { const w = WORDS[G.lvl][0], sp = 6, x0 = Math.round(cols / 2 - (w.length * sp - 1) / 2); return { x: x0 + i * sp, y: 4 }; }
-function shoot(L, tx, ty) {
-  const E = emitter(), x1 = L ? L.x + 2.5 : tx, y1 = L ? L.y + 3.5 : ty;
-  const dist = Math.hypot(x1 - E.x, y1 - E.y);
-  G.beams.push({ x0: E.x, y0: E.y - 1, x1, y1, t: 0, dur: clamp(dist / 160, .08, .28), L, prev: 0 });
-  if (L) L.state = 'targeted';
-  if (!G.t0) G.t0 = performance.now();
-}
-function resolve(B) {
-  const L = B.L;
-  if (!L) { burst(B.x1, B.y1, [255, 120, 140], 5); return; }
-  if (L.state !== 'targeted') return;
-  if (G.filled < WORDS[G.lvl][0].length && L.c === needChar()) {
-    G.hits++; const S = slotPos(G.filled); L.state = 'fly';
-    G.flyers.push({ L, x0: L.x, y0: L.y, x1: S.x, y1: S.y, t: 0, idx: G.filled }); G.filled++;
-    burst(L.x + 2.5, L.y + 3.5, [255, 190, 100], 14);
-  } else {
-    G.miss++; G.missWord++; L.state = 'free'; L.flash = .5; L.vx += (Math.random() - .5) * 60; L.vy += (Math.random() - .5) * 60;
-    burst(L.x + 2.5, L.y + 3.5, [255, 90, 110], 6);
+/* ================= GAME: Rozsviť ulici (isometric city) ================= */
+const gcv = $('#gameCv');
+let gameVisible = false;
+const CITY = (() => {
+  const ctx = gcv.getContext('2d');
+  const hintEl = $('#cHint'), cntEl = $('#cityCount'), dayBtn = $('#cDay'), sndBtn = $('#cSnd'), toastEl = $('#cToast');
+  const ctlBox = $('#ctlBox'), ctlStrip = $('#ctlStrip'), boxInput = $('#boxTxt');
+  const findsEl = $('#finds'), winEl = $('#win'), winStats = $('#winStats'), sentList = $('#sentList'), sentN = $('#sentN');
+  const FONT_D = '"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif', FONT_M = '"JetBrains Mono",ui-monospace,monospace';
+
+  /* ---------- colour helpers ---------- */
+  const hx = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const rgb = (c, a = 1) => a >= 1 ? `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})` : `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a.toFixed(3)})`;
+  const shade = (c, f) => c.map(v => clamp(v * f, 0, 255));
+  const mixA = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  const nightOf = c => [c[0] * .22 + 8, c[1] * .24 + 10, c[2] * .3 + 22];
+  const hsl = (h, s, l) => `hsl(${h | 0},${s}%,${l}%)`;
+  const hash = (a, b = 0) => { const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return s - Math.floor(s); };
+
+  /* ---------- projection (scene px) ---------- */
+  let S = 20, OX = 0, OY = 0, SW = 0, SH = 0; const ZU = .95;
+  const P = (x, y, z = 0) => [OX + (x - y) * S, OY + (x + y) * S * .5 - z * S * ZU];
+  let W = 0, H = 0, D = 1, R = 1, zoom = 1, tx = 0, ty = 0, Q = 2, mob = false;
+
+  /* ---------- world: 14 x 14 units, roads x/y 6..8 ---------- */
+  const BLD = [
+    { id: 'nw1', x0: .3, y0: .3, x1: 3, y1: 3.2, h: 3.4, col: '#c9c2b6' },
+    { id: 'nw2', x0: 3.4, y0: .3, x1: 5.5, y1: 2.9, h: 4.2, col: '#b7bec4' },
+    { id: 'kino', x0: .3, y0: 3.6, x1: 3, y1: 5.5, h: 2.6, col: '#a8857a', shop: 'y' },
+    { id: 'hotel', x0: 3.2, y0: 3.2, x1: 5.5, y1: 5.5, h: 6, col: '#d9d3c7' },
+    { id: 'ne1', x0: 8.5, y0: .3, x1: 11, y1: 3.4, h: 4.5, col: '#c1b9ad' },
+    { id: 'ne2', x0: 11.2, y0: .3, x1: 13.7, y1: 3.4, h: 3.6, col: '#c7ccd0' },
+    { id: 'pekarna', x0: 8.5, y0: 3.7, x1: 10.3, y1: 5.5, h: 2.4, col: '#dcc6a3', shop: 'y' },
+    { id: 'kavarna', x0: 10.4, y0: 3.7, x1: 12.1, y1: 5.5, h: 2.9, col: '#8d7a6b', shop: 'y' },
+    { id: 'lekarna', x0: 12.2, y0: 3.7, x1: 13.7, y1: 5.5, h: 2.4, col: '#e2e6e2', shop: 'y' },
+    { id: 'sw1', x0: .3, y0: 8.5, x1: 3.2, y1: 11, h: 3.8, col: '#c4c0b9' },
+    { id: 'sw2', x0: .3, y0: 11.2, x1: 3.2, y1: 13.7, h: 2.6, col: '#b5babe' },
+    { id: 'kvetiny', x0: 3.6, y0: 8.5, x1: 5.5, y1: 10.2, h: 2.2, col: '#cdd8c2', shop: 'x' },
+    { id: 'ilustro', x0: 3.4, y0: 10.3, x1: 5.5, y1: 12.3, h: 2.8, col: '#2c2e33', shop: 'x' },
+    { id: 'boxdum', x0: 3.6, y0: 12.4, x1: 5.5, y1: 13.7, h: 3.4, col: '#d3cabe' },
+    { id: 'dido', x0: 9.3, y0: 9.3, x1: 10.5, y1: 10.3, h: 1.3, col: '#3a4047', shop: 'y' }
+  ];
+  const BI = {}; BLD.forEach(b => { b.c = hx(b.col); BI[b.id] = b; });
+  BLD.sort((a, b) => (a.x0 + a.x1 + a.y0 + a.y1) - (b.x0 + b.x1 + b.y0 + b.y1));
+
+  const TG = [
+    { id: 'pekarna', name: 'Pekárna', desc: 'Neonový croissant nad výlohou.', sent: 'Dobré věci vznikají brzo ráno, když ostatní ještě spí.' },
+    { id: 'kavarna', name: 'Kavárna', desc: 'Hrnek, ze kterého se kouří.', sent: 'Nejlepší zakázky začínají u kafe, ne v tabulce.' },
+    { id: 'kino', name: 'Kino', desc: 'Rámeček z běžících žárovek.', sent: 'Každá výloha je malé kino. Světlo rozhoduje, jestli se lidé zastaví.' },
+    { id: 'lekarna', name: 'Lékárna', desc: 'Zelený kříž, který tepe.', sent: 'Světlo umí i uklidnit. Nemusí pořád křičet.' },
+    { id: 'kvetiny', name: 'Květinářství', desc: 'Květina, která se rozvine.', sent: 'Nápad je jako semínko. Bez světla nevyroste.' },
+    { id: 'hotel', name: 'Hotel', desc: 'Logo, které umí promluvit.', sent: 'S AI nepíšu příkazy. Vedu rozhovor.' },
+    { id: 'dido', name: 'DiDo', desc: 'Stánek na náměstí.', sent: 'Město se dá poslouchat. Stačí mu dát hlas.' },
+    { id: 'ilustro', name: 'Dílna Ilustro', desc: 'Duhová stěna a lampa, co se dívá.', sent: 'Světlo je můj materiál. Stejně jako papír, dřevo a kód.' },
+    { id: 'box', name: 'Světelný box', desc: 'Prázdný box. Napiš do něj vzkaz.', sent: 'Nápady sbírám v noci do telefonu. Ty nejlepší chytám pod hladinou.' },
+    { id: 'strip', name: 'Chytrý pásek', desc: 'Světlo po hraně střech. Dá se programovat.', sent: 'Stroje stavím, aby reagovaly na lidi. Ne aby je nahradily.' }
+  ];
+  const SECRET = { id: 'secret', name: '??? Tajemství', desc: 'Někdo nahoře spí.', sent: 'J6K. Podpis, který najdeš jen ve tmě.', realName: 'J6K' };
+  const TI = {}; TG.forEach(t => TI[t.id] = t);
+
+  /* ---------- state ---------- */
+  const G = { k: 0, kT: 0, found: new Map(), secret: false, taps: 0, t0: 0, tEnd: 0, finale: -1, wave: -1, cat: 'sleep', catT: 0,
+    boxText: 'AHOJ', boxCol: '#fff1d6', stripFx: 'duha', stripCol: '#ffffff', ptrScene: null, signal: 0, sigHold: 0, toastT: 0 };
+
+  /* ---------- props ---------- */
+  const LAMPS = [[1.8, 5.8], [4.6, 5.8], [11.3, 5.8], [5.8, 1.8], [5.8, 9.6], [5.8, 12.6], [8.2, 1.8], [8.2, 12.2], [12.2, 8.2], [10.2, 8.2], [1.8, 8.2]];
+  const TREES = [[12.7, 9.5], [13.1, 12.9], [9.4, 13.1], [12.0, 13.4], [13.3, 11.2]];
+  const TLIGHTS = [[5.75, 5.75, 'x'], [8.25, 8.25, 'x'], [8.25, 5.75, 'y'], [5.75, 8.25, 'y']];
+  const FOUNT = [11.6, 11.3];
+
+  /* ---------- traffic ---------- */
+  const LANES = [{ ax: 'x', c: 6.5, dir: 1, stop: 5.55 }, { ax: 'x', c: 7.5, dir: -1, stop: 8.45 }, { ax: 'y', c: 7.5, dir: 1, stop: 5.55 }, { ax: 'y', c: 6.5, dir: -1, stop: 8.45 }];
+  const CARCOL = ['#d24a3a', '#2f6db0', '#ece8de', '#3a3d42', '#e1b13c', '#5b8f6b', '#8a96a3', '#c8c2b5'];
+  const cars = [];
+  LANES.forEach((L, li) => { for (let i = 0; i < 3; i++) cars.push({ lane: li, s: (L.dir > 0 ? -1.5 : 15.5) - L.dir * i * 5.2 + L.dir * hash(li, i) * 1.5, v: 1.4, c: hx(CARCOL[(li * 3 + i) % CARCOL.length]), sp: false }); });
+  const CL = .95, CWd = .46;
+  function signalFor(ax, now) { // 'g' | 'y' | 'r'
+    if (G.sigHold > now) return ax === 'x' ? 'g' : 'r';
+    const t = (now / 1000) % 19;
+    if (ax === 'x') return t < 7 ? 'g' : t < 8.5 ? 'y' : 'r';
+    return t >= 9.5 && t < 16.5 ? 'g' : t >= 16.5 && t < 18 ? 'y' : 'r';
   }
-  updHud();
-}
-function burst(x, y, c, n) { for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, v = 8 + Math.random() * 26; G.sparks.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: .4 + Math.random() * .4, c }); } }
-function nearestLetter(px, py, maxPx) {
-  let best = -1, bd = maxPx; G.letters.forEach((L, i) => { if (L.state !== 'free') return;
-    const d = Math.hypot((L.x + 2.5) * cell - px, (L.y + 3.5) * cell - py); if (d < bd) { bd = d; best = i; } });
-  return best;
-}
-function canvasPt(e) { const r = gcv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * GW, y: (e.clientY - r.top) / r.height * GH }; }
-gcv.addEventListener('pointerdown', e => {
-  if (G.done || G.cele > 0) return; const p = canvasPt(e), i = nearestLetter(p.x, p.y, cell * 7);
-  if (i >= 0) shoot(G.letters[i]); else shoot(null, p.x / cell, p.y / cell);
-});
-gcv.addEventListener('pointermove', e => { const p = canvasPt(e); G.hover = nearestLetter(p.x, p.y, cell * 7); });
-gcv.addEventListener('pointerleave', () => G.hover = -1);
-addEventListener('keydown', e => {
-  if (!$('#reader').hidden) return;
-  if (!gameVisible || e.metaKey || e.ctrlKey || e.altKey || G.done || G.cele > 0) return;
-  if (e.target.closest && e.target.closest('input,textarea,select')) return;
-  const k = strip((e.key || '').toUpperCase()); if (!/^[A-Z]$/.test(k)) return;
-  e.preventDefault();
-  const need = needChar(), E = emitter();
-  let cand = G.letters.filter(L => L.state === 'free' && strip(L.c) === k);
-  if (!cand.length) { G.emFlash = .4; G.miss++; updHud(); return; }
-  const exact = cand.filter(L => L.c === need); if (exact.length && strip(need) === k) cand = exact;
-  cand.sort((a, b) => Math.hypot(a.x - E.x, a.y - E.y) - Math.hypot(b.x - E.x, b.y - E.y)); shoot(cand[0]);
-});
-function completeWord() {
-  G.cele = 1.8; const li = $$('li', unl)[G.lvl]; li.classList.add('done'); li.querySelector('.v').textContent = WORDS[G.lvl][1];
-}
-function nextAfterCele() {
-  if (G.lvl < WORDS.length - 1) { G.lvl++; spawnWord(); }
-  else { G.done = true; G.tEnd = performance.now(); G.letters = G.letters.filter(L => L.state === 'gone'); const s = Math.round((G.tEnd - G.t0) / 1000);
-    $('#win').classList.add('show'); $('#winStats').textContent = `${G.hits} zásahů · ${G.miss} minutí · ${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; updHud(); }
-}
-function resetGame() {
-  Object.assign(G, { lvl: 0, filled: 0, letters: [], beams: [], flyers: [], sparks: [], hits: 0, miss: 0, missWord: 0, cele: 0, t0: 0, done: false });
-  $$('li', unl).forEach((li, i) => { li.classList.remove('done'); li.querySelector('.v').textContent = 'zamčeno'; });
-  $('#win').classList.remove('show'); spawnWord();
-}
-$('#gReset').addEventListener('click', resetGame);
-$('#gSkip').addEventListener('click', () => $$('li', unl).forEach((li, i) => { li.classList.add('done'); li.querySelector('.v').textContent = WORDS[i][1]; }));
-let gPrev = 0;
-function gameTick(now) {
-  if (!gameVisible || !cols) { gPrev = now; return; }
-  const dt = Math.min(.05, (now - gPrev) / 1000 || .016); gPrev = now; const t = now / 1000;
-  const n = cols * rows; for (let i = 0; i < n; i++) { Rb[i] *= .74; Gb[i] *= .74; Bb[i] *= .74; }
-  const C = swirlC(), word = WORDS[G.lvl][0];
-  // swarm
-  G.letters.forEach((L, i) => {
-    if (L.state === 'fly' || L.state === 'gone') return;
-    if (L.state === 'free' || L.state === 'targeted') {
-      L.a += L.w * dt; const tx = C.x + Math.cos(L.a) * L.rx * L.rad - 2.5, ty = C.y + Math.sin(L.a) * L.ry * L.rad - 3.5 + Math.sin(t * 1.3 + L.ph) * 1.2;
-      L.vx += (tx - L.x) * 2.2 * dt; L.vy += (ty - L.y) * 2.2 * dt; L.vx *= Math.pow(.25, dt); L.vy *= Math.pow(.25, dt);
-      L.x += L.vx * dt; L.y += L.vy * dt; L.x = clamp(L.x, 1, cols - 6); L.y = clamp(L.y, 14, rows - 18);
-    }
-    L.flash = Math.max(0, L.flash - dt);
-    let r = 150, g = 168, b = 186;
-    const hint = G.missWord >= 3 && L.c === needChar() && L.state === 'free';
-    if (i === G.hover) { r = 240; g = 244; b = 250; }
-    if (hint) { const k = .5 + .5 * Math.sin(t * 8); r = lerp(r, 255, k); g = lerp(g, 200, k); b = lerp(b, 120, k); }
-    if (L.flash > 0) { r = 255; g = 80; b = 100; }
-    if (G.cele > 0) { const k = clamp(G.cele - .6); r *= k; g *= k; b *= k; }
-    stampGlyph(L.c, L.x, L.y, r, g, b);
-  });
-  // flyers to slots
-  G.flyers = G.flyers.filter(F => { F.t += dt / .42; const k = easeOut(clamp(F.t));
-    F.L.x = lerp(F.x0, F.x1, k); F.L.y = lerp(F.y0, F.y1, k) - Math.sin(k * Math.PI) * 6;
-    if (F.t >= 1) { F.L.state = 'gone'; burst(F.x1 + 2.5, F.y1 + 3.5, [255, 210, 140], 8);
-      if (G.flyers.length && G.filled === word.length && !G.flyers.some(o => o !== F && o.t < 1)) completeWord(); return false; }
-    stampGlyph(F.L.c, F.L.x, F.L.y, 255, 196, 110); return true; });
-  // slots
-  const done = G.letters.filter(L => L.state === 'gone').length;
-  [...word].forEach((c, i) => {
-    const S = slotPos(i);
-    if (i < done) {
-      let r = 255, g = 184, b = 92;
-      if (G.cele > 0 || G.done) { const h = (t * (G.done ? .7 : 1.6) + i * .18) % 1; r = 200 + 55 * Math.sin(h * 6.28); g = 150 + 90 * Math.sin(h * 6.28 + 2.1); b = 150 + 100 * Math.sin(h * 6.28 + 4.2); }
-      stampGlyph(c, S.x, S.y, r, g, b);
-      for (let k = 0; k < 5; k++) stamp(S.x + k, S.y + 9, 255, 184, 92);
-    } else {
-      stampGlyph(c, S.x, S.y, 46, 40, 34);
-      const blink = i === done && Math.sin(t * 6) > 0 ? 1 : .45;
-      for (let k = 0; k < 5; k++) stamp(S.x + k, S.y + 9, 120 * blink, 90 * blink, 50 * blink);
-    }
-  });
-  // beams
-  G.beams = G.beams.filter(B => { B.t += dt / B.dur; const k = clamp(B.t);
-    if (B.L && B.L.state === 'targeted') { B.x1 = B.L.x + 2.5; B.y1 = B.L.y + 3.5; }
-    const steps = Math.ceil(Math.hypot(B.x1 - B.x0, B.y1 - B.y0));
-    const from = Math.floor(B.prev * steps), to = Math.ceil(k * steps);
-    for (let s = Math.max(0, from - 2); s <= to; s++) { const u = s / steps; stamp(lerp(B.x0, B.x1, u), lerp(B.y0, B.y1, u), 255, 214, 150); }
-    B.prev = k; if (B.t >= 1) { resolve(B); return false; } return true; });
-  // sparks
-  G.sparks = G.sparks.filter(s => { s.life -= dt; s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 30 * dt; if (s.life <= 0) return false;
-    const k = clamp(s.life * 2); stamp(s.x, s.y, s.c[0] * k, s.c[1] * k, s.c[2] * k); return true; });
-  // emitter lamp
-  const E = emitter(); G.emFlash = Math.max(0, G.emFlash - dt);
-  const pulse = .65 + .35 * Math.sin(t * 3), er = G.emFlash > 0 ? 255 : 255 * pulse, eg = G.emFlash > 0 ? 80 : 184 * pulse, eb = G.emFlash > 0 ? 100 : 92 * pulse;
-  for (let x = -3; x <= 3; x++) stamp(E.x + x, E.y + 1, er * .8, eg * .8, eb * .8);
-  for (let x = -2; x <= 2; x++) stamp(E.x + x, E.y, er, eg, eb);
-  for (let x = -5; x <= 5; x++) stamp(E.x + x, E.y + 3, 70, 60, 50);
-  // celebration timing
-  if (G.cele > 0) { G.cele -= dt; if (G.cele <= 0) { G.cele = 0; nextAfterCele(); } }
-  if (G.done && Math.random() < dt * 3) { const S = slotPos((Math.random() * word.length) | 0); burst(S.x + 2.5, S.y + 3.5, [255, 200, 130], 10); }
-  // render
-  const d = img.data, q = gimg.data;
-  for (let i = 0, j = 0; i < n; i++, j += 4) {
-    d[j] = 20 + Rb[i]; d[j + 1] = 21 + Gb[i]; d[j + 2] = 25 + Bb[i]; d[j + 3] = 255;
-    q[j] = Rb[i]; q[j + 1] = Gb[i]; q[j + 2] = Bb[i]; q[j + 3] = 255;
+  function carXY(car) { const L = LANES[car.lane]; return L.ax === 'x' ? [car.s, L.c] : [L.c, car.s]; }
+  function updCars(dt, now) {
+    LANES.forEach((L, li) => {
+      const lc = cars.filter(c => c.lane === li).sort((a, b) => (b.s - a.s) * L.dir);
+      const sig = signalFor(L.ax, now);
+      lc.forEach((car, i) => {
+        const v0 = car.sp ? 2.8 : 1.6, front = car.s + L.dir * CL / 2;
+        let lim = v0;
+        if (i > 0) { const ld = lc[i - 1], gap = (ld.s - car.s) * L.dir - CL - .35; if (gap < 4) lim = Math.min(lim, Math.max(0, gap * 1.8)); }
+        if (sig !== 'g' && !car.sp) { const dist = (L.stop - front) * L.dir; if (dist > -.05 && dist < 3) lim = Math.min(lim, Math.max(0, (dist - .02) * 2)); }
+        car.v += clamp(lim - car.v, -5 * dt, 1.4 * dt); car.s += car.v * L.dir * dt;
+        if (L.dir > 0 && car.s > 15.8) { if (car.sp) { cars.splice(cars.indexOf(car), 1); return; } car.s = -1.6; car.c = hx(CARCOL[(Math.random() * CARCOL.length) | 0]); }
+        if (L.dir < 0 && car.s < -1.8) { car.s = 15.6; car.c = hx(CARCOL[(Math.random() * CARCOL.length) | 0]); }
+      });
+    });
   }
-  lx.putImageData(img, 0, 0); glx.putImageData(gimg, 0, 0);
-  gx.setTransform(1, 0, 0, 1, 0, 0); gx.globalCompositeOperation = 'source-over'; gx.globalAlpha = 1;
-  gx.imageSmoothingEnabled = false; gx.drawImage(lb, 0, 0, cols * cell * GD, rows * cell * GD);
-  gx.drawImage(mask, 0, 0);
-  gx.globalCompositeOperation = 'lighter'; gx.imageSmoothingEnabled = true; gx.globalAlpha = .42;
-  gx.drawImage(gb, 0, 0, cols * cell * GD, rows * cell * GD);
-  gx.globalAlpha = 1; gx.globalCompositeOperation = 'source-over';
-}
+
+  /* ---------- people ---------- */
+  const WALKS = [[.4, 5.75, 5.6, 5.75], [5.75, .4, 5.75, 5.6], [8.25, .4, 8.25, 5.6], [8.4, 5.75, 13.7, 5.75], [.4, 8.25, 5.6, 8.25], [5.75, 8.4, 5.75, 13.7], [8.7, 8.7, 13.6, 8.7], [8.7, 8.7, 8.7, 13.6], [9.2, 11.4, 13.2, 11.4], [11.0, 9.2, 11.0, 13.5]];
+  const SHIRT = ['#e0574a', '#3d7cc9', '#f1efe8', '#2f3238', '#e7b440', '#6aa37d', '#b46bd1', '#d98c4a'];
+  const people = Array.from({ length: 16 }, (_, i) => ({ w: i % WALKS.length, p: hash(i, 3), dir: hash(i, 5) > .5 ? 1 : -1, sp: .55 + hash(i, 7) * .4, c: hx(SHIRT[i % SHIRT.length]), ph: hash(i, 9) * 6 }));
+  const visitors = [];
+  function personXY(pp) { const w = WALKS[pp.w]; return [lerp(w[0], w[2], pp.p), lerp(w[1], w[3], pp.p)]; }
+  function updPeople(dt) {
+    people.forEach(pp => { const w = WALKS[pp.w], len = Math.hypot(w[2] - w[0], w[3] - w[1]); pp.p += pp.dir * pp.sp * dt / len; if (pp.p > 1) { pp.p = 1; pp.dir = -1; } if (pp.p < 0) { pp.p = 0; pp.dir = 1; } pp.ph += dt * 7 * pp.sp; });
+    for (let i = visitors.length - 1; i >= 0; i--) { const v = visitors[i]; const dx = v.tx - v.x, dy = v.ty - v.y, d = Math.hypot(dx, dy);
+      if (v.delay > 0) { v.delay -= dt; continue; }
+      if (d < .05) { v.fade -= dt * 2; if (v.fade <= 0) visitors.splice(i, 1); continue; }
+      const st = Math.min(d, .8 * dt); v.x += dx / d * st; v.y += dy / d * st; v.ph += dt * 6; }
+  }
+  function doorOf(id) {
+    if (id === 'box' || id === 'strip') return null;
+    const b = BI[id]; if (!b) return null;
+    if (b.shop === 'x') return [b.x1 + .05, (b.y0 + b.y1) / 2]; return [(b.x0 + b.x1) / 2, b.y1 + .05];
+  }
+  function spawnVisitors(id) {
+    const d = doorOf(id); if (!d) return; const b = BI[id];
+    for (let i = 0; i < 3; i++) {
+      const off = (i - 1) * .9, sx = b.shop === 'x' ? d[0] + .35 + Math.random() * .2 : d[0] + off, sy = b.shop === 'x' ? d[1] + off : d[1] + .35 + Math.random() * .2;
+      visitors.push({ x: sx, y: sy, tx: d[0] + (b.shop === 'x' ? -.1 : (Math.random() - .5) * .3), ty: d[1] + (b.shop === 'x' ? (Math.random() - .5) * .3 : -.1), c: hx(SHIRT[(Math.random() * SHIRT.length) | 0]), ph: Math.random() * 6, fade: 1, delay: i * .35 });
+    }
+  }
+
+  /* ---------- caches ---------- */
+  let gDay = null, gNight = null, SPR = {}, glowCache = {}, stars = [], stripDots = [], stripPath = [];
+  function off(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, Math.ceil(w * R)); c.height = Math.max(1, Math.ceil(h * R)); return c; }
+  function poly(c, pts, fill) { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.closePath(); c.fillStyle = fill; c.fill(); }
+  function rect3(x0, y0, x1, y1, z) { return [P(x0, y0, z), P(x1, y0, z), P(x1, y1, z), P(x0, y1, z)]; }
+  function boxFaces(c, x0, y0, x1, y1, z0, z1, col, cf = rgb) {
+    poly(c, [P(x0, y1, z1), P(x1, y1, z1), P(x1, y1, z0), P(x0, y1, z0)], cf(shade(col, .93)));
+    poly(c, [P(x1, y0, z1), P(x1, y1, z1), P(x1, y1, z0), P(x1, y0, z0)], cf(shade(col, .77)));
+    poly(c, rect3(x0, y0, x1, y1, z1), cf(shade(col, 1.07)));
+  }
+  // face frame, units of 1/100 world unit; u runs left->right as seen, v runs top->down from the roof line
+  function FO(b, face, h = b.h) { if (face === 'y') { const o = P(b.x0, b.y1, h); return [S / 100, S * .5 / 100, 0, S * ZU / 100, o[0], o[1]]; } const o = P(b.x1, b.y1, h); return [S / 100, -S * .5 / 100, 0, S * ZU / 100, o[0], o[1]]; }
+  const fpt = (b, face, u, v) => { const m = FO(b, face); return [m[4] + m[0] * u + m[2] * v, m[5] + m[1] * u + m[3] * v]; };
+  const fquad = (b, face, u0, v0, u1, v1) => [fpt(b, face, u0, v0), fpt(b, face, u1, v0), fpt(b, face, u1, v1), fpt(b, face, u0, v1)];
+  const fw = (b, face) => (face === 'y' ? b.x1 - b.x0 : b.y1 - b.y0) * 100;
+  function inFace(c, b, face, fn) { c.save(); const m = FO(b, face); c.transform(m[0], m[1], m[2], m[3], m[4], m[5]); fn(c); c.restore(); }
+  function windowsOf(b) { // list of [face,u0,v0,u1,v1]
+    const out = [];
+    ['x', 'y'].forEach(face => {
+      const w = fw(b, face), hh = b.h * 100, shopFace = b.shop === face;
+      if (b.id === 'dido') return;
+      const top = shopFace ? 115 : 22, bottom = shopFace ? hh - 108 : hh - 14;
+      for (let v = top; v + 50 <= bottom; v += 100) { const n = Math.max(1, Math.floor(w / 55)), sp = w / n; for (let i = 0; i < n; i++) out.push([face, i * sp + sp / 2 - 13, v + 8, i * sp + sp / 2 + 13, v + 58]); }
+    });
+    return out;
+  }
+  function drawBuilding(c, b) {
+    boxFaces(c, b.x0, b.y0, b.x1, b.y1, 0, b.h, b.c);
+    poly(c, rect3(b.x0 + .1, b.y0 + .1, b.x1 - .1, b.y1 - .1, b.h), rgb(shade(b.c, .95)));
+    const dark = b.id === 'ilustro';
+    windowsOf(b).forEach(([face, u0, v0, u1, v1]) => poly(c, fquad(b, face, u0, v0, u1, v1), dark ? '#59606b' : '#8ea2b2'));
+    if (b.shop) { const w = fw(b, b.shop), hh = b.h * 100;
+      if (b.id === 'ilustro') poly(c, fquad(b, 'x', 15, 120, w - 15, hh - 8), '#7f93a3');
+      else if (b.id === 'dido') { poly(c, fquad(b, 'y', 12, 30, w - 12, hh - 30), '#8ea2b2'); }
+      else { poly(c, fquad(b, b.shop, 14, hh - 92, w - 14, hh - 6), '#9bb0bf'); poly(c, fquad(b, b.shop, w / 2 - 14, hh - 80, w / 2 + 14, hh - 6), rgb(shade(b.c, .55))); poly(c, fquad(b, b.shop, 10, hh - 104, w - 10, hh - 94), rgb(shade(b.c, .7))); }
+    }
+    if (b.id === 'boxdum') poly(c, fquad(b, 'x', 16, 66, 114, 154), '#2d3035');
+  }
+  function makeSprite(b, night) {
+    const pts = [P(b.x0, b.y0, b.h), P(b.x1, b.y0, b.h), P(b.x1, b.y1, b.h), P(b.x0, b.y1, b.h), P(b.x1, b.y0, 0), P(b.x1, b.y1, 0), P(b.x0, b.y1, 0)];
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), m = 3, x0 = Math.min(...xs) - m, y0 = Math.min(...ys) - m, w = Math.max(...xs) - x0 + m, h = Math.max(...ys) - y0 + m;
+    const cv = off(w, h), c = cv.getContext('2d'); c.setTransform(R, 0, 0, R, -x0 * R, -y0 * R);
+    drawBuilding(c, b);
+    if (night) {
+      c.globalCompositeOperation = 'source-atop'; c.fillStyle = 'rgba(7,10,22,.76)'; c.fillRect(x0, y0, w, h); c.globalCompositeOperation = 'source-over';
+      windowsOf(b).forEach(([face, u0, v0, u1, v1], i) => { const r = hash(i, b.x0 * 7 + b.y0); if (r < .42) poly(c, fquad(b, face, u0, v0, u1, v1), rgb(mixA([255, 214, 150], [255, 236, 200], hash(i, 2)), .55 + r)); });
+    }
+    return { cv, x: x0, y: y0, w, h };
+  }
+  function makeGround(night) {
+    const pts = [P(0, 0), P(14, 0), P(14, 14), P(0, 14), P(14, 0, -.6), P(0, 14, -.6), P(14, 14, -.6)];
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), m = 3, x0 = Math.min(...xs) - m, y0 = Math.min(...ys) - m, w = Math.max(...xs) - x0 + m, h = Math.max(...ys) - y0 + m;
+    const cv = off(w, h), c = cv.getContext('2d'); c.setTransform(R, 0, 0, R, -x0 * R, -y0 * R);
+    poly(c, [P(14, 0, 0), P(14, 14, 0), P(14, 14, -.6), P(14, 0, -.6)], '#a59f94');
+    poly(c, [P(0, 14, 0), P(14, 14, 0), P(14, 14, -.6), P(0, 14, -.6)], '#bdb6aa');
+    poly(c, rect3(0, 0, 14, 14, 0), '#e2ded6');
+    [[0, 0, 6, 6], [8, 0, 14, 6], [0, 8, 6, 14]].forEach(([a, b2, c2, d]) => poly(c, rect3(a + .05, b2 + .05, c2 - .05, d - .05, 0), '#d8d3ca'));
+    poly(c, rect3(8.4, 8.4, 14, 14, 0), '#dcd4c6');
+    for (let i = 9; i < 14; i++) { c.strokeStyle = 'rgba(150,140,125,.35)'; c.lineWidth = .7; let a = P(i, 8.4), b2 = P(i, 14); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b2[0], b2[1]); c.stroke(); a = P(8.4, i); b2 = P(14, i); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b2[0], b2[1]); c.stroke(); }
+    TREES.forEach(([x, y]) => poly(c, rect3(x - .45, y - .45, x + .45, y + .45, 0), '#b9c8a4'));
+    poly(c, rect3(0, 6, 14, 8, 0), '#5c6066'); poly(c, rect3(6, 0, 8, 14, 0), '#5c6066');
+    c.strokeStyle = 'rgba(240,238,230,.8)'; c.lineWidth = Math.max(1, S * .05);
+    const dash = (x0_, y0_, x1_, y1_) => { const n = Math.round(Math.hypot(x1_ - x0_, y1_ - y0_) / .7); for (let i = 0; i < n; i += 2) { const a = P(lerp(x0_, x1_, i / n), lerp(y0_, y1_, i / n)), b2 = P(lerp(x0_, x1_, (i + 1) / n), lerp(y0_, y1_, (i + 1) / n)); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b2[0], b2[1]); c.stroke(); } };
+    dash(0, 7, 5.2, 7); dash(8.8, 7, 14, 7); dash(7, 0, 7, 5.2); dash(7, 8.8, 7, 14);
+    for (let i = 0; i < 6; i++) { const o = 6.1 + i * .32; poly(c, rect3(5.25, o, 5.75, o + .16, 0), 'rgba(240,238,230,.85)'); poly(c, rect3(8.25, o, 8.75, o + .16, 0), 'rgba(240,238,230,.85)'); poly(c, rect3(o, 5.25, o + .16, 5.75, 0), 'rgba(240,238,230,.85)'); poly(c, rect3(o, 8.25, o + .16, 8.75, 0), 'rgba(240,238,230,.85)'); }
+    // fountain basin
+    const [fx_, fy_] = FOUNT; boxFaces(c, fx_ - .7, fy_ - .7, fx_ + .7, fy_ + .7, 0, .25, [190, 186, 178]); poly(c, rect3(fx_ - .55, fy_ - .55, fx_ + .55, fy_ + .55, .25), '#7fa6bb');
+    if (night) { c.globalCompositeOperation = 'source-atop'; c.fillStyle = 'rgba(7,10,22,.78)'; c.fillRect(x0, y0, w, h); c.globalCompositeOperation = 'source-over'; }
+    return { cv, x: x0, y: y0, w, h };
+  }
+  function glowSpr(col) {
+    const key = col.join(',');
+    if (glowCache[key]) return glowCache[key];
+    const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'), g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, rgb(col, 1)); g.addColorStop(.25, rgb(col, .45)); g.addColorStop(1, rgb(col, 0)); x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    return (glowCache[key] = c);
+  }
+  function buildStrip() {
+    stripPath = []; const ids = ['pekarna', 'kavarna', 'lekarna'];
+    ids.forEach((id, i) => { const b = BI[id]; if (i) stripPath.push([b.x0, 5.5, BI[ids[i - 1]].h]); stripPath.push([b.x0, 5.5, b.h], [b.x1, 5.5, b.h]); });
+    stripDots = []; let acc = 0;
+    for (let i = 1; i < stripPath.length; i++) { const a = stripPath[i - 1], b = stripPath[i], L = Math.hypot(b[0] - a[0], b[2] - a[2]), n = Math.max(1, Math.round(L / .1));
+      for (let j = 0; j < n; j++) { const t = j / n; stripDots.push({ x: lerp(a[0], b[0], t), z: lerp(a[2], b[2], t), s: acc + L * t }); } acc += L; }
+    const tot = acc; stripDots.forEach(d => { d.s /= tot; d.p = P(d.x, 5.52, d.z + .03); });
+  }
+  function buildCaches() {
+    gDay = makeGround(false); gNight = makeGround(true); SPR = {};
+    BLD.forEach(b => { SPR[b.id] = [makeSprite(b, false), makeSprite(b, true)]; });
+    buildStrip();
+    stars = Array.from({ length: 60 }, (_, i) => [hash(i, 1) * SW, hash(i, 2) * OY * 1.1, hash(i, 3)]);
+  }
+
+  /* ---------- sizing ---------- */
+  function clampPan() {
+    const sw = SW * zoom, sh = SH * zoom;
+    tx = sw <= W ? (W - sw) / 2 : clamp(tx, W - sw, 0); ty = sh <= H ? (H - sh) / 2 : clamp(ty, H - sh, 0);
+    gcv.style.touchAction = zoom > 1.02 ? 'none' : 'pan-y';
+  }
+  function size() {
+    W = gcv.clientWidth; if (!W) return; mob = W < 700;
+    const m = 12, TOP = 4.4, wH = 14 + TOP + .6;
+    S = mob ? (W - 2 * m) / 28 * 1.5 : Math.min((W - 2 * m) / 28, (720 - 2 * m) / wH);
+    OX = m + 14 * S; OY = m + TOP * S; SW = 28 * S + 2 * m; SH = OY + 14.6 * S + m;
+    H = Math.round(SH); gcv.style.height = H + 'px';
+    D = Math.min(devicePixelRatio || 1, 2) * (Q === 0 ? .75 : 1); R = D * (mob ? 1.5 : 1.1);
+    gcv.width = Math.round(W * D); gcv.height = Math.round(H * D);
+    zoom = 1; tx = (W - SW) / 2; ty = (H - SH) / 2; clampPan();
+    buildCaches(); computeHits();
+  }
+
+  /* ---------- hit areas ---------- */
+  let HITS = [];
+  function computeHits() {
+    HITS = [];
+    const shopFace = (id, face) => { const b = BI[id]; HITS.push({ id, poly: fquad(b, face, 0, 0, fw(b, face), b.h * 100) }); };
+    ['pekarna', 'kavarna', 'lekarna', 'kino'].forEach(id => shopFace(id, 'y'));
+    ['kvetiny', 'ilustro'].forEach(id => shopFace(id, 'x'));
+    shopFace('hotel', 'y'); shopFace('hotel', 'x'); HITS.push({ id: 'hotel', poly: rect3(3.2, 3.2, 5.5, 5.5, 6) });
+    const dd = BI.dido; HITS.push({ id: 'dido', poly: [fpt(dd, 'y', -10, -90), fpt(dd, 'y', 130, -90), fpt(dd, 'y', 130, 130), fpt(dd, 'y', -10, 130)] }); shopFace('dido', 'x');
+    const bx = BI.boxdum; HITS.push({ id: 'box', poly: fquad(bx, 'x', 0, 40, 130, 185) });
+    ['nw1', 'nw2', 'ne1', 'ne2', 'sw1', 'sw2'].forEach(id => { const b = BI[id]; HITS.push({ id: 'none', poly: fquad(b, 'x', 0, 0, fw(b, 'x'), b.h * 100) }, { id: 'none', poly: fquad(b, 'y', 0, 0, fw(b, 'y'), b.h * 100) }); });
+    HITS.push({ id: 'none', poly: fquad(bx, 'x', 0, 185, 130, 340) }, { id: 'none', poly: fquad(bx, 'y', 0, 0, fw(bx, 'y'), 340) });
+  }
+  function inPoly(x, y, pts) { let c = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const [xi, yi] = pts[i], [xj, yj] = pts[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }
+  function catPos() { return P(3.75, 3.75, 6); }
+  function j6kPos() { const p = P(4.9, 3.5, 6.05); return [p[0], p[1] - S * .25]; }
+  function hitAt(x, y) {
+    const cp = catPos(); if (Math.hypot(x - cp[0], y - (cp[1] - S * .15)) < Math.max(16, S * .55)) return 'cat';
+    if (G.cat === 'awake') { const jp = j6kPos(); if (Math.abs(x - jp[0]) < Math.max(22, S * .7) && Math.abs(y - jp[1]) < Math.max(14, S * .4)) return 'j6k'; }
+    const hitR = Math.max(10, S * .3);
+    for (let i = 1; i < stripDots.length; i++) { const a = stripDots[i - 1].p, b = stripDots[i].p, l2 = (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2 || 1, t = clamp(((x - a[0]) * (b[0] - a[0]) + (y - a[1]) * (b[1] - a[1])) / l2); if (Math.hypot(x - a[0] - t * (b[0] - a[0]), y - a[1] - t * (b[1] - a[1])) < hitR) return 'strip'; }
+    for (let i = HITS.length - 1; i >= 0; i--) if (HITS[i].id !== 'none' && inPoly(x, y, HITS[i].poly)) return HITS[i].id;
+    for (const h of HITS) if (h.id === 'none' && inPoly(x, y, h.poly)) return 'none';
+    return null;
+  }
+
+  /* ---------- sound (WebAudio, generated) ---------- */
+  let AC = null, sndOn = false;
+  function ac() { if (!AC) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; AC = new A(); } if (AC.state === 'suspended') AC.resume(); return AC; }
+  function tone(f, d, type = 'sine', g = .06, when = 0, f2 = 0) {
+    if (!sndOn) return; const a = ac(); if (!a) return; const t0 = a.currentTime + when, o = a.createOscillator(), gn = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t0); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t0 + d);
+    gn.gain.setValueAtTime(0, t0); gn.gain.linearRampToValueAtTime(g, t0 + .012); gn.gain.exponentialRampToValueAtTime(.0001, t0 + d);
+    o.connect(gn); gn.connect(a.destination); o.start(t0); o.stop(t0 + d + .05);
+  }
+  const sLight = () => { tone(110, .16, 'sawtooth', .018); tone(880, .22, 'sine', .05, .03); tone(1320, .4, 'sine', .035, .09); };
+  const sNo = () => tone(220, .12, 'triangle', .03);
+  const sWave = () => [392, 523, 659, 784, 1047, 1319, 1568].forEach((n, i) => tone(n, .22, 'triangle', .045, i * .07));
+  const sMeow = () => { tone(760, .32, 'sine', .045, 0, 430); tone(1140, .25, 'sine', .015, .02, 640); };
+  function sFinale() {
+    if (!sndOn) return; const a = ac(); if (!a) return; const t0 = a.currentTime, o = a.createOscillator(), f = a.createBiquadFilter(), g = a.createGain();
+    o.type = 'sawtooth'; f.type = 'lowpass'; f.frequency.value = 650;
+    [[55, 0], [170, .7], [95, 1.05], [230, 1.7], [120, 2.1], [70, 2.7]].forEach(([fr, at]) => at ? o.frequency.exponentialRampToValueAtTime(fr, t0 + at) : o.frequency.setValueAtTime(fr, t0));
+    g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(.08, t0 + .15); g.gain.setValueAtTime(.08, t0 + 2.3); g.gain.exponentialRampToValueAtTime(.0001, t0 + 2.9);
+    o.connect(f); f.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0 + 3);
+    [523, 659, 784, 1047, 784, 1047].forEach((n, i) => tone(n, .15, 'square', .028, 2.1 + i * .13));
+  }
+
+  /* ---------- UI: cards, toast, controls ---------- */
+  function buildCards() {
+    findsEl.innerHTML = ''; sentList.innerHTML = '<li class="empty">Zatím nic. Rozsviť první místo.</li>'; sentN.textContent = '0 / 10';
+    [...TG, SECRET].forEach(t => { const c = document.createElement('span'); c.setAttribute('role', 'listitem'); c.dataset.id = t.id; c.title = t.desc; c.textContent = t.id === 'secret' ? '★' : t.name; if (t.id === 'secret') c.className = 'sec'; findsEl.appendChild(c); });
+  }
+  function markCard(id) {
+    const c = findsEl.querySelector(`[data-id="${id}"]`); if (!c || c.classList.contains('on')) return; const t = id === 'secret' ? SECRET : TI[id];
+    c.classList.add('on'); if (id === 'secret') c.textContent = SECRET.realName;
+    const em = sentList.querySelector('.empty'); if (em) em.remove();
+    const li = document.createElement('li'); li.innerHTML = `<b>${id === 'secret' ? SECRET.realName : t.name}</b>`; li.appendChild(document.createTextNode(t.sent)); sentList.appendChild(li);
+    sentN.textContent = `${G.found.size} / 10${G.secret ? ' + ★' : ''}`;
+  }
+  function toast(msg, ms = 2600, html = false) { if (html) toastEl.innerHTML = msg; else toastEl.textContent = msg; toastEl.classList.add('show'); G.toastT = performance.now() + ms; }
+  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function updHud() {
+    const n = G.found.size; cntEl.textContent = `${n} / 10${G.secret ? ' + ★' : ''}`;
+    hintEl.textContent = G.kT < .5 ? 'setmí se? přepni na noc' : n >= 10 ? 'celá ulice svítí' : 'najdi světlo';
+    dayBtn.textContent = G.kT < .5 ? '☾ noc' : '☀ den'; dayBtn.setAttribute('aria-pressed', G.kT > .5 ? 'true' : 'false');
+    dayBtn.classList.toggle('pulse', G.kT < .5 && n === 0);
+  }
+  function light(id, now) {
+    if (G.found.has(id)) return false;
+    G.found.set(id, now); markCard(id); spawnVisitors(id); sLight(); if (!G.t0) G.t0 = now;
+    if (G.found.size === 10) { G.tEnd = now; G.finale = now + 900; setTimeout(startFinale, 900); }
+    updHud(); return true;
+  }
+  function startFinale() {
+    const L = LANES[0]; cars.forEach(c => { if (c.lane === 0 && c.s < 1.5 && c.s > -2.5) c.s -= 3; });
+    cars.push({ lane: 0, s: -2.2, v: 2.8, c: [244, 241, 234], sp: true }); G.sigHold = performance.now() + 9000; sFinale();
+    winEl.classList.add('show'); const secs = Math.round((G.tEnd - G.t0) / 1000);
+    winStats.textContent = !G.taps ? 'Pojďme spolu něco rozsvítit.' : `Za ${secs >= 60 ? Math.floor(secs / 60) + ' min ' : ''}${secs % 60} s a ${G.taps} ťuknutí. Pojďme spolu něco rozsvítit.`;
+  }
+  function openCtl(which) { ctlBox.hidden = which !== 'box'; ctlStrip.hidden = which !== 'strip'; }
+  boxInput.value = G.boxText;
+  boxInput.addEventListener('input', () => { G.boxText = boxInput.value.toUpperCase().slice(0, 12); });
+  $$('[data-boxcol]').forEach(b => b.addEventListener('click', () => { G.boxCol = b.dataset.boxcol; $$('[data-boxcol]').forEach(x => x.classList.toggle('on', x === b)); }));
+  $$('[data-fx]').forEach(b => b.addEventListener('click', () => { G.stripFx = b.dataset.fx; $$('[data-fx]').forEach(x => x.classList.toggle('on', x === b)); }));
+  $$('[data-stripcol]').forEach(b => b.addEventListener('click', () => { G.stripCol = b.dataset.stripcol; if (G.stripFx === 'duha') { G.stripFx = 'beh'; $$('[data-fx]').forEach(x => x.classList.toggle('on', x.dataset.fx === 'beh')); } $$('[data-stripcol]').forEach(x => x.classList.toggle('on', x === b)); }));
+  $$('.ctl-x').forEach(b => b.addEventListener('click', () => openCtl(null)));
+  dayBtn.addEventListener('click', () => { G.kT = G.kT > .5 ? 0 : 1; updHud(); });
+  sndBtn.addEventListener('click', () => { sndOn = !sndOn; sndBtn.textContent = sndOn ? 'zvuk: zap' : 'zvuk: vyp'; sndBtn.setAttribute('aria-pressed', sndOn ? 'true' : 'false'); if (sndOn) { ac(); tone(660, .12, 'sine', .04); } });
+  $('#gReset').addEventListener('click', () => { G.found.clear(); G.secret = false; G.t0 = G.tEnd = 0; G.taps = 0; G.finale = -1; G.cat = 'sleep'; winEl.classList.remove('show'); buildCards(); openCtl(null); updHud(); });
+  $('#gSkip').addEventListener('click', () => { G.kT = 1; const now = performance.now(); TG.forEach(t => { if (!G.found.has(t.id)) { G.found.set(t.id, now); markCard(t.id); } }); if (!G.tEnd) { G.t0 = G.t0 || now; G.tEnd = now; G.finale = now + 600; setTimeout(startFinale, 600); } updHud(); });
+
+  /* ---------- input ---------- */
+  const ptrs = new Map(); let downX = 0, downY = 0, moved = false, pinch = null, pan0 = [0, 0];
+  const toScene = (ox, oy) => [(ox - tx) / zoom, (oy - ty) / zoom];
+  gcv.addEventListener('pointerdown', e => {
+    if (e.isPrimary) { ptrs.clear(); pinch = null; }
+    ptrs.set(e.pointerId, { x: e.offsetX, y: e.offsetY });
+    if (ptrs.size === 1) { downX = e.offsetX; downY = e.offsetY; moved = false; pan0 = [tx, ty]; }
+    else if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, z: zoom, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, tx, ty }; moved = true; }
+  });
+  gcv.addEventListener('pointermove', e => {
+    G.ptrScene = toScene(e.offsetX, e.offsetY);
+    const p = ptrs.get(e.pointerId);
+    if (!p) { if (e.pointerType === 'mouse') { const h = hitAt(...G.ptrScene); gcv.style.cursor = h && h !== 'none' ? 'pointer' : 'default'; } return; }
+    p.x = e.offsetX; p.y = e.offsetY;
+    if (ptrs.size === 2 && pinch) { const [a, b] = [...ptrs.values()], d = Math.hypot(a.x - b.x, a.y - b.y), nz = clamp(pinch.z * d / pinch.d, 1, 2.6);
+      const scx = (pinch.cx - pinch.tx) / pinch.z, scy = (pinch.cy - pinch.ty) / pinch.z; zoom = nz; tx = pinch.cx - scx * nz; ty = pinch.cy - scy * nz; clampPan(); return; }
+    if (ptrs.size === 1) { const dx = e.offsetX - downX, dy = e.offsetY - downY; if (Math.hypot(dx, dy) > 8) moved = true;
+      if (moved && (SW * zoom > W || SH * zoom > H)) { tx = pan0[0] + dx; ty = pan0[1] + (zoom > 1.02 ? dy : 0); clampPan(); } }
+  });
+  const end = e => {
+    const had = ptrs.has(e.pointerId); ptrs.delete(e.pointerId);
+    if (ptrs.size < 2) pinch = null;
+    if (had && e.type === 'pointerup' && !moved && ptrs.size === 0) tap(...toScene(e.offsetX, e.offsetY));
+  };
+  gcv.addEventListener('pointerup', end); gcv.addEventListener('pointercancel', end); gcv.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') G.ptrScene = null; });
+  gcv.addEventListener('dblclick', () => { zoom = 1; clampPan(); });
+
+  function tap(x, y) {
+    const now = performance.now(), h = hitAt(x, y); if (!h) return; G.taps++;
+    if (h === 'cat') { if (G.cat === 'sleep') { G.cat = 'stretch'; G.catT = now; sMeow(); } return; }
+    if (h === 'j6k') { G.wave = now; sWave(); if (!G.secret) { G.secret = true; markCard('secret'); toast(`<b>Tajemství</b> · ${esc(SECRET.sent)}`, 4500, true); updHud(); } return; }
+    if (G.kT < .5) { toast('Ve dne světlo nevynikne. Přepni na noc.'); sNo(); return; }
+    if (h === 'none') { toast('Tady svítí jen okna. Hledej dál.'); sNo(); return; }
+    if (G.found.has(h)) { if (h === 'box' || h === 'strip') openCtl(h); else toast(TI[h].name); return; }
+    light(h, now); toast(`<b>${esc(TI[h].name)}</b> · ${esc(TI[h].sent)}`, 4500, true);
+    if (h === 'box' || h === 'strip') openCtl(h);
+  }
+
+  /* ---------- per-frame drawing ---------- */
+  let k = 0, t = 0, glows = [];
+  const onOf = (id, now) => { const f = G.found.has(id) ? 1 : 0; let w = 0; if (G.wave > 0) { const age = (now - G.wave) / 1000; if (age < 3) { const b = BI[id === 'box' ? 'boxdum' : id === 'strip' ? 'kavarna' : id], d = b ? Math.hypot((b.x0 + b.x1) / 2 - 4.3, (b.y0 + b.y1) / 2 - 4.3) : 5; w = clamp(1 - Math.abs(age * 6 - d) / 2.2); } } return Math.max(f, w) * Math.max(k, w * .6); };
+  const ageOf = (id, now) => G.found.has(id) ? (now - G.found.get(id)) / 1000 : 9;
+  const offTxt = () => mixA([70, 74, 80], [52, 58, 70], k), board = () => mixA([244, 240, 232], [26, 30, 38], k);
+  const flick = a => a > .9 ? 1 : (hash(Math.floor(a * 22)) > .45 ? 1 : .15);
+  function glow(p, r, col, a) { if (a > .01) glows.push(p[0], p[1], r, col, a); }
+  function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function txt(c, s, x, y, size, col, weight = 800, font = FONT_D) { c.font = `${weight} ${size}px ${font}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = col; c.fillText(s, x, y); }
+  function storeLight(b, on) { if (on <= .01 || !b.shop || b.id === 'ilustro' || b.id === 'dido') return; const w = fw(b, b.shop), hh = b.h * 100; poly(ctx, fquad(b, b.shop, 14, hh - 92, w - 14, hh - 6), rgb([255, 214, 150], .85 * on)); glow(fpt(b, b.shop, w / 2, hh - 30), S * 1.4, [255, 200, 130], .35 * on); }
+  const SIGNS = {
+    pekarna(b, now) { const on = onOf('pekarna', now), fl = flick(ageOf('pekarna', now)), col = mixA(offTxt(), [255, 205, 120], on * fl);
+      inFace(ctx, b, 'y', c => { rr(c, 18, 16, 144, 86, 10); c.fillStyle = rgb(board()); c.fill();
+        c.lineWidth = 9; c.lineCap = 'round'; c.strokeStyle = rgb(col); c.beginPath(); c.arc(90, 62, 26, Math.PI * 1.08, Math.PI * 1.92); c.stroke();
+        c.lineWidth = 5; [[-22, 1.1], [-8, 1.28], [8, 1.5], [22, 1.72]].forEach(([dx]) => { c.beginPath(); c.moveTo(90 + dx, 40 + Math.abs(dx) * .35); c.lineTo(90 + dx * .8, 52 + Math.abs(dx) * .3); c.stroke(); });
+        txt(c, 'PEKÁRNA', 90, 86, 17, rgb(col)); });
+      glow(fpt(b, 'y', 90, 58), S * 1.6, [255, 196, 110], .55 * on * fl); },
+    kavarna(b, now) { const on = onOf('kavarna', now), col = mixA(offTxt(), [255, 244, 225], on);
+      inFace(ctx, b, 'y', c => { rr(c, 16, 14, 138, 90, 10); c.fillStyle = rgb(board()); c.fill();
+        c.fillStyle = rgb(col); c.fillRect(66, 50, 32, 26); c.lineWidth = 5; c.strokeStyle = rgb(col); c.beginPath(); c.arc(100, 62, 8, -Math.PI / 2, Math.PI / 2); c.stroke();
+        c.lineWidth = 3.5; for (let i = 0; i < 3; i++) { c.beginPath(); for (let y = 0; y <= 20; y += 2) { const xx = 72 + i * 10 + Math.sin(y * .35 + t * 4 + i) * 3 * (on > .05 ? 1 : .3); y ? c.lineTo(xx, 44 - y) : c.moveTo(xx, 44); } c.strokeStyle = rgb(col, .4 + .6 * on); c.stroke(); }
+        txt(c, 'KAVÁRNA', 85, 90, 16, rgb(col)); });
+      glow(fpt(b, 'y', 85, 55), S * 1.4, [255, 230, 190], .45 * on); },
+    kino(b, now) { const on = onOf('kino', now), col = mixA(offTxt(), [255, 236, 200], on);
+      inFace(ctx, b, 'y', c => { rr(c, 22, 20, 226, 92, 8); c.fillStyle = rgb(mixA(board(), [40, 14, 18], .35)); c.fill();
+        const pts = []; for (let x = 30; x <= 240; x += 15) pts.push([x, 26], [x, 106]); for (let y = 41; y < 106; y += 15) pts.push([28, y], [242, y]);
+        pts.forEach(([x, y], i) => { const lit = on * (((i / 2 | 0) + Math.floor(t * 8)) % 3 === 0 ? 1 : .35); c.fillStyle = rgb(mixA(offTxt(), [255, 214, 140], lit)); c.beginPath(); c.arc(x, y, 3.6, 0, 7); c.fill(); });
+        txt(c, 'KINO', 135, 68, 44, rgb(col)); });
+      glow(fpt(b, 'y', 135, 66), S * 2.4, [255, 200, 130], .5 * on); },
+    lekarna(b, now) { const on = onOf('lekarna', now), p = .78 + .22 * Math.sin(t * 3), col = mixA(offTxt(), [80, 230, 130], on * p);
+      inFace(ctx, b, 'y', c => { rr(c, 14, 14, 122, 92, 10); c.fillStyle = rgb(board()); c.fill(); c.fillStyle = rgb(col); c.fillRect(66, 22, 18, 54); c.fillRect(48, 40, 54, 18); txt(c, 'LÉKÁRNA', 75, 91, 15, rgb(col)); });
+      glow(fpt(b, 'y', 75, 50), S * 1.5, [70, 230, 120], .5 * on * p); },
+    kvetiny(b, now) { const on = onOf('kvetiny', now), a = easeOut(clamp(ageOf('kvetiny', now) / 1.3)), open = G.found.has('kvetiny') ? a : .15, pc = mixA(offTxt(), [255, 120, 180], on), cc = mixA(offTxt(), [255, 214, 110], on);
+      inFace(ctx, b, 'x', c => { rr(c, 14, 14, 142, 92, 10); c.fillStyle = rgb(board()); c.fill();
+        c.strokeStyle = rgb(mixA(offTxt(), [110, 210, 120], on)); c.lineWidth = 4; c.beginPath(); c.moveTo(46, 62); c.lineTo(46, 98); c.stroke();
+        c.fillStyle = rgb(pc); for (let i = 0; i < 6; i++) { c.save(); c.translate(46, 50); c.rotate(i * Math.PI / 3 + t * .2 * on); c.beginPath(); c.ellipse(0, -12 * open - 2, 6 * open + 2, 12 * open + 3, 0, 0, 7); c.fill(); c.restore(); }
+        c.fillStyle = rgb(cc); c.beginPath(); c.arc(46, 50, 6, 0, 7); c.fill(); txt(c, 'KVĚTINY', 108, 60, 19, rgb(mixA(offTxt(), [255, 236, 245], on))); });
+      glow(fpt(b, 'x', 60, 55), S * 1.5, [255, 130, 190], .45 * on); },
+    hotel(b, now) { const on = onOf('hotel', now), col = mixA(offTxt(), [170, 220, 255], on);
+      inFace(ctx, b, 'y', c => { c.fillStyle = rgb(board()); c.beginPath(); c.arc(115, 72, 46, 0, 7); c.fill(); c.lineWidth = 6; c.strokeStyle = rgb(col); c.beginPath(); c.arc(115, 72, 40, 0, 7); c.stroke();
+        txt(c, 'H', 115, 62, 40, rgb(col)); for (let i = 0; i < 5; i++) { const hgt = on > .05 ? 4 + 10 * Math.abs(Math.sin(t * 9 + i * 1.3)) * (Math.sin(t * 1.7) > -.2 ? 1 : .15) : 3; c.fillStyle = rgb(col); c.fillRect(97 + i * 8, 92 - hgt / 2, 5, hgt); } });
+      inFace(ctx, b, 'x', c => { txt(c, 'HOTEL', 115, 46, 30, rgb(col)); });
+      glow(fpt(b, 'y', 115, 72), S * 2.2, [150, 205, 255], .5 * on); glow(fpt(b, 'x', 115, 46), S * 1.8, [150, 205, 255], .35 * on); },
+    dido(b, now) { const on = onOf('dido', now);
+      inFace(ctx, b, 'y', c => { c.strokeStyle = rgb(mixA([90, 94, 100], [40, 44, 52], k)); c.lineWidth = 4; c.beginPath(); c.moveTo(25, 0); c.lineTo(25, -14); c.moveTo(95, 0); c.lineTo(95, -14); c.stroke();
+        rr(c, 2, -78, 116, 64, 10); c.fillStyle = rgb(mixA([40, 44, 50], [16, 18, 24], k)); c.fill(); txt(c, 'DiDo', 60, -46, 40, rgb(mixA(mixA([226, 228, 232], [70, 74, 84], k), [120, 228, 255], on))); });
+      glow(fpt(b, 'y', 60, -46), S * 1.8, [110, 220, 255], .55 * on); },
+    ilustro(b, now) { const on = onOf('ilustro', now), col = mixA([200, 200, 200], [255, 255, 255], on), w = fw(b, 'x'), hh = b.h * 100;
+      inFace(ctx, b, 'x', c => { txt(c, 'ilustro', w / 2, 64, 42, rgb(mixA(col, [90, 92, 98], k * (1 - on))), 700);
+        if (on > .02) { c.save(); c.globalAlpha = on; c.fillStyle = '#0d0f14'; c.fillRect(15, 120, w - 30, hh - 128);
+          for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++) { const hue = (i * 38 + j * 70 + t * 50) % 360; c.fillStyle = hsl(hue, 90, 62); c.globalAlpha = on * (.55 + .45 * Math.sin(t * 2 + i + j)); c.fillRect(22 + i * 19, 128 + j * 19, 15, 15); }
+          c.globalAlpha = on; const bx = w - 46, by = hh - 12, ang = -1.1 + Math.sin(t * .9) * .55; c.strokeStyle = '#d9dde3'; c.lineWidth = 4; c.beginPath(); c.moveTo(bx - 10, by); c.lineTo(bx + 10, by); c.moveTo(bx, by); c.lineTo(bx, by - 52); c.lineTo(bx + Math.cos(ang) * 22, by - 52 + Math.sin(ang) * 22); c.stroke();
+          c.fillStyle = 'rgba(255,240,200,.22)'; c.beginPath(); const hx_ = bx + Math.cos(ang) * 22, hy = by - 52 + Math.sin(ang) * 22; c.moveTo(hx_, hy); c.lineTo(hx_ + Math.cos(ang + .5) * -60 - 20, hy + 70); c.lineTo(hx_ + Math.cos(ang - .5) * -60 + 30, hy + 70); c.closePath(); c.fill(); c.restore(); } });
+      glow(fpt(b, 'x', w / 2, 64), S * 1.8, [255, 255, 255], .4 * on); glow(fpt(b, 'x', 80, 170), S * 2, [180, 140, 255], .35 * on); },
+    boxdum(b, now) { const on = onOf('box', now), bc = hx(G.boxCol), panel = mixA(mixA([238, 238, 234], [36, 40, 50], k), bc, on);
+      inFace(ctx, b, 'x', c => { c.fillStyle = rgb(panel); c.fillRect(22, 72, 86, 76); const s = (G.boxText || ' ').slice(0, 12); let fs = 30; c.font = `800 ${fs}px ${FONT_D}`; const mw = c.measureText(s).width; if (mw > 78) fs = fs * 78 / mw;
+        txt(c, s, 65, 111, fs, rgb(mixA(mixA([150, 152, 156], [70, 74, 82], k), [24, 24, 28], on))); });
+      glow(fpt(b, 'x', 65, 110), S * 1.7, bc, .55 * on); }
+  };
+  function drawStrip(now) {
+    const on = onOf('strip', now), sc = hx(G.stripCol), n = stripDots.length, r = Math.max(.9, S * .045);
+    if (on < .02) { ctx.strokeStyle = rgb(mixA([120, 122, 126], [40, 44, 54], k)); ctx.lineWidth = Math.max(1, S * .05); ctx.beginPath(); stripDots.forEach((d, i) => i ? ctx.lineTo(d.p[0], d.p[1]) : ctx.moveTo(d.p[0], d.p[1])); ctx.stroke(); return; }
+    let ps = -1; if (G.ptrScene && G.stripFx === 'vlna') { let best = 1e9; stripDots.forEach(d => { const dd = Math.abs(d.p[0] - G.ptrScene[0]); if (dd < best) { best = dd; ps = d.s; } }); }
+    const carXs = cars.filter(c => LANES[c.lane].ax === 'x').map(c => c.s);
+    stripDots.forEach((d, i) => {
+      let col = sc, a = 1;
+      if (G.stripFx === 'duha') col = hslRgb((d.s * 360 + t * 70) % 360);
+      else if (G.stripFx === 'beh') a = ((d.s * 4 - t * .9) % 1 + 1) % 1 < .22 ? 1 : .18;
+      else if (G.stripFx === 'dych') a = .25 + .75 * (.5 + .5 * Math.sin(t * 2.2));
+      else if (G.stripFx === 'jiskry') a = hash(i, Math.floor(t * 9)) > .82 ? 1 : .12;
+      else if (G.stripFx === 'vlna') a = ps < 0 ? .3 + .7 * (.5 + .5 * Math.sin(d.s * 18 - t * 4)) : .15 + .85 * Math.exp(-(((d.s - ps) * 9) ** 2));
+      for (const cx of carXs) if (Math.abs(cx - d.x) < .6) a = Math.min(1, a + .6);
+      a *= on; ctx.fillStyle = rgb(mixA([60, 62, 68], col, a)); ctx.beginPath(); ctx.arc(d.p[0], d.p[1], r, 0, 7); ctx.fill();
+      if (i % 3 === 0) glow(d.p, S * .55, col, .5 * a);
+    });
+  }
+  function hslRgb(h) { const f = n => { const kk = (n + h / 30) % 12; return 255 * (.6 - .4 * Math.max(-1, Math.min(kk - 3, 9 - kk, 1))); }; return [f(0), f(8), f(4)]; }
+  function drawCar(car) {
+    const L = LANES[car.lane], [x, y] = carXY(car), alpha = clamp(Math.min(car.s, 14 - car.s) * 2 + .2);
+    if (alpha <= 0) return; ctx.globalAlpha = alpha;
+    const col = mixA(car.c, nightOf(car.c), k * .8), along = L.ax === 'x';
+    const [x0, y0, x1, y1] = along ? [x - CL / 2, y - CWd / 2, x + CL / 2, y + CWd / 2] : [x - CWd / 2, y - CL / 2, x + CWd / 2, y + CL / 2];
+    boxFaces(ctx, x0, y0, x1, y1, .08, .34, col);
+    const cb = along ? [x - CL * .22 - (L.dir > 0 ? .08 : -.08), y - CWd * .4, x + CL * .22 - (L.dir > 0 ? .08 : -.08), y + CWd * .4] : [x - CWd * .4, y - CL * .22 - (L.dir > 0 ? .08 : -.08), x + CWd * .4, y + CL * .22 - (L.dir > 0 ? .08 : -.08)];
+    boxFaces(ctx, cb[0], cb[1], cb[2], cb[3], .34, .58, mixA([70, 84, 100], [20, 24, 34], k));
+    poly(ctx, rect3(cb[0] + .03, cb[1] + .03, cb[2] - .03, cb[3] - .03, .58), rgb(shade(col, 1.05)));
+    if (car.sp) { // striped special
+      const st = [[255, 184, 92], [22, 24, 28], [255, 184, 92]];
+      st.forEach((sc, i) => { const o = (i - 1) * .11; const q = along ? rect3(x0, y + o - .03, x1, y + o + .03, .345) : rect3(x + o - .03, y0, x + o + .03, y1, .345); poly(ctx, q, rgb(sc)); });
+      const fq_ = along ? [P(x0, y1, .3), P(x1, y1, .3), P(x1, y1, .2), P(x0, y1, .2)] : [P(x1, y0, .3), P(x1, y1, .3), P(x1, y1, .2), P(x1, y0, .2)]; poly(ctx, fq_, '#ffb85c');
+      glow(P(x, y, .4), S * 1.6, [255, 184, 92], .35 + .45 * k);
+    }
+    ctx.globalAlpha = 1;
+    // lights
+    const fx_ = along ? x + L.dir * CL / 2 : x, fy = along ? y : y + L.dir * CL / 2, bx = along ? x - L.dir * CL / 2 : x, by = along ? y : y - L.dir * CL / 2;
+    if (k > .05) { glow(P(fx_ + (along ? L.dir * .9 : 0), fy + (along ? 0 : L.dir * .9), 0), S * 1.2, [255, 236, 190], .28 * k * alpha); glow(P(fx_, fy, .22), S * .5, [255, 246, 220], .8 * k * alpha); glow(P(bx, by, .22), S * .35, [255, 60, 60], .7 * k * alpha); }
+  }
+  function drawPerson(x, y, c, ph, a = 1) {
+    const col = mixA(c, nightOf(c), k * .85), sk = mixA([226, 190, 160], [60, 54, 60], k * .85), lg = mixA([60, 64, 72], [18, 20, 26], k);
+    const p0 = P(x, y, 0), sw = Math.sin(ph) * S * .06, hb = S * ZU;
+    ctx.globalAlpha = a; ctx.strokeStyle = rgb(lg); ctx.lineWidth = Math.max(1, S * .05);
+    ctx.beginPath(); ctx.moveTo(p0[0] - S * .03, p0[1] - hb * .28); ctx.lineTo(p0[0] - S * .03 + sw, p0[1]); ctx.moveTo(p0[0] + S * .03, p0[1] - hb * .28); ctx.lineTo(p0[0] + S * .03 - sw, p0[1]); ctx.stroke();
+    ctx.fillStyle = rgb(col); rr(ctx, p0[0] - S * .075, p0[1] - hb * .62, S * .15, hb * .36, S * .04); ctx.fill();
+    ctx.fillStyle = rgb(sk); ctx.beginPath(); ctx.arc(p0[0], p0[1] - hb * .72, S * .065, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+  }
+  function drawLamp(x, y) { const a = P(x, y, 0), b = P(x, y, 1.7); ctx.strokeStyle = rgb(mixA([70, 74, 80], [30, 34, 40], k)); ctx.lineWidth = Math.max(1, S * .06); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    ctx.fillStyle = rgb(mixA([90, 94, 100], [255, 226, 170], k)); ctx.beginPath(); ctx.arc(b[0], b[1], Math.max(1.5, S * .09), 0, 7); ctx.fill(); glow(b, S * .9, [255, 214, 150], .7 * k); }
+  function drawTree(x, y) { const a = P(x, y, 0), b = P(x, y, .9); ctx.strokeStyle = rgb(mixA([110, 86, 62], [34, 28, 26], k)); ctx.lineWidth = Math.max(1, S * .08); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    const g = mixA([118, 156, 104], [22, 34, 30], k); ctx.fillStyle = rgb(g); ctx.beginPath(); ctx.arc(b[0], b[1] - S * .25, S * .48, 0, 7); ctx.fill(); ctx.fillStyle = rgb(shade(g, 1.15)); ctx.beginPath(); ctx.arc(b[0] - S * .14, b[1] - S * .4, S * .25, 0, 7); ctx.fill(); }
+  function drawTL(x, y, ax, now) { const a = P(x, y, 0), b = P(x, y, 1.15), s = signalFor(ax, now); ctx.strokeStyle = rgb(mixA([60, 64, 70], [26, 28, 34], k)); ctx.lineWidth = Math.max(1, S * .05); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    ctx.fillStyle = '#22252a'; rr(ctx, b[0] - S * .07, b[1] - S * .36, S * .14, S * .36, S * .03); ctx.fill();
+    [['r', [255, 70, 60]], ['y', [255, 196, 60]], ['g', [70, 220, 110]]].forEach(([n, c], i) => { const p = [b[0], b[1] - S * .29 + i * S * .11]; ctx.fillStyle = s === n ? rgb(c) : '#3a3d42'; ctx.beginPath(); ctx.arc(p[0], p[1], S * .04, 0, 7); ctx.fill(); if (s === n) glow(p, S * .35, c, .3 + .5 * k); }); }
+  function drawFountain() { const [x, y] = FOUNT; for (let i = 0; i < 14; i++) { const a = i / 14 * 6.283, ph = (t * 1.3 + i * .37) % 1, r = .1 + ph * .42, z = .25 + Math.sin(ph * Math.PI) * .7; const p = P(x + Math.cos(a) * r, y + Math.sin(a) * r, z); ctx.fillStyle = rgb(mixA([230, 244, 252], [150, 190, 220], k), .8 * (1 - ph * .5)); ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(1, S * .045), 0, 7); ctx.fill(); }
+    glow(P(x, y, .3), S * 1.1, [120, 190, 255], .25 * k); }
+  function drawCat(now) {
+    const p = catPos(), s = S * .32, col = rgb(mixA([60, 58, 62], [26, 26, 32], k * .7)); ctx.fillStyle = col;
+    if (G.cat === 'sleep') { ctx.beginPath(); ctx.ellipse(p[0], p[1] - s * .35, s * .75, s * .38, 0, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(p[0] + s * .55, p[1] - s * .55, s * .28, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(p[0] + s * .38, p[1] - s * .75); ctx.lineTo(p[0] + s * .45, p[1] - s * 1.0); ctx.lineTo(p[0] + s * .58, p[1] - s * .8); ctx.moveTo(p[0] + s * .62, p[1] - s * .8); ctx.lineTo(p[0] + s * .76, p[1] - s * 1.0); ctx.lineTo(p[0] + s * .8, p[1] - s * .7); ctx.fill();
+      const zz = (t % 2) / 2; txt(ctx, 'z', p[0] + s * 1.1, p[1] - s * (1.1 + zz), Math.max(8, s * .7), rgb(mixA([90, 94, 100], [200, 210, 230], k), 1 - zz), 700, FONT_M); return; }
+    const st = G.cat === 'stretch' ? clamp((now - G.catT) / 1100) : 1; if (st >= 1 && G.cat === 'stretch') G.cat = 'awake';
+    const len = s * (.8 + .5 * Math.sin(st * Math.PI)); ctx.beginPath(); ctx.ellipse(p[0], p[1] - s * .55, len, s * .3, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(p[0] + len * .95, p[1] - s * .85, s * .28, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(p[0] + len * .8, p[1] - s * 1.05); ctx.lineTo(p[0] + len * .86, p[1] - s * 1.35); ctx.lineTo(p[0] + len, p[1] - s * 1.1); ctx.moveTo(p[0] + len * 1.02, p[1] - s * 1.1); ctx.lineTo(p[0] + len * 1.12, p[1] - s * 1.35); ctx.lineTo(p[0] + len * 1.2, p[1] - s * 1.0); ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = Math.max(1, s * .14); ctx.beginPath(); ctx.moveTo(p[0] - len * .9, p[1] - s * .6); ctx.quadraticCurveTo(p[0] - len * 1.4, p[1] - s * (1.4 + .2 * Math.sin(t * 3)), p[0] - len * 1.1, p[1] - s * 1.7); ctx.stroke();
+    if (G.cat === 'awake') { const jp = j6kPos(), a = .55 + .45 * Math.sin(t * 2.5), on = Math.max(.35, k); txt(ctx, 'J6K', jp[0], jp[1], Math.max(10, S * .42), rgb(mixA([110, 112, 118], [255, 236, 200], on * a)), 800, FONT_M); glow(jp, S * .9, [255, 220, 170], .5 * on * a); }
+  }
+  function drawRoofSign(now) {
+    const fin = G.finale > 0 && now > G.finale ? clamp((now - G.finale) / 1200) : 0; if (fin <= 0) return;
+    const vb = { x0: 3.3, x1: 5.4, y1: 4.6, h: 6 };
+    inFace(ctx, vb, 'y', c => { c.strokeStyle = rgb(mixA([90, 94, 100], [40, 44, 52], k)); c.lineWidth = 4; c.beginPath(); c.moveTo(40, 0); c.lineTo(40, -20); c.moveTo(170, 0); c.lineTo(170, -20); c.stroke();
+      const s = 'ILUSTRO'; for (let i = 0; i < s.length; i++) { const li = clamp(fin * 8 - i); txt(c, s[i], 22 + i * 28, -48, 46, rgb(mixA([80, 82, 88], [255, 200, 130], li))); } });
+    glow(fpt(vb, 'y', 105, -48), S * 3, [255, 184, 92], .55 * fin);
+  }
+  function drawBubble(now) {
+    const on = onOf('hotel', now); if (on < .4 || !G.found.has('hotel')) return;
+    const L = ['Dobrý večer.', 'Vítejte v hotelu.', 'Pokoj 404? Vlevo.', 'Svítím jen pro vás.', 'Snídaně od sedmi.'], i = Math.floor(t / 2.8) % L.length, ph = (t / 2.8) % 1;
+    const a = clamp(ph * 6) * clamp((1 - ph) * 6) * on, p = fpt(BI.hotel, 'y', 40, 50), fs = clamp(S * .36, 10, 15);
+    ctx.font = `600 ${fs}px ${FONT_D}`; const w = ctx.measureText(L[i]).width + fs * 1.2, h = fs * 1.9, x = p[0] - w - S * .35, y = p[1] - h / 2;
+    ctx.globalAlpha = a; ctx.fillStyle = '#f6f7fb'; rr(ctx, x, y, w, h, h / 2); ctx.fill(); ctx.beginPath(); ctx.moveTo(x + w - 1, p[1] - 5); ctx.lineTo(x + w + 8, p[1]); ctx.lineTo(x + w - 1, p[1] + 5); ctx.fill();
+    txt(ctx, L[i], x + w / 2, p[1] + 1, fs, '#15171c', 600); ctx.globalAlpha = 1;
+  }
+  // depth rule for point objects vs boxes: draw the point right before the first box that is in front of it
+  function slotOf(x, y) { for (let i = 0; i < BLD.length; i++) { const b = BLD[i]; const front = (x <= b.x0 || y <= b.y0) && !(x >= b.x1 || y >= b.y1); if (front) return i; } return BLD.length; }
+  let fAcc = 0, fN = 0, prev = 0;
+  function tick(now) {
+    if (!gameVisible || !W) { prev = now; return; }
+    const dt = Math.min(.05, (now - prev) / 1000 || .016); prev = now; t = now / 1000;
+    fAcc += dt; if (++fN >= 90) { const avg = fAcc / fN; if (avg > 1 / 45 && Q > 0) { Q--; if (Q === 0) size(); } fAcc = fN = 0; }
+    G.k += (G.kT - G.k) * Math.min(1, dt * 2.2); k = G.k;
+    if (G.toastT && now > G.toastT) { toastEl.classList.remove('show'); G.toastT = 0; }
+    updCars(dt, now); updPeople(dt); glows = [];
+    // background
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = rgb(mixA([233, 236, 236], [8, 10, 17], k)); ctx.fillRect(0, 0, gcv.width, gcv.height);
+    ctx.setTransform(D * zoom, 0, 0, D * zoom, D * tx, D * ty);
+    if (k > .05 && Q > 0) { ctx.fillStyle = '#fff'; stars.forEach(([x, y, r]) => { ctx.globalAlpha = k * (.25 + .5 * r) * (.6 + .4 * Math.sin(t * (1 + r * 2) + r * 9)); ctx.fillRect(x, y, 1.4, 1.4); }); ctx.globalAlpha = 1; }
+    ctx.drawImage(gDay.cv, gDay.x, gDay.y, gDay.w, gDay.h); if (k > .01) { ctx.globalAlpha = k; ctx.drawImage(gNight.cv, gNight.x, gNight.y, gNight.w, gNight.h); ctx.globalAlpha = 1; }
+    // ground light pools (under everything)
+    if (k > .05) { ctx.globalCompositeOperation = 'lighter'; LAMPS.forEach(([x, y]) => { const p = P(x, y, 0), g = glowSpr([255, 214, 150]); ctx.globalAlpha = .4 * k; ctx.drawImage(g, p[0] - S * 1.6, p[1] - S * .8, S * 3.2, S * 1.6); }); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
+    // point objects
+    const pts = [];
+    LAMPS.forEach(([x, y]) => pts.push([x, y, () => drawLamp(x, y)]));
+    TREES.forEach(([x, y]) => pts.push([x, y, () => drawTree(x, y)]));
+    TLIGHTS.forEach(([x, y, ax]) => pts.push([x, y, () => drawTL(x, y, ax, now)]));
+    pts.push([FOUNT[0] + .7, FOUNT[1] + .7, drawFountain]);
+    cars.forEach(c => { const [x, y] = carXY(c); pts.push([x, y, () => drawCar(c)]); });
+    const nP = Q >= 2 ? people.length : 9; for (let i = 0; i < nP; i++) { const pp = people[i], [x, y] = personXY(pp); pts.push([x, y, () => drawPerson(x, y, pp.c, pp.ph)]); }
+    visitors.forEach(v => { if (v.delay <= 0) pts.push([v.x, v.y, () => drawPerson(v.x, v.y, v.c, v.ph, v.fade)]); });
+    const slots = Array.from({ length: BLD.length + 1 }, () => []);
+    pts.forEach(o => slots[slotOf(o[0], o[1])].push(o)); slots.forEach(s => s.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1])));
+    for (let i = 0; i <= BLD.length; i++) {
+      slots[i].forEach(o => o[2]());
+      if (i === BLD.length) break;
+      const b = BLD[i], sp = SPR[b.id];
+      ctx.drawImage(sp[0].cv, sp[0].x, sp[0].y, sp[0].w, sp[0].h); if (k > .01) { ctx.globalAlpha = k; ctx.drawImage(sp[1].cv, sp[1].x, sp[1].y, sp[1].w, sp[1].h); ctx.globalAlpha = 1; }
+      if (b.shop) storeLight(b, onOf(b.id, now));
+      if (SIGNS[b.id]) SIGNS[b.id](b, now);
+      if (b.id === 'lekarna') drawStrip(now);
+      if (b.id === 'hotel') { drawCat(now); drawRoofSign(now); }
+    }
+    // additive glow pass
+    if (glows.length) { ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < glows.length; i += 5) { const r = glows[i + 2] * (Q > 0 ? 1 : .8); ctx.globalAlpha = Math.min(1, glows[i + 4]); ctx.drawImage(glowSpr(glows[i + 3]), glows[i] - r, glows[i + 1] - r, r * 2, r * 2); } ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
+    drawBubble(now);
+  }
+  buildCards(); updHud();
+  return { size, tick };
+})();
+function sizeGame() { CITY.size(); }
+function gameTick(now) { CITY.tick(now); }
 
 /* ================= copy e-mail ================= */
 $('#copyMail').addEventListener('click', () => {
@@ -1415,7 +1904,7 @@ if ('IntersectionObserver' in window) {
 } else { rVisible = symVisible = gameVisible = true; cStart(); }
 function layout() { sizeFilm(); measureBlocks(); placeSats(); layoutSpokes(); sizeSym(); sizeGame(); sizeChip(); for (const B of blocks) B.last = -1; }
 let rzT = 0; addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(layout, 120); });
-layout(); spawnWord();
+layout();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measureBlocks(); placeSats(); layoutSpokes(); });
 function loop(now) {
   if (lenis) lenis.raf(now);
