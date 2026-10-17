@@ -344,7 +344,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 <script>
 (function(){
   "use strict";
-  var N = 120;
+  var N = 240;            // frames on disk
+  var NS = 120;           // story timeline units (captions, altitude, scenes)
   var portrait = window.matchMedia("(max-aspect-ratio: 1/1)").matches;
   var dir = portrait ? "f/m/" : "f/d/";
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -359,7 +360,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     for (var i = 0; i < N; i += step) if (!seen[i]) { seen[i] = 1; order.push(i); }
   });
   var bar = document.getElementById("ldbar"), ldn = document.getElementById("ldn"), loader = document.getElementById("loader");
-  var gate = 0, gateNeed = Math.ceil(N / 8) + 1, revealed = false;
+  var gate = 0, gateNeed = Math.ceil(N / 16) + 1, revealed = false;
   function pad(n){ return ("00" + n).slice(-3); }
   function onLoad(i){
     ok[i] = true; loaded++;
@@ -367,9 +368,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     var pct = Math.min(100, Math.round(gate / gateNeed * 100));
     bar.style.width = pct + "%"; ldn.textContent = "NAČÍTÁM " + pct + " %";
     if (!revealed && gate >= gateNeed) { revealed = true; loader.classList.add("done"); dirty = true; }
-    if (i === 0) dirty = true;
+    if (i === 0 || i === Math.round(cur)) dirty = true;
   }
-  var q = order.slice(), active = 0, PAR = 6;
+  var q = order.slice(), active = 0, PAR = 8;
   function pump(){
     while (active < PAR && q.length) {
       (function(i){
@@ -408,12 +409,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     ctx.globalAlpha = alpha;
     ctx.drawImage(im, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
   }
+  var shown = -1;
   function draw(f){
-    var a = Math.floor(f), b = Math.min(N - 1, a + 1), t = f - a;
-    var ia = nearest(a); if (ia < 0) return;
-    cover(imgs[ia], 1);
-    if (t > 0.02 && ok[b] && b !== ia) cover(imgs[b], t);
-    ctx.globalAlpha = 1;
+    var ia = nearest(Math.round(f)); if (ia < 0 || (ia === shown && !dirty)) return;
+    ctx.imageSmoothingQuality = "high";
+    cover(imgs[ia], 1); shown = ia;
   }
 
   /* ---------- story timeline (frame units) ---------- */
@@ -457,7 +457,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     ruler.appendChild(t);
   }
   SCENES.forEach(function(s){
-    var d = document.createElement("div"); d.className = "dot"; d.style.left = (s.f / (N - 1) * 100) + "%";
+    var d = document.createElement("div"); d.className = "dot"; d.style.left = (s.f / (NS - 1) * 100) + "%";
     s.dot = d; track.appendChild(d);
   });
 
@@ -543,7 +543,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     cur += (target - cur) * k;
     if (Math.abs(target - cur) < 0.001) cur = target;
     if (dirty || Math.abs(cur - lastDrawn) > 0.002) {
-      draw(cur); story(cur, P); lastDrawn = cur; dirty = false;
+      draw(cur); story(cur * (NS - 1) / (N - 1), P); lastDrawn = cur; dirty = false;
     }
     requestAnimationFrame(loop);
   }
@@ -578,4 +578,5 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
   } else peaksEls.forEach(reveal);
 })();
 </script>
+
 </body></html>
