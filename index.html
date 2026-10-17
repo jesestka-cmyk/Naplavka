@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Let nad Söldenem: z vrcholů nad mraky přes lanovku a sjezd až do vesnice. Tři třítisícovky, 142 km sjezdovek, ledovce od září do května.">
+<title>Sölden</title>
+<meta name="theme-color" content="#08121b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sölden">
+<meta property="og:description" content="Let nad Söldenem: z vrcholů nad mraky až do vesnice.">
+<meta property="og:image" content="/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Schibsted+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+</head>
+<body>
+<style>
+/* Layout: one sticky full-bleed film driven by scroll, HUD (altimeter + scene rail) on top, then calm info bands. Single dark alpine look. */
+:root{
+  --ink:#08121b;          /* night over the glacier */
+  --ink-2:#0f1f2c;
+  --snow:#f3f6f8;
+  --frost:#a9c4d3;        /* muted text on ink */
+  --ice:#9fd6ee;
+  --pylon:#ff5b1f;        /* orange of the lift pylons in the film */
+  --scrim:rgba(4,12,20,.74);
+  --f-display:"Archivo","Arial Narrow",Helvetica,Arial,sans-serif;
+  --f-body:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --gut-l:max(16px,env(safe-area-inset-left,0px));
+  --gut-r:max(16px,env(safe-area-inset-right,0px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+body{background:var(--ink);color:var(--snow);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--pylon);outline-offset:3px}
+
+/* ---------- loader ---------- */
+#loader{position:fixed;inset:0;z-index:50;background:var(--ink);display:grid;place-items:center;transition:opacity .9s ease,visibility .9s}
+#loader.done{opacity:0;visibility:hidden}
+.ld{display:grid;gap:14px;justify-items:center}
+.ld-word{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:clamp(28px,6vw,54px);letter-spacing:.06em}
+.ld-bar{width:min(220px,50vw);height:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.ld-bar i{display:block;height:100%;width:0;background:var(--pylon);transition:width .2s}
+.ld-n{font-family:var(--f-mono);font-size:12px;color:var(--frost);letter-spacing:.12em}
+
+/* ---------- film ---------- */
+#film{position:relative;height:780vh}
+.stage{position:sticky;top:0;height:100vh;height:100lvh;overflow:hidden;background:var(--ink)}
+canvas#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+.veil{position:absolute;inset:0;pointer-events:none}
+#white{background:#fff;opacity:0}
+#dip{background:var(--ink);opacity:0}
+.vign{background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(3,10,16,.55) 100%)}
+#scrim{background:linear-gradient(to top,var(--scrim) 0%,rgba(4,12,20,.3) 40%,transparent 62%);opacity:1}
+#cscrim{background:radial-gradient(60% 45% at 50% 50%,rgba(4,12,20,.62),rgba(4,12,20,.2) 70%,transparent);opacity:0}
+.grain{opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* overlay layer sized to the *visible* viewport so captions never hide under mobile browser bars */
+.ui{position:absolute;left:0;right:0;top:0;height:100vh;height:100svh;pointer-events:none}
+
+/* hero */
+.hero{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-left:var(--gut-l);padding-right:var(--gut-r);will-change:transform,opacity,filter}
+.hero-eyebrow{font-family:var(--f-mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.32em;text-transform:uppercase;color:#fff;opacity:.9;text-shadow:0 1px 12px rgba(0,30,60,.35)}
+.hero h1{white-space:nowrap;margin:.1em 0 0;font-family:var(--f-display);font-weight:900;font-stretch:125%;line-height:.82;font-size:clamp(64px,17vw,300px);letter-spacing:-.01em;color:#fff;text-shadow:0 6px 40px rgba(0,30,70,.28)}
+.hero h1 .o{position:relative;display:inline-block}
+.hero-sub{margin-top:clamp(14px,2vw,26px);display:flex;gap:clamp(10px,2vw,28px);flex-wrap:wrap;justify-content:center;font-family:var(--f-mono);font-size:clamp(11px,1.05vw,13px);letter-spacing:.14em;color:#fff;text-transform:uppercase}
+.hero-sub span{padding:6px 10px;background:rgba(8,18,27,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);border-radius:2px}
+.cue{position:absolute;left:50%;bottom:calc(64px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:grid;justify-items:center;gap:10px;font-family:var(--f-mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#fff}
+.cue i{width:1px;height:46px;background:linear-gradient(#fff,transparent);animation:cue 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* captions */
+.cap{position:absolute;left:0;bottom:0;width:min(640px,100%);padding:0 var(--gut-r) calc(clamp(72px,11vh,120px) + env(safe-area-inset-bottom,0px)) calc(var(--gut-l) + clamp(0px,4vw,56px));opacity:0;will-change:transform,opacity}
+.cap .k{display:flex;align-items:center;gap:12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.cap h2,.cap p{text-shadow:0 2px 18px rgba(0,10,20,.35)}
+.cap.dark h2,.cap.dark p,.cap.dark .k{text-shadow:none}
+.cap .k b{color:var(--pylon);font-weight:600}
+.cap .k::after{content:"";height:1px;width:48px;background:currentColor;opacity:.6}
+.cap h2{margin:.35em 0 .3em;font-family:var(--f-display);font-weight:800;font-stretch:115%;font-size:clamp(34px,5.6vw,84px);line-height:.95;letter-spacing:-.015em;text-wrap:balance}
+.cap h2 em{font-style:normal;color:var(--pylon)}
+.cap p{margin:0;max-width:44ch;font-size:clamp(15px,1.25vw,18px);color:#e6eef3;text-wrap:pretty}
+.cap.dark{color:var(--ink)}
+.cap.dark .k{color:#2d5a73}
+.cap.dark p{color:#22394a}
+.cap.center{left:50%;bottom:auto;top:50%;transform:translate(-50%,-50%);text-align:center;width:min(760px,100%);padding:0 var(--gut-r) 0 var(--gut-l)}
+.cap.center .k{justify-content:center}
+.cap.center .k::after{display:none}
+.cap.center p{margin-inline:auto}
+.cap .btn{pointer-events:auto}
+.btn{display:inline-flex;align-items:center;gap:12px;margin-top:22px;padding:14px 22px;background:var(--pylon);color:#fff;text-decoration:none;font-family:var(--f-display);font-stretch:110%;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;border-radius:2px;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px);background:#ff7340}
+.btn svg{width:18px;height:18px}
+
+/* HUD */
+.hud-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:calc(18px + env(safe-area-inset-top,0px)) var(--gut-r) 0 var(--gut-l);font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.35);transition:color .3s}
+.hud-top .mark{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:14px;letter-spacing:.14em;opacity:0;transition:opacity .4s}
+.hud-top .mark.on{opacity:1}
+.stage.light .hud-top,.stage.light .alt,.stage.light .rail{color:var(--ink);text-shadow:none}
+
+.alt{position:absolute;right:calc(var(--gut-r) + 6px);top:50%;transform:translateY(-50%);display:flex;align-items:stretch;gap:12px;color:#fff;font-family:var(--f-mono);text-shadow:0 1px 8px rgba(0,0,0,.35);transition:color .3s}
+.alt-read{display:flex;flex-direction:column;justify-content:center;text-align:right;min-width:92px}
+.alt-read small{font-size:10px;letter-spacing:.24em;opacity:.75;text-transform:uppercase}
+.alt-read strong{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.alt-read strong span{font-size:12px;font-weight:400;opacity:.75;margin-left:4px}
+.ruler{position:relative;width:34px;height:min(46vh,380px)}
+.ruler .t{position:absolute;right:0;height:1px;background:currentColor;opacity:.55}
+.ruler .t.maj{opacity:.9}
+.ruler .t em{position:absolute;right:16px;top:-6px;font-style:normal;font-size:9px;opacity:.8;font-variant-numeric:tabular-nums}
+.ruler .needle{position:absolute;right:-4px;width:42px;height:2px;background:var(--pylon);box-shadow:0 0 12px rgba(255,91,31,.7)}
+.ruler .needle::after{content:"";position:absolute;right:-2px;top:-4px;border:5px solid transparent;border-right-color:var(--pylon)}
+
+.rail{position:absolute;left:0;right:0;bottom:0;padding:0 var(--gut-r) calc(22px + env(safe-area-inset-bottom,0px)) var(--gut-l);display:flex;align-items:center;gap:16px;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#fff;transition:color .3s}
+.rail .lbl{white-space:nowrap;min-width:150px;font-variant-numeric:tabular-nums}
+.rail .lbl b{color:var(--pylon);font-weight:600}
+.rail .track{position:relative;flex:1;height:2px;background:rgba(255,255,255,.22)}
+.stage.light .rail .track{background:rgba(8,18,27,.18)}
+.rail .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:currentColor}
+.rail .dot{position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5;transform:translateX(-50%)}
+.rail .dot.on{opacity:1;background:var(--pylon)}
+#hud-fade{transition:opacity .5s}
+
+/* ---------- info bands ---------- */
+.band{padding-block:clamp(72px,12vw,150px);padding-left:var(--gut-l);padding-right:var(--gut-r)}
+.wrap{max-width:1180px;margin:0 auto}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ice)}
+.band h3{margin:.4em 0 .5em;font-family:var(--f-display);font-weight:800;font-stretch:118%;font-size:clamp(32px,5vw,68px);line-height:.98;letter-spacing:-.015em;text-wrap:balance}
+.lead{max-width:60ch;color:var(--frost);font-size:clamp(16px,1.3vw,19px);margin:0}
+
+.peaks{margin-top:clamp(36px,6vw,64px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2.4vw,28px)}
+.peak{display:grid;gap:16px;min-width:0;margin:0;align-content:start}
+.ph{position:relative;aspect-ratio:4/5;max-width:100%;overflow:hidden;border-radius:2px;background:var(--ink-2)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.12);transition:transform 1.8s cubic-bezier(.2,.7,.2,1)}
+.peak.in .ph img{transform:scale(1)}
+.peak:hover .ph img{transform:scale(1.04)}
+.ph::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(4,12,20,.78),rgba(4,12,20,.1) 45%,transparent 65%)}
+.ph figcaption{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:clamp(16px,2vw,24px);display:grid;gap:4px}
+.peak .nm{font-family:var(--f-display);font-weight:700;font-stretch:105%;font-size:clamp(18px,1.8vw,24px);line-height:1.1}
+.peak .m{font-family:var(--f-display);font-weight:800;font-stretch:120%;font-size:clamp(40px,4.6vw,66px);line-height:1;font-variant-numeric:tabular-nums}
+.peak .m span{font-size:.4em;font-stretch:100%;color:var(--pylon);margin-left:6px}
+.rise{display:grid;gap:8px}
+.rise .ln{height:3px;background:rgba(169,196,211,.16);position:relative}
+.rise .ln i{position:absolute;left:0;top:0;bottom:0;background:var(--pylon);width:0;transition:width 1.4s cubic-bezier(.2,.7,.2,1) .2s}
+.rise .tx{display:flex;justify-content:space-between;gap:12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--frost)}
+.rise .tx b{color:var(--snow);font-weight:600;white-space:nowrap}
+.peak .d{font-size:15px;color:var(--frost);margin:0}
+
+.band.alt-bg{background:var(--ink-2)}
+.stats{margin-top:clamp(32px,5vw,56px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(169,196,211,.22)}
+.stat{padding:clamp(18px,2.4vw,30px) clamp(0px,1.6vw,22px) 0 0;display:grid;gap:6px;min-width:0}
+.stat + .stat{padding-left:clamp(14px,1.8vw,24px);border-left:1px solid rgba(169,196,211,.22)}
+.stat .v{font-family:var(--f-display);font-weight:800;font-stretch:120%;font-size:clamp(38px,5.4vw,78px);line-height:1;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:.38em;font-stretch:100%;color:var(--pylon);margin-left:6px}
+.stat .l{font-size:15px;color:var(--frost);max-width:24ch}
+
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,5vw,80px);margin-top:clamp(32px,5vw,56px)}
+.split > div{min-width:0}
+.split h4{margin:0 0 .5em;font-family:var(--f-display);font-weight:700;font-stretch:110%;font-size:clamp(20px,2vw,26px)}
+.split p{margin:0;color:var(--frost);max-width:52ch}
+.split ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.split li{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(169,196,211,.16);padding-bottom:8px;font-size:15px}
+.split li span:last-child{font-family:var(--f-mono);color:var(--snow);font-variant-numeric:tabular-nums;white-space:nowrap}
+.split li span:first-child{color:var(--frost)}
+
+.end{text-align:center}
+.end h3{font-size:clamp(40px,8vw,120px);font-stretch:125%}
+.end .lead{margin-inline:auto}
+footer{padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));padding-left:var(--gut-l);padding-right:var(--gut-r);border-top:1px solid rgba(169,196,211,.14);font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--frost)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+
+/* ---------- responsive ---------- */
+@media (max-width:820px){
+  .ruler{display:none}
+  .alt{top:calc(14px + env(safe-area-inset-top,0px));transform:none;right:var(--gut-r)}
+  .alt-read strong{font-size:17px}
+  .hud-top .coord{display:none}
+  .rail .lbl{min-width:0}
+  .rail .lbl .nm{display:none}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:nth-child(3){padding-left:0;border-left:0}
+  .stat:nth-child(n+3){margin-top:22px;border-top:1px solid rgba(169,196,211,.22)}
+  .split{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .peaks{grid-template-columns:1fr;gap:40px}
+  .ph{aspect-ratio:5/4}
+  .cap h2{font-size:clamp(32px,10vw,48px)}
+  .hero h1{font-stretch:100%;font-size:21vw}
+  .hero-sub{gap:8px}
+  .hero-sub span:nth-child(3){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .cue i{animation:none}
+  #loader{transition:none}
+}
+</style>
+
+<div id="loader" aria-hidden="true">
+  <div class="ld">
+    <div class="ld-word">SÖLDEN</div>
+    <div class="ld-bar"><i id="ldbar"></i></div>
+    <div class="ld-n" id="ldn">NAČÍTÁM 0 %</div>
+  </div>
+</div>
+
+<main>
+<section id="film" aria-label="Let nad Söldenem">
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-hidden="true"></canvas>
+    <div class="veil vign"></div>
+    <div class="veil" id="scrim"></div>
+    <div class="veil" id="white"></div>
+    <div class="veil" id="cscrim"></div>
+    <div class="veil" id="dip"></div>
+    <div class="veil grain"></div>
+
+    <div class="ui">
+      <div class="hero" id="hero">
+        <div class="hero-eyebrow">Ötztal · Tyrolsko · Rakousko</div>
+        <h1>S<span class="o">Ö</span>LDEN</h1>
+        <div class="hero-sub"><span>1&nbsp;377 – 3&nbsp;340&nbsp;m</span><span>142 km sjezdovek</span><span>2 ledovce</span></div>
+        <div class="cue" id="cue"><i></i>Scrolluj</div>
+      </div>
+
+      <article class="cap center dark" data-in="15" data-out="27">
+        <div class="k"><b>01</b>Mraky</div>
+        <h2>Nad mraky začíná zima.</h2>
+        <p>Ledovce Rettenbach a Tiefenbach drží sníh od září až do května.</p>
+      </article>
+
+      <article class="cap" data-in="29" data-out="55">
+        <div class="k"><b>02</b>Lanovky</div>
+        <h2>Tři vrcholy <em>nad 3&nbsp;000&nbsp;m</em>.</h2>
+        <p>Jediné středisko v Rakousku, kde se lanovkou dostaneš na tři třítisícovky. Celkem 30 lanovek a vleků.</p>
+      </article>
+
+      <article class="cap" data-in="58" data-out="77">
+        <div class="k"><b>03</b>Sjezd</div>
+        <h2>15&nbsp;km <em>v&nbsp;jednom sjezdu</em>.</h2>
+        <p>Ze Schwarze Schneide ve 3&nbsp;340&nbsp;m až dolů do údolí. Lesem, po širokých svazích, bez zastavení.</p>
+      </article>
+
+      <article class="cap" data-in="79" data-out="95">
+        <div class="k"><b>04</b>Vesnice</div>
+        <h2>Sölden, <em>1&nbsp;377&nbsp;m</em>.</h2>
+        <p>Z lyží rovnou do ulic. Podél řeky Ötztaler Ache stojí hotely, bary a après-ski hned pod svahem.</p>
+      </article>
+
+      <article class="cap center" data-in="99" data-out="999">
+        <div class="k"><b>05</b>Doma</div>
+        <h2>Dobrou noc <em>pod štíty</em>.</h2>
+        <p>Sezóna běží od září do května. Vyber si termín a zbytek nech na horách.</p>
+        <a class="btn" href="#plan">Naplánuj sezónu
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></a>
+      </article>
+    </div>
+
+    <div id="hud-fade">
+      <div class="hud-top">
+        <div class="mark" id="mark">SÖLDEN</div>
+        <div class="coord">46.97° N · 11.01° E</div>
+      </div>
+      <div class="alt" aria-hidden="true">
+        <div class="alt-read"><small>Výška</small><strong id="altv">3 340<span>m</span></strong></div>
+        <div class="ruler" id="ruler"><div class="needle" id="needle"></div></div>
+      </div>
+      <div class="rail" aria-hidden="true">
+        <div class="lbl" id="rlbl"><b>00</b> <span class="nm">Vrcholy</span></div>
+        <div class="track" id="track"><div class="fill" id="fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="plan">
+  <div class="wrap">
+    <div class="eyebrow">BIG3 · tři třítisícovky</div>
+    <h3>Tři vrcholy, jeden skipas.</h3>
+    <p class="lead">Na všechny tři se dostaneš lanovkou. Oranžová čára ukazuje převýšení nad vesnicí, ve správném poměru.</p>
+    <div class="peaks" id="peaks"></div>
+  </div>
+</section>
+
+<section class="band alt-bg">
+  <div class="wrap">
+    <div class="eyebrow">Středisko v číslech</div>
+    <h3>Dost na celý týden. I na dva.</h3>
+    <div class="stats">
+      <div class="stat"><div class="v">142<small>km</small></div><div class="l">sjezdovek všech obtížností</div></div>
+      <div class="stat"><div class="v">30</div><div class="l">lanovek a vleků, z toho 8 kabinových</div></div>
+      <div class="stat"><div class="v">15<small>km</small></div><div class="l">nejdelší sjezd, z ledovce až do údolí</div></div>
+      <div class="stat"><div class="v">IX–V</div><div class="l">sezóna díky dvěma ledovcům</div></div>
+    </div>
+    <div class="split">
+      <div>
+        <h4>Sjezdovky podle obtížnosti</h4>
+        <p>Většina tras je modrá a červená, takže se tu vyřádí rodiny i pokročilí.</p>
+        <ul>
+          <li><span>Lehké (modré)</span><span>69,8 km</span></li>
+          <li><span>Střední (červené)</span><span>44,8 km</span></li>
+          <li><span>Těžké (černé)</span><span>27,4 km</span></li>
+          <li><span>Skialpové trasy</span><span>2 km</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Na ledovcích od září</h4>
+        <p>Rettenbach a Tiefenbach otevírají sezónu dřív než většina Alp. Na Rettenbachu se každý podzim jede úvodní závod Světového poháru.</p>
+        <ul>
+          <li><span>Nejvyšší bod</span><span>3 340 m</span></li>
+          <li><span>Nejnižší bod</span><span>1 377 m</span></li>
+          <li><span>Technické zasněžování</span><span>až 77 %</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band end">
+  <div class="wrap">
+    <div class="eyebrow">Zima 2026 / 27</div>
+    <h3>Vidíme se nahoře.</h3>
+    <p class="lead">Skipasy, ubytování a aktuální sněhové zprávy najdeš na oficiálních stránkách střediska.</p>
+    <a class="btn" href="https://www.soelden.com" target="_blank" rel="noopener">soelden.com
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Sölden · Ötztal · Tyrolsko</span>
+    <span>Údaje: tyrol.com, central-soelden.com</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  var N = 120;
+  var portrait = window.matchMedia("(max-aspect-ratio: 1/1)").matches;
+  var dir = portrait ? "f/m/" : "f/d/";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+  var stage = document.getElementById("stage"), film = document.getElementById("film");
+  var imgs = new Array(N), ok = new Array(N).fill(false), loaded = 0;
+
+  /* ---------- progressive loading: keyframes first, then fill the gaps ---------- */
+  var order = [], seen = {};
+  [16, 8, 4, 2, 1].forEach(function(step){
+    for (var i = 0; i < N; i += step) if (!seen[i]) { seen[i] = 1; order.push(i); }
+  });
+  var bar = document.getElementById("ldbar"), ldn = document.getElementById("ldn"), loader = document.getElementById("loader");
+  var gate = 0, gateNeed = Math.ceil(N / 8) + 1, revealed = false;
+  function pad(n){ return ("00" + n).slice(-3); }
+  function onLoad(i){
+    ok[i] = true; loaded++;
+    if (order.indexOf(i) < gateNeed) gate++;
+    var pct = Math.min(100, Math.round(gate / gateNeed * 100));
+    bar.style.width = pct + "%"; ldn.textContent = "NAČÍTÁM " + pct + " %";
+    if (!revealed && gate >= gateNeed) { revealed = true; loader.classList.add("done"); dirty = true; }
+    if (i === 0) dirty = true;
+  }
+  var q = order.slice(), active = 0, PAR = 6;
+  function pump(){
+    while (active < PAR && q.length) {
+      (function(i){
+        active++;
+        var im = new Image(); im.decoding = "async";
+        im.onload = function(){ active--; onLoad(i); pump(); };
+        im.onerror = function(){ active--; pump(); };
+        im.src = dir + pad(i + 1) + ".webp";
+        imgs[i] = im;
+      })(q.shift());
+    }
+  }
+  pump();
+  setTimeout(function(){ if (!revealed) { revealed = true; loader.classList.add("done"); } }, 9000);
+
+  function nearest(i){
+    if (ok[i]) return i;
+    for (var d = 1; d < N; d++) {
+      if (i - d >= 0 && ok[i - d]) return i - d;
+      if (i + d < N && ok[i + d]) return i + d;
+    }
+    return -1;
+  }
+
+  /* ---------- canvas ---------- */
+  var W = 0, H = 0, dpr = 1;
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    W = stage.clientWidth; H = stage.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    dirty = true;
+  }
+  function cover(im, alpha){
+    var iw = im.naturalWidth, ih = im.naturalHeight, cw = cv.width, ch = cv.height;
+    var s = Math.max(cw / iw, ch / ih), dw = iw * s, dh = ih * s;
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(im, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+  }
+  function draw(f){
+    var a = Math.floor(f), b = Math.min(N - 1, a + 1), t = f - a;
+    var ia = nearest(a); if (ia < 0) return;
+    cover(imgs[ia], 1);
+    if (t > 0.02 && ok[b] && b !== ia) cover(imgs[b], t);
+    ctx.globalAlpha = 1;
+  }
+
+  /* ---------- story timeline (frame units) ---------- */
+  function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+  function ss(a, b, x){ var t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
+  function lerpTable(tab, f){
+    for (var i = 1; i < tab.length; i++) if (f <= tab[i][0]) {
+      var p = tab[i - 1], n = tab[i], t = (f - p[0]) / (n[0] - p[0]);
+      t = t * t * (3 - 2 * t);
+      return p[1] + (n[1] - p[1]) * t;
+    }
+    return tab[tab.length - 1][1];
+  }
+  var ALT = [[0,3340],[12,3260],[22,3060],[30,2790],[54,2610],[60,2280],[77,1640],[90,1377],[119,1377]];
+  var SCENES = [
+    {f:0,  n:"00", nm:"Vrcholy"},
+    {f:15, n:"01", nm:"Mraky"},
+    {f:29, n:"02", nm:"Lanovky"},
+    {f:58, n:"03", nm:"Sjezd"},
+    {f:79, n:"04", nm:"Vesnice"},
+    {f:99, n:"05", nm:"Doma"}
+  ];
+  var caps = [].slice.call(document.querySelectorAll(".cap")).map(function(el){
+    return {el:el, a:+el.dataset.in, b:+el.dataset.out, center:el.classList.contains("center"), last:+el.dataset.out > 500};
+  });
+
+  var hero = document.getElementById("hero"), cue = document.getElementById("cue");
+  var cscrim = document.getElementById("cscrim"), white = document.getElementById("white"), dip = document.getElementById("dip"), scrim = document.getElementById("scrim");
+  var altv = document.getElementById("altv"), needle = document.getElementById("needle"), ruler = document.getElementById("ruler");
+  var fill = document.getElementById("fill"), rlbl = document.getElementById("rlbl"), track = document.getElementById("track");
+  var mark = document.getElementById("mark"), hudFade = document.getElementById("hud-fade");
+
+  // ruler ticks 1000..3500
+  var RMIN = 1000, RMAX = 3500;
+  for (var m = RMIN; m <= RMAX; m += 100) {
+    var t = document.createElement("div"); var maj = m % 500 === 0;
+    t.className = "t" + (maj ? " maj" : "");
+    t.style.width = maj ? "16px" : "8px";
+    t.style.top = ((RMAX - m) / (RMAX - RMIN) * 100) + "%";
+    if (maj) { var e = document.createElement("em"); e.textContent = m; t.appendChild(e); }
+    ruler.appendChild(t);
+  }
+  SCENES.forEach(function(s){
+    var d = document.createElement("div"); d.className = "dot"; d.style.left = (s.f / (N - 1) * 100) + "%";
+    s.dot = d; track.appendChild(d);
+  });
+
+  function fmt(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+
+  var lastScene = -1, lastAlt = -1;
+  function story(f, p){
+    // hero: dive into the clouds
+    var h = ss(2, 15, f);
+    hero.style.opacity = 1 - h;
+    hero.style.transform = "translateY(" + (-h * 8) + "vh) scale(" + (1 + h * 0.5) + ")";
+    hero.style.filter = h > 0.01 ? "blur(" + (h * 10).toFixed(1) + "px)" : "none";
+    cue.style.opacity = 1 - ss(0.3, 2, f);
+
+    // cloud white-out and the hard cut village -> hotel
+    var w = ss(12, 18, f) * (1 - ss(23, 30, f));
+    white.style.opacity = (w * 0.9).toFixed(3);
+    dip.style.opacity = (ss(92.5, 95, f) * (1 - ss(96, 99.5, f)) * 0.85).toFixed(3);
+    cscrim.style.opacity = ss(97, 102, f).toFixed(3);
+    stage.classList.toggle("light", w > 0.45);
+    scrim.style.opacity = (1 - w).toFixed(3);
+
+    caps.forEach(function(c){
+      var v = c.last ? ss(c.a, c.a + 4, f) : ss(c.a, c.a + 3.5, f) * (1 - ss(c.b - 3.5, c.b, f));
+      c.el.style.opacity = v.toFixed(3);
+      var y = (1 - v) * 28;
+      c.el.style.transform = c.center ? "translate(-50%, calc(-50% + " + y + "px))" : "translateY(" + y + "px)";
+      c.el.style.visibility = v < 0.01 ? "hidden" : "visible";
+    });
+
+    var alt = lerpTable(ALT, f);
+    if (Math.abs(alt - lastAlt) > 0.5) {
+      lastAlt = alt;
+      altv.firstChild.nodeValue = fmt(alt);
+      needle.style.top = ((RMAX - alt) / (RMAX - RMIN) * 100) + "%";
+    }
+    fill.style.width = (p * 100).toFixed(2) + "%";
+
+    var si = 0; for (var i = 0; i < SCENES.length; i++) if (f >= SCENES[i].f - 1) si = i;
+    if (si !== lastScene) {
+      lastScene = si;
+      rlbl.innerHTML = "<b>" + SCENES[si].n + "</b> / 05 <span class=\"nm\">" + SCENES[si].nm + "</span>";
+      SCENES.forEach(function(s, k){ s.dot.classList.toggle("on", k <= si); });
+    }
+    mark.classList.toggle("on", f > 10);
+  }
+
+  /* ---------- scroll -> frame ---------- */
+  var target = 0, cur = 0, dirty = true, lastDrawn = -1;
+  function progress(){
+    var r = film.getBoundingClientRect();
+    var span = film.offsetHeight - stage.clientHeight;
+    return clamp(-r.top / span, 0, 1);
+  }
+  var P = 0;
+  function readScroll(){
+    P = progress();
+    target = clamp((P - 0.025) / 0.93, 0, 1) * (N - 1);
+    var past = film.getBoundingClientRect().bottom < stage.clientHeight * 0.98;
+    hudFade.style.opacity = past ? 0 : 1;
+  }
+
+  var lenis = null;
+  if (window.Lenis && !reduce) {
+    try {
+      lenis = new Lenis({ lerp: 0.085, smoothWheel: true, syncTouch: false });
+      lenis.on("scroll", readScroll);
+    } catch (e) { lenis = null; }
+  }
+  window.addEventListener("scroll", readScroll, { passive: true });
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener("click", function(ev){
+      var el = document.querySelector(a.getAttribute("href")); if (!el) return;
+      ev.preventDefault();
+      if (lenis) lenis.scrollTo(el, { duration: 1.6 }); else el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+    });
+  });
+
+  function loop(time){
+    if (lenis) lenis.raf(time);
+    var k = reduce ? 1 : 0.16;
+    cur += (target - cur) * k;
+    if (Math.abs(target - cur) < 0.001) cur = target;
+    if (dirty || Math.abs(cur - lastDrawn) > 0.002) {
+      draw(cur); story(cur, P); lastDrawn = cur; dirty = false;
+    }
+    requestAnimationFrame(loop);
+  }
+
+  var rt; window.addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(function(){ resize(); readScroll(); }, 120); });
+  resize(); readScroll(); cur = target;
+  requestAnimationFrame(loop);
+
+  /* ---------- BIG3 peaks: photo cards + to-scale rise above the village ---------- */
+  var PEAKS = [
+    {nm:"Gaislachkogl", m:3058, img:"p/gaislachkogl.webp", note:"Vrcholová stanice s restaurací ice Q a expozicí 007 ELEMENTS."},
+    {nm:"Tiefenbachkogl", m:3250, img:"p/tiefenbachkogl.webp", note:"Vyhlídka vysoko nad ledovcem Tiefenbach."},
+    {nm:"Schwarze Schneide", m:3340, img:"p/schwarze-schneide.webp", note:"Nejvyšší bod střediska nad ledovcem Rettenbach."}
+  ];
+  var BASE = 1377, TOP = 3340, host = document.getElementById("peaks");
+  PEAKS.forEach(function(pk){
+    var w = ((pk.m - BASE) / (TOP - BASE) * 100).toFixed(1);
+    var el = document.createElement("figure"); el.className = "peak";
+    el.innerHTML =
+      '<div class="ph"><img src="' + pk.img + '" alt="Zasněžený vrchol v Ötztalských Alpách" loading="lazy" decoding="async">' +
+      '<figcaption><div class="nm">' + pk.nm + '</div><div class="m">' + fmt(pk.m) + '<span>m</span></div></figcaption></div>' +
+      '<div class="rise"><div class="ln"><i data-w="' + w + '"></i></div>' +
+      '<div class="tx"><span>Sölden 1\u00a0377 m</span><b>+' + fmt(pk.m - BASE) + ' m</b></div></div>' +
+      '<p class="d">' + pk.note + '</p>';
+    host.appendChild(el);
+  });
+  var peaksEls = [].slice.call(host.querySelectorAll(".peak"));
+  function reveal(el){ el.classList.add("in"); var i = el.querySelector(".ln i"); i.style.width = i.dataset.w + "%"; }
+  if ("IntersectionObserver" in window && !reduce) {
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); } }); }, { threshold: 0.25 });
+    peaksEls.forEach(function(el){ io.observe(el); });
+  } else peaksEls.forEach(reveal);
+})();
+</script>
+</body></html>
