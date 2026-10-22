@@ -108,6 +108,7 @@ h2{font:700 clamp(32px,4vw,48px)/1.08 var(--f-body);letter-spacing:-.025em}
 .hcard .cx{all:unset;position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;cursor:pointer;color:#c9d0dc}
 .hcard .cx:hover{background:rgba(255,255,255,.08)}
 .hcard .cx:focus-visible{outline:2px solid #ffcf96}
+.hcard .more{display:none}
 .htip{position:absolute;z-index:3;left:0;top:0;padding:6px 10px;border-radius:8px;background:rgba(8,11,20,.88);border:1px solid rgba(255,255,255,.14);font-size:12.5px;color:#fff;white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,-150%);transition:opacity .15s}
 .htip.on{opacity:1}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -124,6 +125,20 @@ h2{font:700 clamp(32px,4vw,48px)/1.08 var(--f-body);letter-spacing:-.025em}
   .hero-cta{margin-top:20px}
   .hero-cta .btn{height:44px;padding:0 16px}
   .hero-ui{left:16px;right:16px;bottom:14px;gap:8px}
+  .hcard{left:16px!important;right:16px;top:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 62px);width:auto;padding:9px 78px 9px 13px;border-radius:13px;background:rgba(10,13,22,.6);border-color:rgba(255,200,140,.22);box-shadow:0 14px 30px -18px #000;animation:popup .3s cubic-bezier(.2,1.2,.4,1)}
+  .hcard small{font-size:9.5px}
+  .hcard h3{margin:2px 0 2px;font-size:15px}
+  .hcard p{font-size:12.5px;line-height:1.4;color:#c9d0dc;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  .hcard.full p{-webkit-line-clamp:unset;display:block}
+  .hcard .row{position:absolute;top:8px;right:40px;margin:0;gap:6px}
+  .hcard .row .btn{height:30px;padding:0 10px;font-size:12.5px;border-radius:8px}
+  .hcard .row [data-a="fx"]{display:none}
+  .hcard.full .row{position:static;margin-top:8px}
+  .hcard.full .row [data-a="fx"]{display:inline-flex}
+  .hcard .cx{top:8px;right:6px;width:30px;height:30px}
+  .hcard .more{all:unset;display:inline-block;margin-top:2px;font:500 11px var(--f-mono);letter-spacing:.04em;color:#ffcf96;cursor:pointer}
+  .hcard.full .more{display:none}
+  @keyframes popup{from{transform:translateY(10px);opacity:0}}
 }
 
 /* ---------- services ---------- */
@@ -699,17 +714,20 @@ $('#allBtn').addEventListener('click', () => {
 const hcard = $('#hcard');
 function openCard(i) {
   const it = ITEMS[i]; ST.card = i;
-  hcard.innerHTML = `<button class="cx" type="button" aria-label="Zavřít"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><small>${it.svc}</small><h3>${it.name}</h3><p>${it.text}</p><div class="row"><button class="btn btn-sodium btn-sm" type="button" data-a="ask">Poptat</button>${it.id === 'chytre' ? `<button class="btn btn-glass btn-sm" type="button" data-a="fx">Efekt: ${FXN[it.fx]}</button>` : ''}</div>`;
-  hcard.hidden = false; placeCard();
+  hcard.innerHTML = `<button class="cx" type="button" aria-label="Zavřít"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><small>${it.svc}</small><h3>${it.name}</h3><p>${it.text}</p><button class="more" type="button" data-a="more">celý popis ▾</button><div class="row"><button class="btn btn-sodium btn-sm" type="button" data-a="ask">Poptat</button>${it.id === 'chytre' ? `<button class="btn btn-glass btn-sm" type="button" data-a="fx">Efekt: ${FXN[it.fx]}</button>` : ''}</div>`;
+  hcard.hidden = false; hcard.classList.remove('full'); placeCard(); cardTimer();
 }
+let cardT = 0;
+function cardTimer() { clearTimeout(cardT); if (innerWidth < 760 && !hcard.classList.contains('full')) cardT = setTimeout(closeCard, 5000); }
 function placeCard() { if (ST.card < 0) return; const it = ITEMS[ST.card], cw = hcard.offsetWidth, ch = hcard.offsetHeight; let x = it.hot[0] + 22, y = it.hot[1] - ch / 2; if (x + cw > W - 12) x = it.hot[0] - cw - 22; x = clamp(x, 12, W - cw - 12); y = clamp(y, 90, H - ch - 80); hcard.style.left = x + 'px'; hcard.style.top = y + 'px'; }
-function closeCard() { ST.card = -1; hcard.hidden = true; }
+function closeCard() { clearTimeout(cardT); ST.card = -1; hcard.hidden = true; hcard.classList.remove('full'); }
 hcard.addEventListener('click', e => {
   const it = ITEMS[ST.card]; if (!it) return;
   if (e.target.closest('.cx')) return closeCard();
   const a = e.target.closest('[data-a]'); if (!a) return;
   if (a.dataset.a === 'ask') { $('#fWhat').value = it.svc; closeCard(); $('#kontakt').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); }
-  if (a.dataset.a === 'fx') { it.fx = (it.fx + 1) % 3; sfx.on(); openCard(ST.card); }
+  if (a.dataset.a === 'more') { hcard.classList.add('full'); clearTimeout(cardT); }
+  if (a.dataset.a === 'fx') { const f = hcard.classList.contains('full'); it.fx = (it.fx + 1) % 3; sfx.on(); openCard(ST.card); if (f) { hcard.classList.add('full'); clearTimeout(cardT); } }
 });
 function activate(i) { const it = ITEMS[i]; if (!it.on) lightOn(it); else if (it.id === 'chytre') { it.fx = (it.fx + 1) % 3; sfx.on(); } openCard(i); }
 $('#kbList').innerHTML = ITEMS.map((it, i) => `<button type="button" data-i="${i}">${it.name}</button>`).join('');
